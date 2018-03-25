@@ -1,6 +1,6 @@
 from django import forms
 from .models import Accounts, Transactions
-from categories.models import Category
+from gesfipe.categories.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
 

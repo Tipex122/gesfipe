@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class CategoriesConfig(AppConfig):
-    name = 'categories'
+    name = 'gesfipe.categories'
+    verbose_name = 'Categories'

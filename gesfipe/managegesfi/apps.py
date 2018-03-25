@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class ManagegesfiConfig(AppConfig):
-    name = 'managegesfi'
+    name = 'gesfipe.managegesfi'
+    verbose_name = 'Manage GesFiPe'

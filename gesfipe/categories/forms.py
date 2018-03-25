@@ -2,7 +2,7 @@ from django import forms
 from mptt.forms import TreeNodeChoiceField
 
 from .models import Tag
-from categories.models import Category
+from gesfipe.categories.models import Category
 
 
 class TagForm(forms.ModelForm):

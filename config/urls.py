@@ -17,9 +17,11 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
+    url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
+    url(r'^categories/', include('gesfipe.categories.urls')),
+    url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls')),
 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

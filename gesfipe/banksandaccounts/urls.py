@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 
 #TODO: Mettre à jour de Django 2.0
-'''
+
 urlpatterns = [
     url(r'^$', views.transactions_list, name='transactions_list'),
     url(r'^toto/$', views.TransactionsListView.as_view(), name='transactions_list3'),
@@ -20,4 +20,4 @@ urlpatterns = [
     #    url(r'^keywords/(?P<tag_name>[a-z,\',\*,A-Z]+)/$',
     #    views.transactions_with_tag, name='transactions_with_tag'),
 ]
-'''
+
