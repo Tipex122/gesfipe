@@ -73,10 +73,22 @@ THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'import_export',
+    # 'gunicorn',
+    'mptt',
+    'django_mptt_admin',
+
 ]
 LOCAL_APPS = [
     'gesfipe.users.apps.UsersConfig',
     # Your stuff: custom apps go here
+
+    'gesfipe.banksandaccounts.apps.BanksandaccountsConfig',
+    'gesfipe.categories.apps.CategoriesConfig',
+    # 'django_extensions',
+    # 'controlcenter',
+
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
