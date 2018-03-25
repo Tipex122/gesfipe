@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Transactions de tous les comptes' %}
+{% endblock %}
+
+
+{% block heading %}
+<!-- A améliorer car à chaque fois cela liste l'ensemble des comptes -->
+    <h2>{% trans 'Transactions of account(s):' %}</h2>
+            {% for account in accounts_info %}
+<!-- #TODO: indiquer le nombre de transactions par compte -->
+                <p><i>{{account.name_of_account}} - {{account.num_of_account}} <i>[total: {{account.total_amount_by_account}} - Number of transaction(s): {{account.num_transac_by_account}}]</i></p>
+            {% endfor %}
+{% endblock heading %}
+
+
+{% block content %}
+    <!-- <div class="list-group"> -->
+    <!-- <div class="table-responsive"> -->
+        <!-- <h3> {{banks.name_of_bank}} - {{name_of_account}} - Total amount of the account : {{account_total}}</h3> -->
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <!-- <th>Currency</th>
+                    <th>N° Account</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
+                        <td>{{ transaction.type_of_transaction }}</td>
+                        <td><a href="/transaction_detail/{{transaction.id}}/"> {{ transaction.name_of_transaction }} </a> </td>
+                        {% if transaction.amount_of_transaction >= 0 %}
+                            <td class="font-blue"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                        {% else %}
+                            <td class="font-red"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                        {% endif %}
+                        <!-- <td>{{ transaction.currency_of_transaction }}</td>
+                        <td>{{ transaction.account.num_of_account }}</td> -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <!-- </div> -->
+
+    <!-- La pagination pourrait être mieux placée ... à creuser ultérieurement -->
+    <!-- Voir aussi site https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html  pour tenir compte des ordres de tri -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if transactions.has_previous %}
+                <a href="?page={{ transactions.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
+            </span>
+
+            {% if transactions.has_next %}
+                <a href="?page={{ transactions.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+    {% if transactions.has_other_pages %}
+      <ul class="pagination">
+        {% if transactions.has_previous %}
+          <li><a href="?page={{ transactions.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in transactions.paginator.page_range %}
+          {% if transactions.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if transactions.has_next %}
+          <li><a href="?page={{ transactions.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+
+{% endblock %}
+
+{% block sidebar %}
+    <!-- La pagination pourrait être mieux placée ... à creuser ultérieurement -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if transactions.has_previous %}
+                <a href="?page={{ transactions.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
+            </span>
+
+            {% if transactions.has_next %}
+                <a href="?page={{ transactions.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="row">
+        {% for bank in banks %}
+            <div class="list-group">
+                <a class="list-group-item active" href="#"> {{bank}} </a>
+                {% for account in all_accounts %}
+                    {% if account.bank == bank %}
+                        <!-- <a class="list-group-item" href={% url "transactions_list" %}>{{account}} -->
+                        <a class="list-group-item" href="/account/{{account.id}}">{{account}}
+                            <br> Account id: {{account.num_of_account}}
+                            <i>
+                                <br> Total : {{account.total_amount_by_account}}
+                                <br> Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+                            </i>
+                        </a>
+                        <a class="list-group-item" href="#">Test autre compte (PEL) <br> 0123456789 </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <div class="list-group">
+                <a class="list-group-item active" href="#"> Budget (Changer couleur) </a>
+                <a class="list-group-item" href="#">Mettre autre boîte ici</a>
+        </div>
+    </div>
+{% endblock %}
+
+

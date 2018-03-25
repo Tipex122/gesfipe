@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<div class="list-group">
+    <a href="{% url 'search' %}?q={{ querystring }}&type=banks"
+       class="list-group-item{% if active == 'banks' %} active{% endif %}">
+        <span>{% trans 'Banks' %}</span>
+        <span class="badge">{{ count.banks }}</span>
+    </a>
+    <a href="{% url 'search' %}?q={{ querystring }}&type=accounts"
+       class="list-group-item{% if active == 'accounts' %} active{% endif %}">
+        <span>{% trans 'Accounts' %}</span>
+        <span class="badge">{{ count.accounts }}</span>
+    </a>
+    <a href="{% url 'search' %}?q={{ querystring }}&type=transactions"
+       class="list-group-item{% if active == 'transactions' %} active{% endif %}">
+        <span>{% trans 'Transactions' %}</span>
+        <span class="badge">{{ count.transactions }}</span>
+    </a>
+    <a href="{% url 'search' %}?q={{ querystring }}&type=categories"
+       class="list-group-item{% if active == 'categories' %} active{% endif %}">
+        <span>{% trans 'Categories' %}</span>
+        <span class="badge">{{ count.categories }}</span>
+    </a>
+</div>

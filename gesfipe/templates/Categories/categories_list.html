@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+
+{% block title %}Categories{% endblock %}
+
+{% block heading %}
+    <h2>Categories</h2>
+{% endblock %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block content %}
+
+        <div id="budget_jstree1"  class="list-group">
+            <!-- in this example the tree is populated from inline HTML -->
+
+            <ul>
+                {% recursetree categories %}
+                    <li>
+                        {{ node.name }} +=======+    {{ node.amount }}
+                        {% if not node.is_leaf_node %}
+                            <ul>
+                                {{ children }}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endrecursetree %}
+            </ul>
+
+
+        </div>
+
+        <script>
+            $('#budget_jstree1').jstree({
+                "core" : {
+                   "themes" : {
+                        "variant" : "large"
+                        }
+                      },
+                  "checkbox" : {
+                         "keep_selected_style" : false},
+                        //"plugins" : [ "wholerow", "checkbox" ]
+                        "plugins" : [ "wholerow", "contextmenu", "dnd" ]
+                });
+
+
+        </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% load i18n %}
+
+
+{% if results %}
+<div class="list-group">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Code' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bank in results %}
+        <tr>
+            <td>{{ bank.name_of_bank }}</td>
+            <td>{{ bank.num_of_bank }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <h4 class="no-result">{% trans 'No bank found' %} :(</h4>
+{% endif %}

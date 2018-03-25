@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% if results %}
+<div class="list-group">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{% trans 'Bank' %}</th>
+            <th>{% trans 'Name of account'%}</th>
+            <th>{% trans 'Number of account' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for account in results %}
+        <tr>
+            <td>{{ account.bank.name_of_bank }}</td>
+            <td>{{ account.name_of_account }}</td>
+            <td>{{ account.num_of_account }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<h4 class="no-result">{% trans 'No account found' %} :(</h4>
+{% endif %}

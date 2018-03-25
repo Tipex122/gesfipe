@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    {% if create %}Create{% else %}Edit{% endif %} transaction {{ form.instance.name }}
+{% endblock %}
+
+{% block heading %}
+    {% if create %}
+        <h2>Create transaction</h2>
+    {% else %}
+        <h2>Edit transaction:</h2>
+        <h4><i>{{ transaction.name_of_transaction }}</i></h4>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if create %}
+        {% url "transaction_create" as action_url %}
+    {% else %}
+        {% url "transaction_edit" pk=form.instance.pk as action_url %}
+    {% endif %}
+    <form action="{{ action_url }}" method="post" accept-charset="utf-8">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <p><input type="submit" class="btn btn-default" value="Save"></p>
+    </form>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="row">
+        {% for bank in banks %}
+            <div class="list-group">
+                <a class="list-group-item active" href="#"> {{bank}} </a>
+                {% for account in all_accounts %}
+                    {% if account.bank == bank %}
+                        <a class="list-group-item" href="/account/{{account.id}}/">{{account}}
+                            <br> Account id: {{account.num_of_account}}
+                            <i>
+                                <br> Total : {{account.total_amount_by_account}}
+                                <br> Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+                            </i>
+                        </a>
+                        <a class="list-group-item" href="/transaction_create/">
+                            Create new transaction
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

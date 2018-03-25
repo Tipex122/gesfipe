@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% load i18n %}
+
+{% block head_title %}  {% endblock %}
+
+{% block title %}
+    {% trans 'Categories' %}
+{% endblock %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+    {% for i in ancestors %}
+        <li><a href="{% url 'show_category' node=i.name %}"> {{ i.name }} </a></li>
+    {% endfor %}
+
+</ul>
+
+
+
+{% if  children %}
+<div class="list-group">
+    <h4 class="list-group-item active">
+        Sub Categories of:
+        {% for c in current %}
+            <span><b>{{c.name}}</b></span>
+            <span class="badge">{{c.amount}}</span>
+        {% endfor %}
+    </h4>
+    {% for i in children %}
+        {% if i.is_leaf_node %}
+            <a href="{% url 'category_edit' pk=i.pk %}" class="list-group-item">
+                <span>{{ i.name }}</span>
+                <span class="badge">{{i.amount}}</span>
+            </a>
+        {% else %}
+            <!-- <a href="{{ i.name }}" class="list-group-item"> -->
+            <a href="{% url 'show_category' node=i.name %}" class="list-group-item">
+                <span>{{ i.name }}</span>
+                <span class="badge">{{i.amount}}</span>
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    <br><hr>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block sidebar %}
+    <!-- <div class="row"> -->
+        <div class="list-group">
+            <a class="list-group-item active" href="{% url 'transactions_by_category' pk=Null %}"> Categories</a>
+            <ul>
+                {% recursetree cats %}
+                    <li>
+                        {% if not node.is_leaf_node %}
+                        <a href="{{ node.name }}">{{ node.name }}</a>
+                            <ul class="children">
+                                {{ children }}
+                            </ul>
+                        {% else %}
+                            <a href="{% url 'category_edit' pk=node.pk %}"> {{ node.name }}</a>
+                        {% endif %}
+                    </li>
+                {% endrecursetree %}
+                </ul>
+        </div>
+    <!-- </div> -->
+{% endblock sidebar %}
