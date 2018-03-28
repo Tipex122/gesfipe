@@ -5,7 +5,7 @@ argon2-cffi==18.1.0  # https://github.com/hynek/argon2_cffi
 psycopg2==2.7.4 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
 redis>=2.10.5  # https://github.com/antirez/redis
 
-
+django-mptt==0.9.0
 django-mptt-admin==0.5.0
 
 # Django

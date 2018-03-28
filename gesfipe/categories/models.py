@@ -140,13 +140,13 @@ class Category(MPTTModel):
     # parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 
     # TODO: remplacement de null=True par models.CASCADE pour compatibilité Django 2.0 (à vérifier)
-    parent = TreeForeignKey('self', models.CASCADE, blank=True, related_name='children', db_index=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
     # slug = models.SlugField()
 
     # objects = models.Manager()
 
     # New from Gesfi1
-    tags = ArrayField(ArrayField(models.CharField(max_length=200), blank=True))
+    tags_lists = ArrayField(ArrayField(models.CharField(max_length=200), blank=True), blank=True)
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -167,6 +167,7 @@ class Category(MPTTModel):
         return: Nothing
         """
         level_amount = 0
+
         super(Category, self).save(*args, **kwargs)  # Call the "real" save() method.
 
         for sibling in self.get_siblings(True):
@@ -174,7 +175,18 @@ class Category(MPTTModel):
             level_amount = level_amount + sibling.amount
         print('level_amount = {0}'.format(level_amount))
 
+        par = self.parent
+        print('Parent {}'.format(par))
+
         if self.parent is not None:
+            '''
+            super(Category, self).save(*args, **kwargs)  # Call the "real" save() method.
+
+            for sibling in self.get_siblings(True):
+                print("\tsibling.name: {0},     sibling.amount: {1}".format(sibling.name, sibling.amount))
+                level_amount = level_amount + sibling.amount
+            print('level_amount = {0}'.format(level_amount))
+            '''
             ancestor = self.parent
             print(ancestor)
             ancestor.amount = level_amount
@@ -185,6 +197,8 @@ class Category(MPTTModel):
             # print(ancestor)
             # ancestor.amount = level_amount
             # ancestor.save()
+
+        # else:
 
     def create_tags(self, tags):
         # TODO: what for ? ==> to be explained

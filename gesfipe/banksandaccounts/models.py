@@ -98,8 +98,8 @@ class Transactions(models.Model):
     # TODO: remplacement de null=True par models.CASCADE pour compatibilité Django 2.0 (à vérifier)
     category_of_transaction = models.ForeignKey(
         Category,
-        # null=True,
-        models.CASCADE,
+        null=True,
+        on_delete=models.CASCADE,
         blank=True)
 
     # transcat = models.ForeignKey(Category, null=True,
