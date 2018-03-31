@@ -51,6 +51,7 @@ def accounts_info2(request, account_id=0):
     return account_info
 '''
 
+
 def accounts_info2(request, account_id=0):
     if account_id == 0:
         account_info = Accounts.objects.filter(owner_of_account=request.user).annotate(
@@ -69,6 +70,7 @@ def accounts_info2(request, account_id=0):
             num_transac_by_account=Count('transactions'))
 
     return account_info
+
 
 @login_required
 def banks_and_accounts_list(request):
@@ -92,6 +94,7 @@ def banks_and_accounts_list(request):
         'BanksAndAccounts/banks_and_accounts_list.html',
         context
     )
+
 
 @login_required
 def transactions_list(request):

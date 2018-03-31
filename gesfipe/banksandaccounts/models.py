@@ -10,7 +10,6 @@ from gesfipe.users.models import User
 
 # Create your models here.
 
-
 import datetime
 
 
@@ -48,9 +47,9 @@ class Accounts(models.Model):
         'Identifiant du compte',
         default='Identifiant',
         max_length=256)
-    # TODO: remplacement de null=True par models.CASCADE pour compatibilité Django 2.0 (à vérifier)
-    # bank = models.ForeignKey('Banks', null=True, blank=True)
-    bank = models.ForeignKey('Banks', models.CASCADE, blank=True)
+
+    bank = models.ForeignKey('Banks', null=True, blank=True, on_delete=models.CASCADE)
+
     # owner_of_account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # TODO: Il faut pouvoir affecter un User à un 'Bank account' (ce n'est pas le cas: tout le monde est 'owner'
     # Nota: remplacer "get_users" par "owner_of_account" dans "AccountsAdmin" pour revenir à la solution "ForeignKey"
@@ -91,16 +90,16 @@ class Transactions(models.Model):
         'Date de saisie',
         default=datetime.datetime.now)
 
-    # TODO: remplacement de null=True par models.CASCADE pour compatibilité Django 2.0 (à vérifier)
-    # account = models.ForeignKey('Accounts', null=True, blank=True)
-    account = models.ForeignKey('Accounts', models.CASCADE, blank=True)
+    account = models.ForeignKey('Accounts',
+                                null=True,
+                                blank=True,
+                                on_delete=models.CASCADE)
 
-    # TODO: remplacement de null=True par models.CASCADE pour compatibilité Django 2.0 (à vérifier)
     category_of_transaction = models.ForeignKey(
         Category,
         null=True,
-        on_delete=models.CASCADE,
-        blank=True)
+        blank=True,
+        on_delete=models.CASCADE)
 
     # transcat = models.ForeignKey(Category, null=True,
     # blank=True) #to be used in case of transversal categorization need

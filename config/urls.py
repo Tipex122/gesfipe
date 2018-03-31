@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
+    # url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
 
     # Django Admin, use {% url 'admin:index' %}
@@ -17,9 +17,12 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
-    url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
-    url(r'^categories/', include('gesfipe.categories.urls')),
-    url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls')),
+    # url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
+    # url(r'^categories/', include('gesfipe.categories.urls')),
+    # url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls')),
+    url(r'^', include('gesfipe.managegesfi.urls')),
+    url(r'^', include('gesfipe.categories.urls')),
+    url(r'^', include('gesfipe.banksandaccounts.urls')),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
