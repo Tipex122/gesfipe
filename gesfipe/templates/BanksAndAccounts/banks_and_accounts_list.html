@@ -9,6 +9,7 @@
 {% endblock heading %}
 
 {% block content %}
+<!--
         {% for bank in banks_list %}
             <div class="list-group">
                 <a class="list-group-item active" href="#"> {{bank}} </a>
@@ -40,6 +41,7 @@
                 {% endfor %}
             </div>
         {% endfor %}
+-->
         {% for bank in banks_list %}
             {% for account in accounts_info %}
                 {% if account.bank == bank %}
@@ -48,8 +50,28 @@
                         <div class="card-body">
                             <h4 class="card-title">{{bank}}</h4>
                             <h6 class="card-subtitle mb-2 text-muted">Account id: {{account.num_of_account}}</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            {# <a href="#" class="btn btn-primary">Go somewhere</a> #}
+                            <p class="card-text">
+                                <br> Total :
+                                    {% if account.total_amount_by_account >= 0 %}
+                                        <span>{{account.total_amount_by_account}}</span>
+                                    {% else %}
+                                        <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    {% endif %}
+                                <br> Transaction Mini:
+                                    {% if account.min_amount_by_account < 0 %}
+                                        <span class="label label-danger"> {{account.min_amount_by_account}} </span>
+                                    {% else %}
+                                        <span class="label label-primary"> {{account.min_amount_by_account}} </span>
+                                    {% endif %}
+                                <br> Transaction Maxi:
+                                    {% if account.max_amount_by_account < 0 %}
+                                        <span class="label label-danger"> {{account.max_amount_by_account}} </span>
+                                    {% else %}
+                                        <span class="label label-primary"> {{account.max_amount_by_account}} </span>
+                                    {% endif %}
+                                <br> Number of transactions: <span class="label label-default">{{account.num_transac_by_account}}</span>
+                                <br>
+                            </p>
                             <a href="#" class="card-link">Card link</a>
                             <a href="#" class="card-link">Another link</a>
                         </div>
