@@ -44,7 +44,7 @@
             {% for account in accounts_info %}
                 {% if account.bank == bank %}
                     <div class="card" style="width: 20rem;">
-                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <img class="card-img-top" src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}" alt="Card image cap">
                         <div class="card-body">
                             <h4 class="card-title">{{bank}}</h4>
                             <h6 class="card-subtitle mb-2 text-muted">Account id: {{account.num_of_account}}</h6>

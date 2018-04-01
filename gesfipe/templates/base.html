@@ -1,12 +1,18 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n %}
+{% load staticfiles i18n %}
+
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}GesFiPe{% endblock title %}</title>
+    <title>GesFi - {% block title %}{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+
+    <meta name="description" content="Gesfi - Personal Budget Management Application">
+    <meta name="author" content="XLH">
+
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -73,7 +79,7 @@
 
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
 
       {% if messages %}
           {% for message in messages %}
@@ -81,9 +87,23 @@
           {% endfor %}
       {% endif %}
 
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+      <div class="row">
+        <div class="col-sm-9">
+            {% block content %}  {% endblock content %}
+        </div>
+        <div class="col-sm-3">
+          {% block sidebar %}  {% endblock sidebar %}
+          <br>
+          {% block sidesearch %}
+            <hr>
+            <p> Mettre en place </p>
+            <p>une zone de recherche ici</p>
+            <hr>
+          {% endblock sidesearch %}
+          <br>
+
+        </div>
+      </div>
 
     </div> <!-- /container -->
 
@@ -110,5 +130,25 @@
     {% endblock javascript %}
     {% endblock body %}
   </body>
+
+    <hr>
+
+    <div class="container-fluid">
+        <footer>
+          <div class="row">
+            <div class="col-md-9">
+                <p>&copy; GesFi Company 2016 - You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="col-md-3">
+                <p class="text-right" >
+                    <a href="/admin/">Admin</a>
+                </p>
+            </div>
+            {% endif %}
+          </div>
+        </footer>
+    </div>
+
 </html>
 

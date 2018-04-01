@@ -74,8 +74,12 @@ def accounts_info2(request, account_id=0):
 
 @login_required
 def banks_and_accounts_list(request):
-    banks_list = Banks.objects.all().filter(accounts__owner_of_account=request.user)
+    banks_list = Banks.objects.all() # .filter(accounts__owner_of_account=request.user)
+    print('banks_list: {}'.format(banks_list))
+    print('======================')
     accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+    print('accounts_list {}'.format(accounts_list))
+    print('======================')
     account_total =\
         Transactions.objects.filter(account__owner_of_account=request.user).aggregate(total=Sum('amount_of_transaction'))
     # TODO: To place num_visits on each view and all contexts to get the number of view on each bottom page (or only on the main page?)
