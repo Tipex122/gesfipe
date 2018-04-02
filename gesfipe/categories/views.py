@@ -147,12 +147,11 @@ def tag_edit(request, pk):
 def show_category(request, node=None):
     cats = Category.objects.all()
     node = node.split('/')
-    # current = Category.objects.filter(name=node[-1])
 
     if node[-1] == 'None':
         current = Category.objects.filter(parent=None)
         ancestors = Category.objects.filter(parent=None)
-        children = Category.objects.filter(parent=ancestors)
+        children = Category.objects.filter(parent=ancestors[0])
 
     else:
         current = Category.objects.filter(name=node[-1])
