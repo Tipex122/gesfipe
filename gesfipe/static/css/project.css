@@ -12,6 +12,10 @@
   border-color: #eed3d7;
 }
 
+.col-md-9 .col-lg-9 .col-sm-9{
+  position: relative;
+}
+
 .content {
   margin: 1em 0;
   position: relative;
@@ -41,6 +45,14 @@
     width: 100%;
 }
 
+.sidebar-block {
+
+}
+
+.breadcrumb{
+    box-shadow: 0 0 20px #ccc;
+
+}
 
 .list-group{
     box-shadow: 0 0 20px #ccc;

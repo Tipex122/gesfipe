@@ -124,7 +124,7 @@
 {% endblock %}
 
 {% block sidebar %}
-    <!-- TODO: La pagination pourrait être mieux placée ... à creuser ultérieurement -->
+<!--
     <div class="pagination">
         <span class="step-links">
             {% if transactions.has_previous %}
@@ -140,42 +140,39 @@
             {% endif %}
         </span>
     </div>
-
-    <!-- <div class="row"> -->
-
-        {% for bank in banks_list %}
-            <div class="list-group">
-                <a class="list-group-item active" href="#"> {{bank}} </a>
-                {% for account in all_accounts %}
-                    {% if account.bank == bank %}
-                        {# <a class="list-group-item" href={% url "transactions_list" %}>{{account}} #}
-                        <a class="list-group-item" href="/account/{{account.id}}/">{{account}}
-                            <br> Account id: {{account.num_of_account}}
-                            <i>
-                                <br>Total :
-                                {% if account.total_amount_by_account >= 0 %}
-                                    <span>{{account.total_amount_by_account}}</span>
-                                {% else %}
-                                    <span class="font-red">{{account.total_amount_by_account}}</span>
-                                {% endif %}
-                                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
-                            </i>
-                        </a>
-                        <a class="list-group-item" href="/transaction_create/">
-                            Create new transaction
-                        </a>
-                        {# <a class="list-group-item" href="#">Test autre compte (PEL) <br> 0123456789 </a> #}
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <!--
-        <div class="list-group">
-                <a class="list-group-item active" href="#"> Budget (Changer couleur) </a>
-                <a class="list-group-item" href="#">Mettre autre boîte ici</a>
+-->
+  {% for bank in banks_list %}
+    {% for account in all_accounts %}
+      {% if account.bank == bank %}
+        <div class="card">
+          <img class="card-img-top"
+               src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+               alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">Account id: {{account.num_of_account}}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
+            <p class="card-text">
+              <a href="/account/{{account.id}}/">{{account}}
+              <br> Account id: {{account.num_of_account}}
+              <i>
+                <br>Total :
+                {% if account.total_amount_by_account >= 0 %}
+                    <span>{{account.total_amount_by_account}}</span>
+                {% else %}
+                    <span class="font-red">{{account.total_amount_by_account}}</span>
+                {% endif %}
+                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+              </i>
+              </a>
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="/transaction_create/">Create new transaction</a>
+          </div>
         </div>
-        -->
-    <!-- </div> -->
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
 {% endblock %}
 
 

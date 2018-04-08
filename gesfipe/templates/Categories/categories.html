@@ -10,41 +10,45 @@
 
 {% block content %}
 
-<ol class="breadcrumb">
-    {% for i in ancestors %}
-        <li class="breadcrumb-item active"><a href="{% url 'show_category' node=i.name %}"> {{ i.name }} </a></li>
-    {% endfor %}
+  <ol class="breadcrumb">
+      {% for i in ancestors %}
+          <li class="breadcrumb-item active"><a href="{% url 'show_category' node=i.name %}"> {{ i.name }} </a></li>
+      {% endfor %}
+  </ol>
 
-</ol>
-
-{% if  children %}
-<div class="list-group">
-    <h5 class="list-group-item active">
-        Sub Categories of:
-        {% for c in current %}
-            <span><b>{{c.name}}</b></span>
-            <span class="badge badge-pill badge-info pull-right" style="float:right;">{{c.amount}}</span>
+  {% if children %}
+    <div class="list-group">
+        <h5 class="list-group-item active">
+            Sub Categories of:
+              {% for c in current %}
+                  <br>
+                  <span>
+                    <b>
+                      {{c.name}}
+                    </b>
+                  </span>
+                  <span class="badge badge-pill badge-info pull-right" style="float:right;">
+                    {{c.amount}}
+                  </span>
+              {% endfor %}
+        </h5>
+        {% for i in children %}
+            {% if i.is_leaf_node %}
+                <a href="{% url 'category_edit' pk=i.pk %}" class="list-group-item">
+                    <span>{{ i.name }}</span>
+                    <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
+                </a>
+            {% else %}
+                <!-- <a href="{{ i.name }}" class="list-group-item"> -->
+                <a href="{% url 'show_category' node=i.name %}" class="list-group-item">
+                    <span>{{ i.name }}</span>
+                    <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
+                </a>
+            {% endif %}
         {% endfor %}
-    </h5>
-    {% for i in children %}
-        {% if i.is_leaf_node %}
-            <a href="{% url 'category_edit' pk=i.pk %}" class="list-group-item">
-                <span>{{ i.name }}</span>
-                <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
-            </a>
-        {% else %}
-            <!-- <a href="{{ i.name }}" class="list-group-item"> -->
-            <a href="{% url 'show_category' node=i.name %}" class="list-group-item">
-                <span>{{ i.name }}</span>
-                <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
-            </a>
-        {% endif %}
-    {% endfor %}
 
-    <br><hr>
-</div>
-{% endif %}
-
+    </div>
+  {% endif %}
 
 {% endblock content %}
 
