@@ -61,6 +61,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'home' %}">Accounts <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'transactions_list' %}">Transactions <span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'show_category' node=None %}">Budget <span class="sr-only">(current)</span></a>
             </li>
@@ -103,23 +106,26 @@
       {% endif %}
 
       <div class="row">
-        <div class="col-sm-9">
-            {% block content %}  {% endblock content %}
+        <div class="col-md-9 col-lg-9 col-sm-9">
+          <div class="content">
+            {% block content %}
+            {% endblock content %}
+          </div>
         </div>
-        <div class="col-sm-3">
-          {% block sidebar %}  {% endblock sidebar %}
-          <br>
+        <div class="col-md-3 col-lg-3 col-sm-3">
           {% block sidesearch %}
-            <hr>
+            <!-- <hr>
             <p> Mettre en place </p>
             <p>une zone de recherche ici</p>
-            <hr>
+            <hr> -->
           {% endblock sidesearch %}
           <br>
+          {% block sidebar %}
 
+          {% endblock sidebar %}
+          <br>
         </div>
       </div>
-
     </div> <!-- /container -->
 
     {% block modal %}{% endblock modal %}
@@ -141,10 +147,7 @@
 
       <script src="{% static 'js/project.js' %}"></script>
 
-
     {% endblock javascript %}
-    {% endblock body %}
-  </body>
 
     <hr>
 
@@ -164,6 +167,9 @@
           </div>
         </footer>
     </div>
+
+    {% endblock body %}
+  </body>
 
 </html>
 

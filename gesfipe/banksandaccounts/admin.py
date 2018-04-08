@@ -23,14 +23,14 @@ class TransactionsResource(resources.ModelResource):
         skip_unchanged = True
 
         fields = (
+            'creation_date',
             'type_of_transaction',
             'name_of_transaction',
             'amount_of_transaction',
             'currency_of_transaction',
-            'creation_date',
-            'account',
-            'category_of_transaction',
-            'id'
+            # 'account',
+            # 'category_of_transaction',
+            'id',
         )
 
         # widgets = {
@@ -45,9 +45,9 @@ class TransactionsAdmin(ImportExportModelAdmin):
         (None,
          {'fields':
               ['date_of_transaction',
+               'type_of_transaction',
                'name_of_transaction',
-               'type_of_transaction'
-               ]
+                              ]
           }
          ),
         # ('Info Genre', {'fields':
@@ -56,7 +56,8 @@ class TransactionsAdmin(ImportExportModelAdmin):
          {'fields':
               ['amount_of_transaction',
                'currency_of_transaction',
-               'creation_date', 'account',
+               'creation_date',
+               'account',
                'category_of_transaction',
                ]
           }

@@ -59,8 +59,8 @@ class Accounts(models.Model):
         return "%s" % self.name_of_account
 
     class Meta:
-        verbose_name = _('bank account')
-        verbose_name_plural = _('bank accounts')
+        verbose_name = _('account')
+        verbose_name_plural = _('accounts')
         ordering = ['name_of_account']
 
 
@@ -79,21 +79,23 @@ class Transactions(models.Model):
         max_digits=12,
         decimal_places=2,
         default=0,
-        verbose_name="Montant de la transaction ",
+        verbose_name='Montant de la transaction ',
         blank=True, null=True)
 
     currency_of_transaction = models.CharField(
         'Devise',
+        default='EUR',
         max_length=3)
 
     creation_date = models.DateField(
         'Date de saisie',
         default=datetime.datetime.now)
 
-    account = models.ForeignKey('Accounts',
-                                null=True,
-                                blank=True,
-                                on_delete=models.CASCADE)
+    account = models.ForeignKey(
+        Accounts,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
 
     category_of_transaction = models.ForeignKey(
         Category,

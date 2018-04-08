@@ -3,7 +3,7 @@
 
 
 {% block title %}
-    {% if create %}Create{% else %}Edit{% endif %} transaction {{ form.instance.name }}
+    {% if create %} - Create{% else %} - Edit{% endif %} transaction {{ form.instance.name }}
 {% endblock %}
 
 {% block heading %}
@@ -29,7 +29,6 @@
 {% endblock %}
 
 {% block sidebar %}
-    <div class="row">
         {% for bank in banks %}
             <div class="list-group">
                 <a class="list-group-item active" href="#"> {{bank}} </a>
@@ -49,5 +48,4 @@
                 {% endfor %}
             </div>
         {% endfor %}
-    </div>
 {% endblock %}
