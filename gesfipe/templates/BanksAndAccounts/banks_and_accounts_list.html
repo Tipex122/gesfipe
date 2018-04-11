@@ -42,9 +42,14 @@
             </div>
         {% endfor %}
 -->
+<div class="row">
+
         {% for bank in banks_list %}
+  <!-- <div class="col-12 col-md-8 col-lg-4"> -->
+
             {% for account in accounts_info %}
                 {% if account.bank == bank %}
+                <div class="col-12 col-sm-12 col-md-9 col-lg-4">
                     <div class="card">
                         <img class="card-img-top"
                              src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
@@ -81,10 +86,13 @@
                         </div>
                     </div>
                     <br>
+                </div>
                 {% endif %}
             {% endfor %}
+    <!-- </div> -->
         {% endfor %}
 
+</div>
 {% endblock content %}
 
 {% block sidebar %}
