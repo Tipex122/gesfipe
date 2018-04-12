@@ -18,6 +18,15 @@
 }
 */
 
+body .font-red {
+    color: #ff0000;
+}
+
+body .font-blue {
+    color: #0000ff;
+}
+
+
 .content {
   margin: 1em 0;
   position: relative;
