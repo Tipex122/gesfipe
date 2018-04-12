@@ -22,35 +22,33 @@
 
 {% block content %}
 
-<div class="list-group">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>N° Account</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
-            <td>{{ transaction.type_of_transaction }}</td>
-            <td>{{ transaction.name_of_transaction }}</td>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Currency</th>
+        <th>N° Account</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
+        <td>{{ transaction.type_of_transaction }}</td>
+        <td>{{ transaction.name_of_transaction }}</td>
             {% if transaction.amount_of_transaction >= 0 %}
                 <td class="font-blue"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
             {% endif %}
             {% if transaction.amount_of_transaction < 0 %}
                 <td class="font-red"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
             {% endif %}
-            <td>{{ transaction.currency_of_transaction }}</td>
-            <td>{{ transaction.account.num_of_account }}</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+        <td>{{ transaction.currency_of_transaction }}</td>
+        <td>{{ transaction.account.num_of_account }}</td>
+    </tr>
+    </tbody>
+</table>
 
 
 {% endblock content %}
