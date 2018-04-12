@@ -23,6 +23,16 @@
   position: relative;
 }
 
+.content .search-sidebar{
+    box-shadow: 0 0 20px #ccc;
+}
+
+/*
+.content .btn .btn-default{
+    box-shadow: 0 0 20px #ccc;
+}
+*/
+
 .content .card{
     box-shadow: 0 0 20px #ccc;
     margin: 1em 0;

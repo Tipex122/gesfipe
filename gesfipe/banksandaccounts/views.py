@@ -240,7 +240,7 @@ def transaction_detail(request, transaction_id):
 @login_required
 def transaction_create(request):
     # TODO: How to obtain the list of accounts only available for the connected user ?
-    banks = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
 
     if request.method == 'POST':
         form = TransactionForm(data=request.POST)
@@ -262,7 +262,7 @@ def transaction_create(request):
         # to all accounts (due to "0") and used in sidebar
 
         'form': form,
-        'banks': banks,
+        'banks_list': banks_list,
         'create': True
     }
     return render(request, 'BanksAndAccounts/transaction_edit.html', context)
@@ -272,7 +272,7 @@ def transaction_create(request):
 def transaction_edit(request, pk):
     # TODO: How to obtain the list of accounts only available for the connected user ?
     transaction = get_object_or_404(Transactions, pk=pk)
-    banks = Banks.objects.all().filter(accounts__owner_of_account=request.user)
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
     # account = forms.ChoiceField(queryset=Accounts.objects.all().filter(owner_of_account=request.user))
 
     # account = Accounts.objects.all().filter(accounts__owner_of_account=request.user)
@@ -322,7 +322,7 @@ def transaction_edit(request, pk):
         # general information related
         # to all accounts (due to "0") and used in sidebar
         # 'account': account,
-        'banks': banks,
+        'banks_list': banks_list,
         'form': form,
         'create': False
     }

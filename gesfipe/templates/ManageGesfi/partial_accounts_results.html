@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if results %}
-<div class="list-group">
+<!-- <div class="list-group"> -->
     <table class="table table-striped">
         <thead>
         <tr>
@@ -20,8 +20,8 @@
         {% endfor %}
         </tbody>
     </table>
-</div>
+<!-- </div> -->
 
 {% else %}
-<h4 class="no-result">{% trans 'No account found' %} :(</h4>
+    <h4 class="no-result">{% trans 'No account found' %} :(</h4>
 {% endif %}

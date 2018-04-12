@@ -145,15 +145,15 @@
     {% for account in all_accounts %}
       {% if account.bank == bank %}
         <div class="card">
-          <img class="card-img-top"
-               src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
-               alt="Card image cap">
+          <a href="/account/{{account.id}}/">
+            <img class="card-img-top"
+                 src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                 alt="Card image cap">
+          </a>
           <div class="card-body">
             <h4 class="card-title">Account id: {{account.num_of_account}}</h4>
             <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
             <p class="card-text">
-              <a href="/account/{{account.id}}/">{{account}}
-              <br> Account id: {{account.num_of_account}}
               <i>
                 <br>Total :
                 {% if account.total_amount_by_account >= 0 %}
@@ -163,7 +163,6 @@
                 {% endif %}
                 <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
               </i>
-              </a>
             </p>
           </div>
           <div class="card-footer">

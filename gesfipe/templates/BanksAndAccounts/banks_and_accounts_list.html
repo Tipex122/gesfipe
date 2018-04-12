@@ -51,9 +51,11 @@
                 {% if account.bank == bank %}
                 <div class="col-12 col-sm-12 col-md-9 col-lg-4">
                     <div class="card">
+                      <a href="/account/{{account.id}}/">
                         <img class="card-img-top"
                              src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
                              alt="Card image cap">
+                      </a>
                         <div class="card-body">
                             <h4 class="card-title">Account id: <br>{{account.num_of_account}}</h4>
                             <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
