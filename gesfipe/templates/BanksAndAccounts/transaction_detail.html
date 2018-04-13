@@ -50,7 +50,78 @@
     </tbody>
 </table>
 
-
 {% endblock content %}
+
+
+{% block sidesearch %}
+  <div class="content">
+  {% if not hide_search %}
+    <form class="search-sidebar" role="search" action="{% url 'search' %}">
+      <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Search">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary search-sidebar">
+              Submit
+              <!-- <span class="glyphicon glyphicon-search"></span> -->
+            </button>
+          </span>
+      </div>
+    </form>
+  {% endif %}
+{% endblock sidesearch %}
+
+
+{% block sidebar %}
+<!--
+    <div class="pagination">
+        <span class="step-links">
+            {% if transactions.has_previous %}
+                <a href="?page={{ transactions.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
+            </span>
+
+            {% if transactions.has_next %}
+                <a href="?page={{ transactions.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+-->
+<!-- TODO: To search why card-text is so long (maybe have a look on project.css ?) -->
+<!-- TODO: To try to use one common list_of_accounts.html for all pages (see result.html -->
+  {% for bank in banks_list %}
+    {% for account in all_accounts %}
+      {% if account.bank == bank %}
+        <div class="card">
+          <a href="/account/{{account.id}}/">
+            <img class="card-img-top"
+                 src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                 alt="Card image cap">
+          </a>
+          <div class="card-body">
+            <h4 class="card-title">Account id: {{account.num_of_account}}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
+            <p class="card-text">
+              <i>
+                <br>Total :
+                {% if account.total_amount_by_account >= 0 %}
+                    <span>{{account.total_amount_by_account}}</span>
+                {% else %}
+                    <span class="font-red">{{account.total_amount_by_account}}</span>
+                {% endif %}
+                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+              </i>
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="/transaction_create/">Create new transaction</a>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}
 
 

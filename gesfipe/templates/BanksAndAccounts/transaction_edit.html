@@ -30,28 +30,31 @@
     </form>
 {% endblock %}
 
+
+{% block sidesearch %}
+  <div class="content">
+  {% if not hide_search %}
+    <form class="search-sidebar" role="search" action="{% url 'search' %}">
+      <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Search">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary search-sidebar">
+              Submit
+              <!-- <span class="glyphicon glyphicon-search"></span> -->
+            </button>
+          </span>
+      </div>
+    </form>
+  {% endif %}
+{% endblock sidesearch %}
+
+
 {% block sidebar %}
-<!--
-        {% for bank in banks %}
-            <div class="list-group">
-                <a class="list-group-item active" href="#"> {{bank}} </a>
-                {% for account in all_accounts %}
-                    {% if account.bank == bank %}
-                        <a class="list-group-item" href="/account/{{account.id}}/">{{account}}
-                            <br> Account id: {{account.num_of_account}}
-                            <i>
-                                <br> Total : {{account.total_amount_by_account}}
-                                <br> Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
-                            </i>
-                        </a>
-                        <a class="list-group-item" href="/transaction_create/">
-                            Create new transaction
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endfor %}
--->
+
+<!-- TODO: To search why card-text is so long (maybe have a look on project.css ?) -->
+<!-- TODO: To try to use one common list_of_accounts.html for all pages (see result.html -->
+<!-- TODO: To search why "Account" isn't obligatory -->
+<!-- TODO: To fill automatically some field such as Account when comming from a link of the sidebar Card (transaction_list.html -->
   {% for bank in banks_list %}
     {% for account in all_accounts %}
       {% if account.bank == bank %}
@@ -82,5 +85,5 @@
         </div>
       {% endif %}
     {% endfor %}
-    {% endfor %}
+  {% endfor %}
 {% endblock %}

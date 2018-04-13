@@ -142,23 +142,7 @@
 
 
 {% block sidebar %}
-<!--
-    <div class="pagination">
-        <span class="step-links">
-            {% if transactions.has_previous %}
-                <a href="?page={{ transactions.previous_page_number }}">previous</a>
-            {% endif %}
 
-            <span class="current">
-                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
-            </span>
-
-            {% if transactions.has_next %}
-                <a href="?page={{ transactions.next_page_number }}">next</a>
-            {% endif %}
-        </span>
-    </div>
--->
 <!-- TODO: To search why card-text is so long (maybe have a look on project.css ?) -->
 <!-- TODO: To try to use one common list_of_accounts.html for all pages (see result.html -->
   {% for bank in banks_list %}
