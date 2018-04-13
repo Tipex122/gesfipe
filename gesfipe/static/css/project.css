@@ -68,8 +68,8 @@ body .font-blue {
     width: 100%;
 }
 
-.sidebar-block {
-
+.content .search-sidebar {
+  /*margin: 1em 0;*/
 }
 
 .breadcrumb{

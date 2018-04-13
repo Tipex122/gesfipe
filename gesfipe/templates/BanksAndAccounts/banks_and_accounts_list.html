@@ -9,95 +9,73 @@
 {% endblock heading %}
 
 {% block content %}
-<!--
-        {% for bank in banks_list %}
-            <div class="list-group">
-                <a class="list-group-item active" href="#"> {{bank}} </a>
-                {% for account in accounts_info %}
-                    {% if account.bank == bank %}
-                        <a class="list-group-item" href="/account/{{account.id}}/">{{account}}
-                            <br> Account id: {{account.num_of_account}}
-                            <br> Total :
-                                {% if account.total_amount_by_account >= 0 %}
-                                    <span>{{account.total_amount_by_account}}</span>
-                                {% else %}
-                                    <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
-                                {% endif %}
-                            <br> Transaction Mini:
-                                {% if account.min_amount_by_account < 0 %}
-                                    <span class="label label-danger"> {{account.min_amount_by_account}} </span>
-                                {% else %}
-                                    <span class="label label-primary"> {{account.min_amount_by_account}} </span>
-                                {% endif %}
-                            <br> Transaction Maxi:
-                                {% if account.max_amount_by_account < 0 %}
-                                    <span class="label label-danger"> {{account.max_amount_by_account}} </span>
-                                {% else %}
-                                    <span class="label label-primary"> {{account.max_amount_by_account}} </span>
-                                {% endif %}
-                            <br> Number of transactions: <span class="label label-default">{{account.num_transac_by_account}}</span>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endfor %}
--->
 <div class="row">
-
-        {% for bank in banks_list %}
-  <!-- <div class="col-12 col-md-8 col-lg-4"> -->
-
-            {% for account in accounts_info %}
-                {% if account.bank == bank %}
-                <div class="col-12 col-sm-12 col-md-9 col-lg-4">
-                    <div class="card">
-                      <a href="/account/{{account.id}}/">
-                        <img class="card-img-top"
-                             src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
-                             alt="Card image cap">
-                      </a>
-                        <div class="card-body">
-                            <h4 class="card-title">Account id: <br>{{account.num_of_account}}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
-                            <p class="card-text">
-                                <br> Total :
-                                    {% if account.total_amount_by_account >= 0 %}
-                                        <span>{{account.total_amount_by_account}}</span>
-                                    {% else %}
-                                        <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
-                                    {% endif %}
-                                <br> Transaction Mini:
-                                    {% if account.min_amount_by_account < 0 %}
-                                        <span class="label label-danger"> {{account.min_amount_by_account}} </span>
-                                    {% else %}
-                                        <span class="label label-primary"> {{account.min_amount_by_account}} </span>
-                                    {% endif %}
-                                <br> Transaction Maxi:
-                                    {% if account.max_amount_by_account < 0 %}
-                                        <span class="label label-danger"> {{account.max_amount_by_account}} </span>
-                                    {% else %}
-                                        <span class="label label-primary"> {{account.max_amount_by_account}} </span>
-                                    {% endif %}
-                                <br> Number of transactions: <span class="label label-default">{{account.num_transac_by_account}}</span>
-                                <br>
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                          <a href="/account/{{account.id}}/" class="card-link">Transactions</a>
-                          {# <a href="#" class="card-link">Another link</a> #}
-                        </div>
-                    </div>
-                    <br>
-                </div>
-                {% endif %}
-            {% endfor %}
-    <!-- </div> -->
-        {% endfor %}
-
+  {% for bank in banks_list %}
+      {% for account in accounts_info %}
+          {% if account.bank == bank %}
+          <div class="col-12 col-sm-12 col-md-9 col-lg-4">
+              <div class="card">
+                <a href="/account/{{account.id}}/">
+                  <img class="card-img-top"
+                       src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                       alt="Card image cap">
+                </a>
+                  <div class="card-body">
+                      <h4 class="card-title">Account id: <br>{{account.num_of_account}}</h4>
+                      <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
+                      <p class="card-text">
+                          <br> Total :
+                              {% if account.total_amount_by_account >= 0 %}
+                                  <span>{{account.total_amount_by_account}}</span>
+                              {% else %}
+                                  <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                              {% endif %}
+                          <br> Transaction Mini:
+                              {% if account.min_amount_by_account < 0 %}
+                                  <span class="label label-danger"> {{account.min_amount_by_account}} </span>
+                              {% else %}
+                                  <span class="label label-primary"> {{account.min_amount_by_account}} </span>
+                              {% endif %}
+                          <br> Transaction Maxi:
+                              {% if account.max_amount_by_account < 0 %}
+                                  <span class="label label-danger"> {{account.max_amount_by_account}} </span>
+                              {% else %}
+                                  <span class="label label-primary"> {{account.max_amount_by_account}} </span>
+                              {% endif %}
+                          <br> Number of transactions: <span class="label label-default">{{account.num_transac_by_account}}</span>
+                          <br>
+                      </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="/account/{{account.id}}/" class="card-link">Transactions</a>
+                    {# <a href="#" class="card-link">Another link</a> #}
+                  </div>
+              </div>
+              <br>
+          </div>
+          {% endif %}
+      {% endfor %}
+  {% endfor %}
 </div>
 {% endblock content %}
 
-{% block sidebar %}
+{% block sidesearch %}
+  <div class="content">
+  {% if not hide_search %}
+    <form class="search-sidebar" role="search" action="{% url 'search' %}">
+      <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Search">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary search-sidebar">
+              Submit
+              <!-- <span class="glyphicon glyphicon-search"></span> -->
+            </button>
+          </span>
+      </div>
+    </form>
+  {% endif %}
+{% endblock sidesearch %}
 
+{% block sidebar %}
 {% endblock sidebar %}
 

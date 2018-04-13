@@ -115,23 +115,8 @@
           {% block sidesearch %}
           {% endblock sidesearch %}
 
-          <div class="content">
-            {% if not hide_search %}
-              <form class="search-sidebar" role="search" action="{% url 'search' %}">
-                <div class="input-group">
-                  <input type="text" class="form-control" name="q" placeholder="Search">
-                    <span class="input-group-btn">
-                      <button type="submit" class="btn btn-primary search-sidebar">
-                        Submit
-                        <!-- <span class="glyphicon glyphicon-search"></span> -->
-                      </button>
-                    </span>
-                </div>
-              </form>
-            {% endif %}
-
-            {% block sidebar %}
-            {% endblock sidebar %}
+          {% block sidebar %}
+          {% endblock sidebar %}
           </div>
         </div>
       </div>
