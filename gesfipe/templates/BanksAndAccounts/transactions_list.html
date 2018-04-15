@@ -50,6 +50,7 @@
 
 {% block content %}
     <!-- <div class="table-responsive"> -->
+<div class="table-responsive{-sm|-md}">
     <table class="table table-hover table-bordered table-striped table-condensed">
         <thead>
             <tr>
@@ -81,6 +82,7 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
     <!-- </div> -->
     <!-- La pagination pourrait être mieux placée ... à creuser ultérieurement -->
     <!-- Voir aussi site https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html  pour tenir compte des ordres de tri -->
