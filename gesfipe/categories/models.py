@@ -151,7 +151,8 @@ class Category(MPTTModel):
     # objects = models.Manager()
 
     # New from Gesfi1
-    tags_lists = ArrayField(ArrayField(models.CharField(max_length=200), blank=True), blank=True)
+    # tags_lists = ArrayField(ArrayField(models.CharField(max_length=200), blank=True), blank=True)
+    tags_lists = ArrayField(models.CharField(max_length=256), blank=True)
 
     class MPTTMeta:
         order_insertion_by = ['name']

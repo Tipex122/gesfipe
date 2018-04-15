@@ -30,7 +30,7 @@ class TransactionsResource(resources.ModelResource):
             'currency_of_transaction',
             # 'account',
             # 'category_of_transaction',
-            'id',
+            # 'id',
         )
 
         # widgets = {

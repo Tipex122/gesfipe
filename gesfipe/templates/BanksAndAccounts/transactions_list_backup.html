@@ -8,12 +8,16 @@
 
 
 {% block heading %}
-<!-- A améliorer car à chaque fois cela liste l'ensemble des comptes -->
+<!-- TODO: A améliorer car à chaque fois cela liste l'ensemble des comptes -->
     <h2>{% trans 'Transactions of account(s):' %}</h2>
-            {% for account in accounts_info %}
-<!-- #TODO: indiquer le nombre de transactions par compte -->
-                <p><i>{{account.name_of_account}} - {{account.num_of_account}} <i>[total: {{account.total_amount_by_account}} - Number of transaction(s): {{account.num_transac_by_account}}]</i></p>
-            {% endfor %}
+      {% for account in accounts_info %}
+        <p>
+          {{account.name_of_account}} - {{account.num_of_account}}
+          <i>
+            [total: {{account.total_amount_by_account}} - Number of transaction(s): {{account.num_transac_by_account}}]
+          </i>
+        </p>
+      {% endfor %}
 {% endblock heading %}
 
 

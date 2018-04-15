@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load i18n %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% for bank in banks_list %}
+  {% for account in all_accounts %}
+    {% if account.bank == bank %}
+      <div class="card">
+        <a href="/account/{{account.id}}/">
+          <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+          <img class="card-img-top"
+               src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+               alt="Card image cap">
+        </a>
+        <div class="card-body">
+          <h4 class="card-title">Account id: {{account.num_of_account}}</h4>
+          <h6 class="card-subtitle mb-2 text-muted">{{bank}} - {{account.name_of_account}}</h6>
+          <p class="card-text">
+            <i>
+              <br>Total :
+              {% if account.total_amount_by_account >= 0 %}
+                  <span>{{account.total_amount_by_account}}</span>
+              {% else %}
+                  <span class="font-red">{{account.total_amount_by_account}}</span>
+              {% endif %}
+              <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+            </i>
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="/transaction_create/">Create new transaction</a>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endfor %}

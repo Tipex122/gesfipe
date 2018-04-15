@@ -72,56 +72,9 @@
 
 
 {% block sidebar %}
-<!--
-    <div class="pagination">
-        <span class="step-links">
-            {% if transactions.has_previous %}
-                <a href="?page={{ transactions.previous_page_number }}">previous</a>
-            {% endif %}
 
-            <span class="current">
-                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
-            </span>
+  {% include 'BanksAndAccounts/sidebar_list_of_accounts.html' with all_account=all_account banks_list=banks_list  %}
 
-            {% if transactions.has_next %}
-                <a href="?page={{ transactions.next_page_number }}">next</a>
-            {% endif %}
-        </span>
-    </div>
--->
-<!-- TODO: To search why card-text is so long (maybe have a look on project.css ?) -->
-<!-- TODO: To try to use one common list_of_accounts.html for all pages (see result.html -->
-  {% for bank in banks_list %}
-    {% for account in all_accounts %}
-      {% if account.bank == bank %}
-        <div class="card">
-          <a href="/account/{{account.id}}/">
-            <img class="card-img-top"
-                 src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
-                 alt="Card image cap">
-          </a>
-          <div class="card-body">
-            <h4 class="card-title">Account id: {{account.num_of_account}}</h4>
-            <h6 class="card-subtitle mb-2 text-muted">{{bank}}</h6>
-            <p class="card-text">
-              <i>
-                <br>Total :
-                {% if account.total_amount_by_account >= 0 %}
-                    <span>{{account.total_amount_by_account}}</span>
-                {% else %}
-                    <span class="font-red">{{account.total_amount_by_account}}</span>
-                {% endif %}
-                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
-              </i>
-            </p>
-          </div>
-          <div class="card-footer">
-            <a href="/transaction_create/">Create new transaction</a>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %}
-  {% endfor %}
 {% endblock %}
 
 
