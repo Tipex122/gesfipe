@@ -194,7 +194,7 @@ class Category(MPTTModel):
             print('level_amount = {0}'.format(level_amount))
             '''
             ancestor = self.parent
-            print(ancestor)
+            # print(ancestor)
             ancestor.amount = level_amount
             ancestor.save()
 
@@ -216,8 +216,7 @@ class Category(MPTTModel):
         tag_list = tags.split(' ')
         for tag in tag_list:
             if tag:
-                t, created = Tag.objects.get_or_create(tag=tag.lower(),
-                                                       category=self)
+                t, created = Tag.objects.get_or_create(tag=tag.lower(), category=self)
 
     def get_tags(self):
         return Tag.objects.filter(category=self)
@@ -236,6 +235,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
+        ordering = ['tag']
         # unique_together = (('tag', 'category'),)
         # index_together = [['tag', 'category'], ]
 

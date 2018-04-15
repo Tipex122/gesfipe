@@ -35,8 +35,8 @@ class Banks(models.Model):
 
 class Accounts(models.Model):
     name_of_account = models.CharField(
-        'Nom du compte',
-        default='Nom du compte en banque',
+        'Name of the account',
+        default='Name of bank account',
         max_length=256
     )
 
@@ -44,8 +44,8 @@ class Accounts(models.Model):
         return "\n".join([u.username for u in User.objects.all()])
 
     num_of_account = models.CharField(
-        'Identifiant du compte',
-        default='Identifiant',
+        'Account Id',
+        default='Id',
         max_length=256)
 
     bank = models.ForeignKey('Banks', null=True, blank=True, on_delete=models.CASCADE)
@@ -66,20 +66,20 @@ class Accounts(models.Model):
 
 class Transactions(models.Model):
     date_of_transaction = models.DateField(
-        'Date de la transaction',
+        'Date of the transaction',
         default=datetime.datetime.now)
 
     type_of_transaction = models.CharField(
-        'Type de transaction',
+        'Type of transaction',
         max_length=64)
 
-    name_of_transaction = models.CharField('Fournisseur', max_length=256)
+    name_of_transaction = models.CharField('Provider', max_length=256)
 
     amount_of_transaction = models.DecimalField(
         max_digits=12,
         decimal_places=2,
         default=0,
-        verbose_name='Montant de la transaction ',
+        verbose_name='Transaction amount',
         blank=True, null=True)
 
     currency_of_transaction = models.CharField(
@@ -88,7 +88,7 @@ class Transactions(models.Model):
         max_length=3)
 
     creation_date = models.DateField(
-        'Date de saisie',
+        'Creation date in database',
         default=datetime.datetime.now)
 
     account = models.ForeignKey(
