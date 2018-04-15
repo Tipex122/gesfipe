@@ -84,22 +84,24 @@
     <!-- </div> -->
     <!-- La pagination pourrait être mieux placée ... à creuser ultérieurement -->
     <!-- Voir aussi site https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html  pour tenir compte des ordres de tri -->
-    <div class="pagination">
+    <nav class="pagination" aria-label="Page navigation">
         <span class="step-links">
             {% if transactions.has_previous %}
-                <a href="?page={{ transactions.previous_page_number }}">previous</a>
+                <a href="?page={{ transactions.previous_page_number }}"> {% trans 'previous' %}</a>
             {% endif %}
 
             <span class="current">
-                Page {{ transactions.number }} sur {{ transactions.paginator.num_pages }}.
+                {% trans 'Page' %} {{ transactions.number }} {% trans 'on' %} {{ transactions.paginator.num_pages }}.
             </span>
 
             {% if transactions.has_next %}
-                <a href="?page={{ transactions.next_page_number }}">next</a>
+                <a href="?page={{ transactions.next_page_number }}">{% trans 'next' %}</a>
             {% endif %}
         </span>
-    </div>
+    </nav>
 
+
+    <!--
     {% if transactions.has_other_pages %}
         <ul class="pagination">
             {% if transactions.has_previous %}
@@ -121,6 +123,7 @@
             {% endif %}
       </ul>
     {% endif %}
+    -->
 
 {% endblock %}
 
