@@ -14,7 +14,10 @@
         {% for account in accounts_info %}
             {% if account.bank == bank %}
             <div class="col-12 col-sm-12 col-md-9 col-lg-4">
-                <div class="card">
+                <div class="card"
+                     data-toggle="tooltip"
+                     data-placement="top"
+                     title="Click to get list of transactions related to this account">
                   <a href="/account/{{account.id}}/">
                     <img class="card-img-top"
                          src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
@@ -62,7 +65,12 @@
 {% block sidesearch %}
   <div class="content">
   {% if not hide_search %}
-    <form class="search-sidebar" role="search" action="{% url 'search' %}">
+    <form class="search-sidebar"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Search any text in any field of banks, accounts, transactions and categories data"
+          role="search"
+          action="{% url 'search' %}">
       <div class="input-group">
         <input type="text" class="form-control" name="q" placeholder="Search">
           <span class="input-group-btn">
