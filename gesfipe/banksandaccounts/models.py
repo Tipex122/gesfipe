@@ -93,8 +93,8 @@ class Transactions(models.Model):
 
     account = models.ForeignKey(
         Accounts,
-        null=True,
-        blank=True,
+        # null=True,
+        # blank=True,
         on_delete=models.CASCADE)
 
     category_of_transaction = models.ForeignKey(
