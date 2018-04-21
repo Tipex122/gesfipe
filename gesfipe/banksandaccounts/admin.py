@@ -59,6 +59,7 @@ class TransactionsAdmin(ImportExportModelAdmin):
                'creation_date',
                'account',
                'category_of_transaction',
+               'key_words',
                ]
           }
          ),

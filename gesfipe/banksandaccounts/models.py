@@ -7,6 +7,7 @@ from gesfipe.categories.models import Category
 from django.utils.translation import ugettext_lazy as _
 # from django.contrib.auth.models import User
 from gesfipe.users.models import User
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -103,16 +104,24 @@ class Transactions(models.Model):
         blank=True,
         on_delete=models.CASCADE)
 
-    # transcat = models.ForeignKey(Category, null=True,
-    # blank=True) #to be used in case of transversal categorization need
+    key_words = ArrayField(models.CharField(max_length=256, blank=True, null=True), blank=True, null=True)
 
-    #    def get_tags(self):
-    #        tags = str.split(self.name_of_transaction)
-    #        for tag in tags:
-    #            tag = tag.lower(tag)
-    #            if len(tag) < 2 or tag.isdecimal():
-    #                tags.remove(self, tag)
-    #        return tags
+    def create_key_words(self):
+        '''
+        function used to create keywords the first time data are loaded in database (via load-data.py)
+        '''
+        key_tags = self.name_of_transaction.split()
+        key_words_list = []
+        for key_tag in key_tags:
+            if len(key_tag) > 2 and key_tag.isalpha():
+                # print ('=====> ', key_tag)
+                key_tag = key_tag.upper()
+                # self.key_words.append(key_tag)
+                key_words_list.append(key_tag)
+        self.key_words=key_words_list
+
+    def get_key_words(self):
+        return self.key_words
 
     def __str__(self):
         return "[%s] -- %s ===>  %s" % (
