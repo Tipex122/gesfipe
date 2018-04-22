@@ -39,6 +39,12 @@ LIST_HEADERS_SEARCH_TAGS = (
 
 @login_required
 def search_tags(request):
+    '''
+    Gives the list of tags in transaction key_words not associated with a category (tag.is_new_tag = True)
+    :param request:
+    :return: render
+    '''
+
     sort_headers = SortHeaders(request, LIST_HEADERS_SEARCH_TAGS)
     transaction_list = Transactions.objects.all()
     list_of_tags = Tag.objects.all()
@@ -55,19 +61,14 @@ def search_tags(request):
             listoftags.append(t.tag)
 
     for transaction in transaction_list:
-        key_tags = transaction.name_of_transaction.split()
-        for key_tag in key_tags:
-            if len(key_tag) > 2 and key_tag.isalpha():
-                # print ('=====> ', key_tag)
-                key_tag = key_tag.upper()
-                if key_tag not in listoftags_found:
-                    key_tag.strip(',')
-                    listoftags_found.append(key_tag)
+        if not transaction.key_words:  # if key_words is empty, we create key_words
+            transaction.create_key_words()
+            transaction.save()
 
-                    # keywords = re.findall(r'\b[a-z,A-Z,\']{3,15}\b', transaction.name_of_transaction)
-                    # for keyword in keywords:
-                    #    keyword = keyword.upper()
-                    #    listoftags_found.append(keyword)
+        for key_tag in transaction.key_words:
+            if key_tag not in listoftags_found:
+                key_tag.strip(',') # To verify if it's needed to strip ',' (?)
+                listoftags_found.append(key_tag)
 
     # To get a list unique
     # listoftags_found = set(listoftags_found)
@@ -147,19 +148,19 @@ def tag_edit(request, pk):
 def show_category(request, node=None):
     cats = Category.objects.all()
     node = node.split('/')
-    print("NNNNNNNNNN OOOOOOOOO DDDDDDDDDDD EEEEEEEEEEEE: {}".format(node))
+    # print("NNNNNNNNNN OOOOOOOOO DDDDDDDDDDD EEEEEEEEEEEE: {}".format(node))
     if node[-1] == 'None':
         current = Category.objects.filter(parent=None)
-        print("Current: {} \n".format(current))
+        # print("Current: {} \n".format(current))
         ancestors = Category.objects.filter(parent=None)
         # ancestors = None
-        print("Ancestors: {} \n".format(current))
+        # print("Ancestors: {} \n".format(current))
 
         # children = Category.objects.filter(parent=ancestors[0])
         children = Category.objects.filter(parent=None)
         # children = Category.objects.filter(parent=ancestors)
 
-        print("Children: {} \n".format(current))
+        # print("Children: {} \n".format(current))
 
     else:
         current = Category.objects.filter(name=node[-1])

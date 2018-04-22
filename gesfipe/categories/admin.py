@@ -16,7 +16,8 @@ class TagAdmin(admin.ModelAdmin):
          {'fields': ['category', 'will_be_used_as_tag', 'is_new_tag', ]}),
     ]
     list_display = ('tag', 'is_new_tag', 'will_be_used_as_tag', 'category')
-    search_fields = ['tag', 'category']
+    # search_fields = ['tag', 'category',]
+    search_fields = ['tag',]
     list_filter = ('category', 'will_be_used_as_tag', 'is_new_tag',)
 
 

@@ -13,8 +13,8 @@ class TagForm(forms.ModelForm):
     # widgets = {
     #            'category':TreeNodeChoiceField(queryset=Category.objects.all()),
     #        }
-
-    category = TreeNodeChoiceField(queryset=Category.objects.all(), level_indicator=u'+-')
+    tag = forms.ModelMultipleChoiceField(queryset=Tag.objects.all())
+    category = TreeNodeChoiceField(queryset=Category.objects.all(), level_indicator=u'+--')
 
 
 class CategoryForm(forms.ModelForm):
