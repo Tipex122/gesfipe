@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^transactions_by_category/(?P<pk>)$', transactions_by_category, name='transactions_by_category'),
     url(r'^transactions_by_category/(?P<pk>[0-9]+)/$', transactions_by_category, name='transactions_by_category'),
 # SUPPR XLH    url(r'^admin/dashboard/', controlcenter.urls),
+    url(r'list_of_banks_available/$', gest_list_of_banks_available, name='gest_list_of_banks_available'),
 ]
 

@@ -15,7 +15,14 @@ from weboob.applications.weboobcfg import WeboobCfg
 from weboob.applications.boobank import Boobank
 
 from weboob.core import Weboob
+from weboob.core.backendscfg import BackendsConfig
 from weboob.capabilities.bank import CapBank
+
+import codecs
+streamWriter = codecs.lookup('utf-8')[-1]
+sys.stdout = streamWriter(sys.stdout)
+reload(sys) # il faut reloader pour pouvoir passer en encoding utf8
+sys.setdefaultencoding('utf8')
 
 
 wcfg = WeboobCfg()
@@ -25,7 +32,8 @@ test = wcfg.do_modules('modules CapBank,')
 
 # wcfg.do_list('CapBank')
 
-print(wcfg)
+print("BeboobCfg - Configuration de Weboob : ~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+print(" {} \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n".format(wcfg))
 
 
 # bbk = Boobank()
@@ -41,6 +49,13 @@ w = Weboob()
 # for cle in capApplicationDict:
 #     print('\n ==========> \n {}\n <==========\n'.format(cle))
 # ==================================================================
+
+if not w.repositories.check_repositories():
+    w.repositories.update()
+    print("WeBoob a été mis à jour (répertoires de config) \n")
+else:
+    print("Repertoires à jour \n\n")
+    # w.repositories.update()
 
 
 w.load_backends(CapBank)
@@ -63,17 +78,21 @@ print('\n ********** \n {}\n **********\n'.format(bal))
 
 print('workdir : {}'.format(w.workdir))
 print('repositories : {} \n'.format(w.repositories.modules_dir))
-print('get_all_modules_info : {} \n'.format(w.repositories.get_all_modules_info(CapBank)))
 
-if not w.repositories.check_repositories():
-    w.repositories.update()
-else:
-    print("Répertoires à jour \n")
-    # w.repositories.update()
+# print('get_all_modules_info :\n {} \n'.format(w.repositories.get_all_modules_info(CapBank)))
+
 
 listbanks = w.repositories.get_all_modules_info(CapBank)
+print("========================================================================================================")
+print("Liste des banques et de leur description")
+print("========================================================================================================")
 for key, val in listbanks.items():
     print("Banque key (Dict) : {} \t\t\t ===> \t {}".format(key, val.description))
+
+print("========================================================================================================\n")
+
+'''
+# Les lignes entre guillemets fonctionnent - temporairement anhihilées pour gagner du temps
 
 print('get_all_modules_info societegenerale:::: \n {}'.format(w.repositories.get_all_modules_info(CapBank)['societegenerale'].description))
 
@@ -81,7 +100,9 @@ print('get_all_modules_info societegenerale:::: \n {}'.format(w.repositories.get
 l = list(w.iter_accounts())
 for account in l:
     # Test if get_account works
-    print('\nAccount Id: {0} \t\t Account description: {1}'.format(account.id, account.label))
+    print("\n========================================================================================================")
+    print('Account Id: {0} \t\t Account description: {1}'.format(account.id, account.label))
+    print("========================================================================================================")
     # w.show_history(account.id)
     print(w.iter_history(account.id))
     m = w.iter_history(account)
@@ -92,4 +113,15 @@ for account in l:
     # Methods can use Account objects or id. Try one of them
     # id_or_account = random.choice([account, account.id])
     # history = list(w.iter_history(account.id))
-    # print(_id)
+    #  print(_id)
+'''
+
+# Ligne ci-dessous crée une entrée CIC dans le fichier de config: /home/xavier/.config/weboob/backends
+# par contre signale une erreur ensuite si mauvais login ou mdp dans le fichier de config
+# lorsqu'on lance la fonction : list(w.iter_accounts())
+# w.backends_config.add_backend('CIC', 'cic', {'login': '', 'password': ''})
+
+
+print("------------------------------------------------------------------------------------")
+print("------------------------------------------------------------------------------------")
+
