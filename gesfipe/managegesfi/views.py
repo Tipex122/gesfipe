@@ -188,11 +188,11 @@ def get_list_of_banks_available(request):
 
     context = {'list_of_banks': list_of_banks}
 
-    return render(request, 'ManageGesfi/list_of_backends.html', context)
+    return render(request, 'ManageGesfi/list_of_available_backends.html', context)
 
 
 @login_required
-def get_list_of_accounts(request):
+def get_list_of_available_accounts(request):
     w = Weboob()
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
@@ -207,8 +207,36 @@ def get_list_of_accounts(request):
 
     print(list_of_banks)
 
+    # TODO: Stupid context ==> bank et accounts ne sont pas liés je n'aurai donc pas la liste des compte associés à la banque
     list_of_accounts = list(w.iter_accounts())
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
 
-    return render(request, 'ManageGesfi/list_of_accounts.html', context)
+    return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
+
+
+@login_required
+def load_transactions(request):
+    w = Weboob()
+    check_weboob_repositories(w)
+    listbanks = w.load_backends(CapBank)
+    list_of_accounts = list(w.iter_accounts())
+
+    db_accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+    print(db_accounts_list)
+    for real_account in list_of_accounts:
+        print(real_account)
+        for a in db_accounts_list:
+            print("------------------------------------")
+            print("real_account.id = {} ******  a.num_of_account = {}".format(real_account.id, a.num_of_account))
+            print("------------------------------------")
+            if real_account.id == a.num_of_account:
+                m = w.iter_history(real_account)
+                for transaction in m:
+                    print(transaction)
+
+    context = {}
+
+    return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
+
+
