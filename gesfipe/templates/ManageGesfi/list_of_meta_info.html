@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load mptt_tags %}
+
+{% block title %}
+    {% trans 'List of Meta Info' %}
+{% endblock %}
+
+{% block heading %}
+    <h2>{% trans 'List of Meta Info' %} </h2>
+    <p><i>{% trans 'Info' %}</i>  </p>
+{% endblock heading %}
+
+{% block content %}
+  <table class="table table-striped ">
+    <thead>
+      <tr>
+        <th>Name of constant</th>
+        <th>Constant description</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for info in meta_info %}
+        <tr>
+          <td> {{info.data}} </td>
+          <td> {{info.description}} </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+

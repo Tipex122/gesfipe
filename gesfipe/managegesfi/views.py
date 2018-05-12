@@ -116,16 +116,33 @@ def transactions_by_category(request, pk=None):
 @login_required
 def display_meta(request):
     values = request.META.items()
-    # values.sort()
-    html = []
+    meta_info = []
     for k, v in values:
-        html.append(
-            '<tr><td>%s</td><td>%s</td></tr>' % (k,v)
-        )
-    return HttpResponse('<table>%s</table>' % '\n'.join(html))
+        info = {}
+        info['data'] = k
+        info['description'] = v
+        meta_info.append(info)
+
+    meta_info.sort(key=lambda k: k['data'])
+    context = {'meta_info': meta_info}
+
+    return render(request, 'ManageGesfi/list_of_meta_info.html', context)
+
+
+def check_weboob_repositories(w):
+    if not w.repositories.check_repositories():
+        w.repositories.update()
+        print("WeBoob a été mis à jour (répertoires de config) \n")
+    else:
+        print("Répertoires à jour\n")
+    return w
 
 @login_required
-def gest_list_of_banks_available(request):
+def get_list_of_banks_available(request):
+    w = Weboob()
+    check_weboob_repositories(w)
+
+    '''
     w = Weboob()
 
     if not w.repositories.check_repositories():
@@ -134,7 +151,8 @@ def gest_list_of_banks_available(request):
     else:
         print("Répertoires à jour \n\n")
         # w.repositories.update()
-    '''
+    
+    
     w.load_backends(CapBank)
     print('get_all_modules_info societegenerale:::: \n {}'.format(
         w.repositories.get_all_modules_info(CapBank)['societegenerale'].description))
@@ -171,3 +189,26 @@ def gest_list_of_banks_available(request):
     context = {'list_of_banks': list_of_banks}
 
     return render(request, 'ManageGesfi/list_of_backends.html', context)
+
+
+@login_required
+def get_list_of_accounts(request):
+    w = Weboob()
+    check_weboob_repositories(w)
+    listbanks = w.load_backends(CapBank)
+    list_of_banks = []
+    for key, val in listbanks.items():
+        # print("Banque key (Dict) : {} \t\t\t ===> \t {}".format(key, val.description))
+        data_bank = {}
+        data_bank['module'] = key
+        data_bank['name'] = val.DESCRIPTION
+        list_of_banks.append(data_bank)
+    list_of_banks.sort(key=lambda k: k['module'])
+
+    print(list_of_banks)
+
+    list_of_accounts = list(w.iter_accounts())
+    # list_of_accounts.sort(key=lambda k: k['label'])
+    context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
+
+    return render(request, 'ManageGesfi/list_of_accounts.html', context)

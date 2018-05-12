@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load mptt_tags %}
+
+{% block title %}
+    {% trans 'List of Accounts' %}
+{% endblock %}
+
+{% block heading %}
+    <h2>{% trans 'List of Accounts' %} </h2>
+    <p><i>{% trans 'Accounts' %}</i>  </p>
+{% endblock heading %}
+
+{% block content %}
+  {% for bank in list_of_banks %}
+  <h1> {{bank.name}} </h1>
+  <table class="table table-striped ">
+    <thead>
+      <tr>
+        <th>Name of Account</th>
+        <th>Identification</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for account in list_of_accounts %}
+        <tr>
+          <td> {{account.label}} </td>
+          <td> {{account.id}} </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
