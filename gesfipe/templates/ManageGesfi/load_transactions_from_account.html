@@ -13,27 +13,26 @@
 {% endblock heading %}
 
 {% block content %}
-  {% for bank in list_of_banks %}
-  <h1> {{bank.name}} </h1>
   <table class="table table-striped ">
     <thead>
       <tr>
-        <th>Name of Account</th>
-        <th>Identification</th>
+        <th>Date of transaction</th>
+        <th>Transaction label</th>
+        <th>Transaction amount</th>
       </tr>
     </thead>
     <tbody>
 
-      {% for account in list_of_accounts %}
+      {% for transaction in list_of_transactions %}
         <tr>
-          <td> {{account.label}} </td>
-          <td> {{account.id}} </td>
+          <td> {{transaction.date}} </td>
+          <td> {{transaction.label}} </td>
+          <td> {{transaction.amount}} </td>
         </tr>
       {% endfor %}
 
     </tbody>
   </table>
-  {% endfor %}
 {% endblock %}
 
 {% block sidebar %}

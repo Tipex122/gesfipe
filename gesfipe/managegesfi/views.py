@@ -217,25 +217,49 @@ def get_list_of_available_accounts(request):
 
 @login_required
 def load_transactions(request):
+    '''
+    Function to download transactions (or any related information) from banks through backends managed by Weboob
+    And load them in the database managed by Gesfi
+    :param request:
+    :return: render: to render the list of transactions got from accounts managed by Weboob Backends
+    '''
+
     w = Weboob()
+
+    # Check if repositories where à located Backends are up to date
     check_weboob_repositories(w)
+
+    # List of Banks in Backends with Weboob (for which we have te capability to connect with to get information)
     listbanks = w.load_backends(CapBank)
+
+    # List of accounts got from Banks
     list_of_accounts = list(w.iter_accounts())
 
+    # List of accounts in DataBase manage by Gesfipe
     db_accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
     print(db_accounts_list)
+
+    list_of_transactions = []
+
     for real_account in list_of_accounts:
         print(real_account)
-        for a in db_accounts_list:
-            print("------------------------------------")
-            print("real_account.id = {} ******  a.num_of_account = {}".format(real_account.id, a.num_of_account))
-            print("------------------------------------")
-            if real_account.id == a.num_of_account:
-                m = w.iter_history(real_account)
-                for transaction in m:
+        for db_account in db_accounts_list:
+            if real_account.id == db_account.num_of_account:
+                print("------------------------------------")
+                print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
+                                                                                  db_account.num_of_account))
+                print("------------------------------------")
+                transactions_of_banks_account = w.iter_history(real_account)
+                for transaction in transactions_of_banks_account:
+                    transac = {}
+                    transac['date'] = transaction.date
+                    transac['label'] = transaction.label
+                    transac['amount'] = transaction.amount
+                    list_of_transactions.append(transac)
                     print(transaction)
 
-    context = {}
+
+    context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 
     return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
