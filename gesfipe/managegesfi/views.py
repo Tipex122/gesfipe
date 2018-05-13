@@ -252,9 +252,14 @@ def load_transactions(request):
                 transactions_of_banks_account = w.iter_history(real_account)
                 for transaction in transactions_of_banks_account:
                     transac = {}
-                    transac['date'] = transaction.date
-                    transac['label'] = transaction.label
-                    transac['amount'] = transaction.amount
+                    transac['date'] = transaction.date          # Debit date on the bank statement
+                    transac['rdate'] = transaction.rdate        # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    transac['vdate'] = transaction.vdate        # Value date, or accounting date; usually for professional accounts
+                    transac['type'] = transaction.type          # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                    transac['raw'] = transaction.raw            # Raw label of the transaction
+                    transac['category'] = transaction.category  # Category of the transaction
+                    transac['label'] = transaction.label        # Pretty label
+                    transac['amount'] = transaction.amount      # Amount of the transaction
                     list_of_transactions.append(transac)
                     print(transaction)
 
