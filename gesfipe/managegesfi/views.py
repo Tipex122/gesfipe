@@ -140,19 +140,10 @@ def check_weboob_repositories(w):
 @login_required
 def get_list_of_banks_available(request):
     w = Weboob()
-    check_weboob_repositories(w)
+    w.update()
+    # check_weboob_repositories(w)
 
     '''
-    w = Weboob()
-
-    if not w.repositories.check_repositories():
-        w.repositories.update()
-        print("WeBoob a été mis à jour (répertoires de config) \n")
-    else:
-        print("Répertoires à jour \n\n")
-        # w.repositories.update()
-    
-    
     w.load_backends(CapBank)
     print('get_all_modules_info societegenerale:::: \n {}'.format(
         w.repositories.get_all_modules_info(CapBank)['societegenerale'].description))
@@ -166,7 +157,7 @@ def get_list_of_banks_available(request):
         print("====================================================================================================")
     '''
 
-    listbanks = w.repositories.get_all_modules_info(CapBank)
+    listbanks = w.repositories.get_all_modules_info('CapBank')
 
     # acc = next(iter(w.iter_accounts()))
     # bal = acc.balance
@@ -183,6 +174,7 @@ def get_list_of_banks_available(request):
         data_bank = {}
         data_bank['module'] = key
         data_bank['description'] = val.description
+        # print('val de account: {}'.format(val))
         list_of_banks.append(data_bank)
     list_of_banks.sort(key=lambda k: k['module'])
 
@@ -193,6 +185,11 @@ def get_list_of_banks_available(request):
 
 @login_required
 def get_list_of_available_accounts(request):
+    '''
+    Function to get list of accounts of  bank with local backend (cf. ~/.config/weboob/backends
+    :param request:
+    :return: render: to render list_of_banks and list_of_accounts (but banks and account are not linked (to be updated)
+    '''
     w = Weboob()
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
@@ -206,8 +203,8 @@ def get_list_of_available_accounts(request):
     list_of_banks.sort(key=lambda k: k['module'])
 
     print(list_of_banks)
-
-    # TODO: Stupid context ==> bank et accounts ne sont pas liés je n'aurai donc pas la liste des compte associés à la banque
+    # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
+    # TODO: il manque donc l'association account et banque
     list_of_accounts = list(w.iter_accounts())
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
