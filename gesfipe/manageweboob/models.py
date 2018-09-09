@@ -19,6 +19,6 @@ class WeboobModules(models.Model):
         return "%s" % self.description_of_module
 
     class Meta:
-        verbose_name = _('module')
-        verbose_name_plural = _('modules')
+        verbose_name = _('weboob module')
+        verbose_name_plural = _('weboob modules')
         ordering = ['name_of_module']
