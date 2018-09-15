@@ -76,7 +76,7 @@ THIRD_PARTY_APPS = [
     'import_export',
     'mptt',
     'django_mptt_admin',
-    'manageweboob',
+    # 'manageweboob',
 ]
 
 LOCAL_APPS = [
@@ -84,8 +84,8 @@ LOCAL_APPS = [
     # Your stuff: custom apps go here
     'gesfipe.banksandaccounts.apps.BanksandaccountsConfig',
     'gesfipe.categories.apps.CategoriesConfig',
-    # 'gesfipe.managegesfi.apps.ManagegesfiConfig',
-    # 'gesfipe.manageweboob.apps.ManageweboobConfig(AppConfig)',
+    'gesfipe.managegesfi.apps.ManagegesfiConfig',
+    'gesfipe.manageweboob.apps.ManageweboobConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

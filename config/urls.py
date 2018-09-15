@@ -20,6 +20,7 @@ urlpatterns = [
     # url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
     # url(r'^categories/', include('gesfipe.categories.urls')),
     # url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls')),
+    url(r'^', include('gesfipe.manageweboob.urls')),
     url(r'^', include('gesfipe.managegesfi.urls')),
     url(r'^', include('gesfipe.categories.urls')),
     url(r'^', include('gesfipe.banksandaccounts.urls')),

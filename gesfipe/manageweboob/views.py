@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
@@ -17,7 +18,7 @@ def check_weboob_repositories(w):
 @login_required
 def update_list_of_available_banks(request):
     w = Weboob()
-    check_weboob_repositories(w)
+    # check_weboob_repositories(w)
 
     # TODO: Ajouter la liste des modules Banks accessibles dans la base de données
     # TODO: voir si cette fonction ne doit pas faire partie de WeboobModules (models.py). Comparer d'abord si le module existe
@@ -37,6 +38,11 @@ def update_list_of_available_banks(request):
     '''
 
     listbanks = w.repositories.get_all_modules_info(CapBank)
+    print('********************* w.backends_config.get_backend: {}'.format(w.backends_config.get_backend('societegenerale')))
+    print('w.load_or_install_module("axabanque") : {}'.format(w.load_or_install_module('axabanque')))
+    print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))
+#    print('********************* w.backends_config.get_backend: {}'.format(
+#        w.backends_config.get_backend('axabanque')))
 
     # acc = next(iter(w.iter_accounts()))
     # bal = acc.balance

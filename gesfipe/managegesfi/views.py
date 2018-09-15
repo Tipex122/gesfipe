@@ -138,7 +138,7 @@ def check_weboob_repositories(w):
     return w
 
 @login_required
-def get_list_of_banks_available(request):
+def get_list_of_available_banks(request):
     w = Weboob()
     w.update()
     # check_weboob_repositories(w)
