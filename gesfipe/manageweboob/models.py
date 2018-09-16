@@ -15,6 +15,8 @@ class WeboobModules(models.Model):
         default='Description',
         max_length=256)
 
+    is_in_database = models.BooleanField(False)
+
     def __str__(self):
         return "%s" % self.description_of_module
 

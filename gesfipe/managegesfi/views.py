@@ -260,7 +260,6 @@ def load_transactions(request):
                     list_of_transactions.append(transac)
                     print(transaction)
 
-
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 
     return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
