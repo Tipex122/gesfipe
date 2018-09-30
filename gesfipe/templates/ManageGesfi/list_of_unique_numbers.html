@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load mptt_tags %}
+
+{% block title %}
+    {% trans 'List of unique numbers of transactions' %}
+{% endblock %}
+
+{% block heading %}
+    <h2>{% trans 'List of unique numbers of transactions' %} </h2>
+    <p><i>{% trans 'Transactions' %}</i>  </p>
+{% endblock heading %}
+
+{% block content %}
+  <table class="table table-striped ">
+    <thead>
+      <tr>
+        <th>Unique Numbers</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for number in list_unique %}
+        <tr>
+          <td> {{number.unique_id_of_transaction}} </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock %}
+

@@ -272,6 +272,11 @@ def transaction_create(request):
 def transaction_edit(request, pk):
     # TODO: How to obtain the list of accounts only available for the connected user ?
     transaction = get_object_or_404(Transactions, pk=pk)
+    # TODO: Tester le numéro unique de la transaction
+    print('=============> num_of_account :: {}'.format(transaction.account.num_of_account))
+    print('=============> UNIQUE_ID :: {}'.format(transaction.unique_id(account_id=transaction.account.num_of_account)))
+    # print('=============> UNIQUE_ID :: {}'.format(transaction.unique_id()))
+
     banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
     # account = forms.ChoiceField(queryset=Accounts.objects.all().filter(owner_of_account=request.user))
 
@@ -303,15 +308,15 @@ def transaction_edit(request, pk):
             # return redirect('budget')
     else:
         data = {'Account':list_accounts,}
-        print(data)
+        # print(data)
         form = TransactionForm(instance=transaction)
-        print('############## form = TransactionForm(instance=transaction)  {}'.format(form))
+        # print('############## form = TransactionForm(instance=transaction)  {}'.format(form))
         # form = form.as_table()
         # form.account = forms.ChoiceField(choices=Accounts.objects.all().filter(owner_of_account=request.user))
 
     # *****************************************************************************************************************
     form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
-    print(form.account.choices)
+    # print(form.account.choices)
     # form.account = forms.ChoiceField(choices=choix)
 
     # *****************************************************************************************************************

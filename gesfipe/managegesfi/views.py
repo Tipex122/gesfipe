@@ -1,9 +1,9 @@
 from django.shortcuts import render
-
 # Create your views here.
 
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.db.models import Q
+from django.shortcuts import get_list_or_404
 # from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
@@ -213,6 +213,27 @@ def get_list_of_available_accounts(request):
 
 
 @login_required
+def list_unique_numbers(request):
+    # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
+    list_unique = Transactions.objects.all()
+    list_unique_of_numbers()
+    context = {'list_unique': list_unique}
+    return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
+
+def list_unique_of_numbers():
+    '''
+    Function to obtain the list of unique Id of each transaction
+    :return: list of Transactions.unique_id_of_transaction
+    '''
+    # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
+    list_unique = Transactions.objects.all()
+    list_of_numbers = []
+    for num in list_unique:
+        list_of_numbers.append(num.unique_id_of_transaction)
+    print('List of unique Numbers : {}'.format(list_of_numbers))
+    return list_of_numbers
+
+@login_required
 def load_transactions(request):
     '''
     Function to download transactions (or any related information) from banks through backends managed by Weboob
@@ -220,6 +241,7 @@ def load_transactions(request):
     :param request:
     :return: render: to render the list of transactions got from accounts managed by Weboob Backends
     '''
+
 
     w = Weboob()
 
@@ -236,10 +258,14 @@ def load_transactions(request):
     db_accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
     print(db_accounts_list)
 
+    # list_trans = Transactions.objects.all()
+    list_uniques = list_unique_of_numbers()
+    # TODO: Vérifier d'abord si la liste chargée existe déjà dans la base de données (via comparaison avec unique_id_of_transaction)
+
     list_of_transactions = []
 
     for real_account in list_of_accounts:
-        print(real_account)
+        # print(real_account)
         for db_account in db_accounts_list:
             if real_account.id == db_account.num_of_account:
                 print("------------------------------------")
@@ -247,18 +273,62 @@ def load_transactions(request):
                                                                                   db_account.num_of_account))
                 print("------------------------------------")
                 transactions_of_banks_account = w.iter_history(real_account)
+
                 for transaction in transactions_of_banks_account:
-                    transac = {}
-                    transac['date'] = transaction.date          # Debit date on the bank statement
-                    transac['rdate'] = transaction.rdate        # Real date, when the payment has been made; usually extracted from the label or from credit card info
-                    transac['vdate'] = transaction.vdate        # Value date, or accounting date; usually for professional accounts
-                    transac['type'] = transaction.type          # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
-                    transac['raw'] = transaction.raw            # Raw label of the transaction
-                    transac['category'] = transaction.category  # Category of the transaction
-                    transac['label'] = transaction.label        # Pretty label
-                    transac['amount'] = transaction.amount      # Amount of the transaction
-                    list_of_transactions.append(transac)
                     print(transaction)
+                    transac = {}
+                    Trans = Transactions()
+
+                    Trans.account = db_account
+                    print(Trans.account)
+
+                    transac['date'] = transaction.date          # Debit date on the bank statement
+                    Trans.date_of_transaction = transaction.date
+                    print(Trans.date_of_transaction)
+
+                    transac['rdate'] = transaction.rdate        # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    Trans.real_date_of_transaction = transaction.rdate
+                    print(Trans.real_date_of_transaction)
+
+                    transac['vdate'] = transaction.vdate        # Value date, or accounting date; usually for professional accounts
+                    Trans.value_date_of_transaction = transaction.vdate
+                    print(Trans.value_date_of_transaction)
+
+                    transac['type'] = transaction.type          # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                    Trans.type_int_of_transaction = transaction.type
+                    print(Trans.type_int_of_transaction)
+
+                    transac['raw'] = transaction.raw            # Raw label of the transaction
+                    Trans.name_of_transaction = transaction.raw
+                    print(Trans.name_of_transaction)
+
+                    transac['category'] = transaction.category  # Category of the transaction
+                    Trans.type_of_transaction = transaction.category
+                    print(Trans.type_of_transaction)
+
+                    transac['label'] = transaction.label        # Pretty label
+                    Trans.label_of_transaction = transaction.label
+                    print(Trans.label_of_transaction)
+
+                    transac['amount'] = transaction.amount      # Amount of the transaction
+                    Trans.amount_of_transaction = transaction.amount
+                    print(Trans.amount_of_transaction)
+
+                    Trans.create_key_words()
+                    print(Trans.key_words)
+
+                    Trans.unique_id_of_transaction = Trans.unique_id(account_id=db_account.num_of_account)
+                    print(Trans.unique_id_of_transaction)
+
+                    if Trans.unique_id_of_transaction not in list_uniques:
+                        Trans.save()
+                        list_uniques.append(Trans.unique_id_of_transaction)
+                        print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
+                    else:
+                        print('Trans.label : {} with unique id: {} already exist'.format(Trans.__str__(), Trans.unique_id_of_transaction))
+
+                    list_of_transactions.append(transac)
+
 
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 

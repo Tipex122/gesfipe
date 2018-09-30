@@ -39,6 +39,8 @@ def update_list_of_available_banks(request):
     '''
 
     listbanks = w.repositories.get_all_modules_info(CapBank)
+    # module = w.load_backend("societegenerale", "societegenerale")
+    # print('********************* w.load_backend(): {} \n'.format(module))
     print('********************* w.backends_config.get_backend: {}'.format(w.backends_config.get_backend('societegenerale')))
     print('w.load_or_install_module("axabanque") : {}'.format(w.load_or_install_module('axabanque')))
     print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))

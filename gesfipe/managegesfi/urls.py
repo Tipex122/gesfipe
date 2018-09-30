@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'list_of_available_banks/$', get_list_of_available_banks, name='get_list_of_available_banks'),
     url(r'list_of_available_accounts/$', get_list_of_available_accounts, name='get_list_of_available_accounts'),
     url(r'load_transactions/$', load_transactions, name='load_transactions'),
+    url(r'list_unique_numbers/$', list_unique_numbers, name='list_unique_numbers'),
 
 ]
 
