@@ -68,7 +68,7 @@
                     <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
                     <!-- <td>{{ transaction.type_of_transaction }}</td> -->
                     {# <td><a href="/transaction_detail/{{transaction.id}}/"> {{ transaction.name_of_transaction }} </a> </td> #}
-                    <td><a href="/transaction_edit/{{transaction.id}}/"> {{ transaction.name_of_transaction }} </a> </td>
+                    <td><a href="/transaction_edit/{{transaction.id}}/"> {{ transaction.label_of_transaction }} </a> </td>
                     <!-- <td>{{transaction.category_of_transaction}}</td> -->
                     {% if transaction.amount_of_transaction >= 0 %}
                         <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
