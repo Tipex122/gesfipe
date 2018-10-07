@@ -93,6 +93,17 @@ class Accounts(models.Model):
         default='Id',
         max_length=256)
 
+    type_int_of_account = models.IntegerField(
+        'Type of account (int)',  # use TYPE_* constants
+        default=TYPE_UNKNOWN
+    )
+
+    type_of_account = models.CharField(
+        'Type of account',
+        default='Unknown',
+        max_length=128
+    )
+
     bank = models.ForeignKey('Banks', null=True, blank=True, on_delete=models.CASCADE)
 
     # owner_of_account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -140,7 +151,7 @@ class Transactions(models.Model):
     )
 
     type_int_of_transaction = models.IntegerField(
-        'Type of transaction, use TYPE_* constants',
+        'Type of transaction (int)', # use TYPE_* constants
         default=TYPE_UNKNOWN
     )
 
@@ -191,7 +202,7 @@ class Transactions(models.Model):
     )
 
     creation_date = models.DateField(
-        'Creation date of the transaction in in database',
+        'Creation date of the transaction in  database',
         default=datetime.datetime.now
     )
 

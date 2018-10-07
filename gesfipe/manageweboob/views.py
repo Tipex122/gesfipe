@@ -41,14 +41,14 @@ def update_list_of_available_banks(request):
     listbanks = w.repositories.get_all_modules_info(CapBank)
     # module = w.load_backend("societegenerale", "societegenerale")
     # print('********************* w.load_backend(): {} \n'.format(module))
-    print('********************* w.backends_config.get_backend: {}'.format(w.backends_config.get_backend('societegenerale')))
-    print('w.load_or_install_module("axabanque") : {}'.format(w.load_or_install_module('axabanque')))
-    print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))
+    # print('********************* w.backends_config.get_backend: {}'.format(w.backends_config.get_backend('societegenerale')))
+    # print('w.load_or_install_module("axabanque") : {}'.format(w.load_or_install_module('axabanque')))
+    # print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))
 
-    if not w.backends_config.backend_exists('cic'):
-        w.backends_config.add_backend('cic','cic', {'login': 'toto', 'password': 'tutu'})
+    # if not w.backends_config.backend_exists('cic'):
+    #    w.backends_config.add_backend('cic','cic', {'login': 'toto', 'password': 'tutu'})
 
-    print('\n _____#####_____\n iter_backedns : {} \n _____####_____\n'.format(list(w.backends_config.iter_backends())))
+    # print('\n _____#####_____\n iter_backedns : {} \n _____####_____\n'.format(list(w.backends_config.iter_backends())))
 
 #    print('********************* w.backends_config.get_backend: {}'.format(
 #        w.backends_config.get_backend('axabanque')))

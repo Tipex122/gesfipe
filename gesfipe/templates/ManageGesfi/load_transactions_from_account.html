@@ -13,35 +13,37 @@
 {% endblock heading %}
 
 {% block content %}
-  <table class="table table-striped ">
-    <thead>
-      <tr>
-        <th>Debit Date</th>
-        <th>Real Date</th>
-        <th>Value Date</th>
-        <th>Type</th>
-        <th>Raw Label</th>
-        <th>Category</th>
-        <th>Label</th>
-        <th>Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-
-      {% for transaction in list_of_transactions %}
+  {% if transaction %}
+    <table class="table table-striped ">
+      <thead>
         <tr>
-          <td> {{transaction.date}} </td>
-          <td> {{transaction.rdate}} </td>
-          <td> {{transaction.vdate}} </td>
-          <td> {{transaction.type}} </td>
-          <td> {{transaction.raw}} </td>
-          <td> {{transaction.category}} </td>
-          <td> {{transaction.label}} </td>
-          <td> {{transaction.amount}} </td>
+          <th>Debit Date</th>
+          <th>Real Date</th>
+          <th>Value Date</th>
+          <th>Type</th>
+          <th>Raw Label</th>
+          <th>Category</th>
+          <th>Label</th>
+          <th>Amount</th>
         </tr>
-      {% endfor %}
-
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for transaction in list_of_transactions %}
+          <tr>
+            <td> {{transaction.date}} </td>
+            <td> {{transaction.rdate}} </td>
+            <td> {{transaction.vdate}} </td>
+            <td> {{transaction.type}} </td>
+            <td> {{transaction.raw}} </td>
+            <td> {{transaction.category}} </td>
+            <td> {{transaction.label}} </td>
+            <td> {{transaction.amount}} </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <tr><h3>Database is up to date: there is no new transaction to load !</h3></tr>
+  {% endif %}
 {% endblock %}
 

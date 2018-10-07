@@ -323,12 +323,12 @@ def load_transactions(request):
                     if Trans.unique_id_of_transaction not in list_uniques:
                         Trans.save()
                         list_uniques.append(Trans.unique_id_of_transaction)
+                        list_of_transactions.append(transac)
                         print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
-                    else:
-                        print('Trans.label : {} with unique id: {} already exist'.format(Trans.__str__(), Trans.unique_id_of_transaction))
+                    # else:
+                    #     print('Trans.label : {} with unique id: {} already exist'.format(Trans.__str__(), Trans.unique_id_of_transaction))
 
-                    list_of_transactions.append(transac)
-
+                    # list_of_transactions.append(transac)
 
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 

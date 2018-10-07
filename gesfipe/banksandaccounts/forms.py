@@ -11,8 +11,14 @@ class TransactionForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:
         model = Transactions
         fields = ('date_of_transaction',
+                  'real_date_of_transaction',
+                  'value_date_of_transaction',
+                  'type_int_of_transaction',
                   'type_of_transaction',
                   'name_of_transaction',
+                  'label_of_transaction',
+                  'card_transaction',
+                  'commission_of_transaction',
                   'amount_of_transaction',
                   'currency_of_transaction',
                   'account',
