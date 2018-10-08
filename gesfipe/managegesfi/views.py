@@ -213,18 +213,24 @@ def get_list_of_available_accounts(request):
     # TODO: à reprendre ==> charge tous les comptes à chaque fois !!!!!
     for real_account in list_of_accounts:
         for db_account in db_accounts_list:
-            if real_account.id == db_account.num_of_account:
+            if db_account.num_of_account == real_account.id:
                 # erase old data and replace by data coming from bank
-                print('')
+                print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
                 db_account.name_of_account = real_account.label
                 db_account.type_int_of_account = real_account.type
+                # db_account.update()
+
             else:
                 # create account
                 new_account = db_Accounts()
                 new_account.num_of_account = real_account.id
                 new_account.name_of_account = real_account.label
-                # new_account.owner_of_account.set(request.user)
+
+                # new_account.owner_of_account = request.user
+                print('new_account.name_of_account = {}'.format(new_account.name_of_account))
                 new_account.save()
+                # new_account.owner_of_account.set(request.user)
+                #new_account.create()
 
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
@@ -292,6 +298,7 @@ def load_transactions(request):
                 print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
                                                                                   db_account.num_of_account))
                 print("------------------------------------")
+                # TODO: Injecter la dernière date en base de donner dans w.iter_history(real_account, date)
                 transactions_of_banks_account = w.iter_history(real_account)
 
                 for transaction in transactions_of_banks_account:
