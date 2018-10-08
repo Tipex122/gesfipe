@@ -45,21 +45,30 @@ class TransactionsAdmin(ImportExportModelAdmin):
         (None,
          {'fields':
               ['date_of_transaction',
+               'real_date_of_transaction',
+               'value_date_of_transaction',
+               # 'type_int_of_transaction',
                'type_of_transaction',
-               'name_of_transaction',
+               # 'name_of_transaction',
+               'label_of_transaction',
                               ]
           }
          ),
         # ('Info Genre', {'fields':
         # ['amount_of_transaction','currency_of_transaction', 'bank_of_account','create_date','account']}),
-        ('Info Genre',
+        ('Detailed info',
          {'fields':
-              ['amount_of_transaction',
-               'currency_of_transaction',
-               'creation_date',
-               'account',
-               'category_of_transaction',
-               'key_words',
+              [
+                'name_of_transaction',
+                'amount_of_transaction',
+                'currency_of_transaction',
+                'commission_of_transaction',
+                'creation_date',
+                'account',
+                'category_of_transaction',
+                'card_transaction',
+                'unique_id_of_transaction',
+                'key_words',
                ]
           }
          ),
@@ -92,6 +101,8 @@ admin.site.register(Transactions, TransactionsAdmin)
 class AccountsAdmin(admin.ModelAdmin):
     list_display = ('num_of_account',
                     'name_of_account',
+                    'type_int_of_account',
+                    'type_of_account',
                     'get_users',
                     'bank')
 

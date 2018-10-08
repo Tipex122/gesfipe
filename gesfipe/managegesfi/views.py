@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from gesfipe.banksandaccounts.models import *
+from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 from gesfipe.categories.models import *
 # from categories.forms import TagForm
 
@@ -194,6 +195,9 @@ def get_list_of_available_accounts(request):
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
     list_of_banks = []
+
+    db_accounts_list = db_Accounts.objects.all().filter(owner_of_account=request.user)
+
     for key, val in listbanks.items():
         # print("Banque key (Dict) : {} \t\t\t ===> \t {}".format(key, val.description))
         data_bank = {}
@@ -206,6 +210,22 @@ def get_list_of_available_accounts(request):
     # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
     # TODO: il manque donc l'association account et banque
     list_of_accounts = list(w.iter_accounts())
+    # TODO: à reprendre ==> charge tous les comptes à chaque fois !!!!!
+    for real_account in list_of_accounts:
+        for db_account in db_accounts_list:
+            if real_account.id == db_account.num_of_account:
+                # erase old data and replace by data coming from bank
+                print('')
+                db_account.name_of_account = real_account.label
+                db_account.type_int_of_account = real_account.type
+            else:
+                # create account
+                new_account = db_Accounts()
+                new_account.num_of_account = real_account.id
+                new_account.name_of_account = real_account.label
+                # new_account.owner_of_account.set(request.user)
+                new_account.save()
+
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
 
