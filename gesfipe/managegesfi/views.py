@@ -171,6 +171,8 @@ def get_list_of_managed_banks(request):
 
     logger.info("+++ workdir : %s", w.workdir)
     logger.info("+++ repositories : %s", w.repositories.modules_dir)
+
+    print("========================================================================================================\n")
     print('workdir : {}'.format(w.workdir))
     print('repositories : {}'.format(w.repositories.modules_dir))
     print("========================================================================================================\n")
@@ -203,7 +205,9 @@ def get_list_of_available_accounts(request):
     list_of_banks = []
     list_of_db_accounts = []
 
-    db_accounts_list = db_Accounts.objects.all().filter(owner_of_account=request.user)
+    # db_accounts_list = db_Accounts.objects.all().filter(owner_of_account=request.user)
+    db_accounts_list = db_Accounts.objects.all()
+
     for key in db_accounts_list:
         # print('db_accounts_list::::::: {}'.format(key.num_of_account))
         list_of_db_accounts.append(key.num_of_account)
@@ -216,7 +220,8 @@ def get_list_of_available_accounts(request):
         list_of_banks.append(data_bank)
     list_of_banks.sort(key=lambda k: k['module'])
 
-    print(list_of_banks)
+    print('************************ : {}'.format(list_of_banks))
+
     # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
     # TODO: il manque donc l'association account et banque
 
@@ -226,9 +231,11 @@ def get_list_of_available_accounts(request):
         # print('REAL ACCOUNT: {}'.format(real_account))
         # print('LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
         if real_account.id in list_of_db_accounts:
+            # print('if real_account.id in list_of_db_accounts: ==>> REAL ACCOUNT.ID: {}'.format(real_account.id))
+            # print('if real_account.id in list_of_db_accounts: ==>> LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
             # erase old data and replace by data coming from bank
             db_account = db_Accounts.objects.get(num_of_account=real_account.id)
-            print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
+            # print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
             db_account.name_of_account = real_account.label
             db_account.type_int_of_account = real_account.type
             # TODO: ajouter le nom de la banque au compte
@@ -240,14 +247,16 @@ def get_list_of_available_accounts(request):
             db_account.save()
 
         else:
+            # print('Else: ==>> REAL ACCOUNT.ID: {}'.format(real_account.id))
+            # print('Else: ===> LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
             # create account
             new_account = db_Accounts()
             new_account.num_of_account = real_account.id
             new_account.name_of_account = real_account.label
             new_account.type_int_of_account = real_account.type
-
+            # TODO: affecter un user + le type (en texte)
             # new_account.owner_of_account = request.user
-            print('new_account.name_of_account = {}'.format(new_account.name_of_account))
+            # print('new_account.name_of_account = {}'.format(new_account.name_of_account))
             new_account.save()
             # new_account.owner_of_account.set(request.user)
             #new_account.create()
@@ -318,7 +327,7 @@ def load_transactions(request):
                 print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
                                                                                   db_account.num_of_account))
                 print("------------------------------------")
-                # TODO: Injecter la dernière date en base de donner dans w.iter_history(real_account, date)
+                # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
                 transactions_of_banks_account = w.iter_history(real_account)
 
                 for transaction in transactions_of_banks_account:
