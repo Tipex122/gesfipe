@@ -12,12 +12,16 @@ from django.contrib.auth.decorators import login_required
 from gesfipe.banksandaccounts.models import *
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 from gesfipe.categories.models import *
+from gesfipe.users.models import User
+
 # from categories.forms import TagForm
 
 # import re
 from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -139,7 +143,7 @@ def check_weboob_repositories(w):
     return w
 
 @login_required
-def get_list_of_available_banks(request):
+def get_list_of_managed_banks(request):
     w = Weboob()
     w.update()
     # check_weboob_repositories(w)
@@ -165,8 +169,10 @@ def get_list_of_available_banks(request):
     # print('\n ********** \n {}\n **********\n'.format(acc))
     # print('\n ********** \n {}\n **********\n'.format(bal))
 
+    logger.info("+++ workdir : %s", w.workdir)
+    logger.info("+++ repositories : %s", w.repositories.modules_dir)
     print('workdir : {}'.format(w.workdir))
-    print('repositories : {} \n'.format(w.repositories.modules_dir))
+    print('repositories : {}'.format(w.repositories.modules_dir))
     print("========================================================================================================\n")
 
     list_of_banks = []
@@ -195,8 +201,12 @@ def get_list_of_available_accounts(request):
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
     list_of_banks = []
+    list_of_db_accounts = []
 
     db_accounts_list = db_Accounts.objects.all().filter(owner_of_account=request.user)
+    for key in db_accounts_list:
+        # print('db_accounts_list::::::: {}'.format(key.num_of_account))
+        list_of_db_accounts.append(key.num_of_account)
 
     for key, val in listbanks.items():
         # print("Banque key (Dict) : {} \t\t\t ===> \t {}".format(key, val.description))
@@ -209,28 +219,38 @@ def get_list_of_available_accounts(request):
     print(list_of_banks)
     # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
     # TODO: il manque donc l'association account et banque
+
     list_of_accounts = list(w.iter_accounts())
-    # TODO: à reprendre ==> charge tous les comptes à chaque fois !!!!!
+
     for real_account in list_of_accounts:
-        for db_account in db_accounts_list:
-            if db_account.num_of_account == real_account.id:
-                # erase old data and replace by data coming from bank
-                print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
-                db_account.name_of_account = real_account.label
-                db_account.type_int_of_account = real_account.type
-                # db_account.update()
+        # print('REAL ACCOUNT: {}'.format(real_account))
+        # print('LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
+        if real_account.id in list_of_db_accounts:
+            # erase old data and replace by data coming from bank
+            db_account = db_Accounts.objects.get(num_of_account=real_account.id)
+            print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
+            db_account.name_of_account = real_account.label
+            db_account.type_int_of_account = real_account.type
+            # TODO: ajouter le nom de la banque au compte
+            # TODO: ajouter le user en cours
+            # db_account.bank = real_account.parent.name
+            # u = User.objects.get(name=request.user.name)
+            # u.db_accounts_set.add(db_account)
+            # db_account.owner_of_account.set([request.user,])
+            db_account.save()
 
-            else:
-                # create account
-                new_account = db_Accounts()
-                new_account.num_of_account = real_account.id
-                new_account.name_of_account = real_account.label
+        else:
+            # create account
+            new_account = db_Accounts()
+            new_account.num_of_account = real_account.id
+            new_account.name_of_account = real_account.label
+            new_account.type_int_of_account = real_account.type
 
-                # new_account.owner_of_account = request.user
-                print('new_account.name_of_account = {}'.format(new_account.name_of_account))
-                new_account.save()
-                # new_account.owner_of_account.set(request.user)
-                #new_account.create()
+            # new_account.owner_of_account = request.user
+            print('new_account.name_of_account = {}'.format(new_account.name_of_account))
+            new_account.save()
+            # new_account.owner_of_account.set(request.user)
+            #new_account.create()
 
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}

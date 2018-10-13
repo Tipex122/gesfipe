@@ -17,7 +17,7 @@ def check_weboob_repositories(w):
     return w
 
 @login_required
-def update_list_of_available_banks(request):
+def update_list_of_managed_banks(request):
     w = Weboob()
     # check_weboob_repositories(w)
 
