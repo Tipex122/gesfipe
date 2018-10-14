@@ -3,6 +3,7 @@ Base settings to build other settings files upon.
 """
 
 import environ
+import os
 
 ROOT_DIR = environ.Path(__file__) - 3  # (gesfipe/config/settings/base.py - 3 = gesfipe/)
 APPS_DIR = ROOT_DIR.path('gesfipe')
@@ -254,3 +255,34 @@ SOCIALACCOUNT_ADAPTER = 'gesfipe.users.adapters.SocialAccountAdapter'
 # Your stuff...
 # ------------------------------------------------------------------------------
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+
+# LOGGING_CONFIG = None
+DJANGO_LOG_LEVEL = DEBUG
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'f': {'format':
+              '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        },
+    },
+    'handlers':{
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'f',
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    'root': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}

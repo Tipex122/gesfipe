@@ -272,6 +272,7 @@ def list_unique_numbers(request):
     # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
     list_unique = Transactions.objects.all()
     list_unique_of_numbers()
+    logger.debug('List of unique Numbers ==> ==> ==> : ', list_unique)
     context = {'list_unique': list_unique}
     return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
 
@@ -285,7 +286,8 @@ def list_unique_of_numbers():
     list_of_numbers = []
     for num in list_unique:
         list_of_numbers.append(num.unique_id_of_transaction)
-    print('List of unique Numbers : {}'.format(list_of_numbers))
+    # print('List of unique Numbers : {}'.format(list_of_numbers))
+    logger.debug('List of unique Numbers ==> ==> ==> : ', list_of_numbers)
     return list_of_numbers
 
 @login_required
@@ -296,7 +298,6 @@ def load_transactions(request):
     :param request:
     :return: render: to render the list of transactions got from accounts managed by Weboob Backends
     '''
-
 
     w = Weboob()
 
@@ -380,7 +381,8 @@ def load_transactions(request):
                         Trans.save()
                         list_uniques.append(Trans.unique_id_of_transaction)
                         list_of_transactions.append(transac)
-                        print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
+                        # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
+                        logger.debug('Sauvegarde de Trans: ===>>>>>>', Trans)
                     # else:
                     #     print('Trans.label : {} with unique id: {} already exist'.format(Trans.__str__(), Trans.unique_id_of_transaction))
 
