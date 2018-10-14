@@ -176,10 +176,10 @@ def get_list_of_managed_banks(request):
     logger.info("+++ workdir : %s", w.workdir)
     logger.info("+++ repositories : %s", w.repositories.modules_dir)
 
-    # print("========================================================================================================\n")
-    # print('workdir : {}'.format(w.workdir))
-    # print('repositories : {}'.format(w.repositories.modules_dir))
-    # print("========================================================================================================\n")
+    print("========================================================================================================")
+    print('workdir : {}'.format(w.workdir))
+    print('repositories : {}'.format(w.repositories.modules_dir))
+    print("========================================================================================================")
 
     list_of_banks = []
     for key, val in listbanks.items():
