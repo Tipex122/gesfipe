@@ -21,7 +21,9 @@ from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 
@@ -94,7 +96,7 @@ def tag_category_edit(request):
 
     transactions = Transactions.objects.all()
     ancestors = Category.objects.filter(parent=None)
-    context = {'transactions': transactions, 'categories_list': categories_list, 'ancestors':ancestors}
+    context = {'transactions': transactions, 'categories_list': categories_list, 'ancestors': ancestors}
     return render(request, 'ManageGesfi/tag_category.html', context)
 
 
@@ -115,8 +117,9 @@ def transactions_by_category(request, pk=None):
 
     categories = Category.objects.all()
 
-    context = {'transactions': transactions, 'ancestors':ancestors, 'categories': categories,}
+    context = {'transactions': transactions, 'ancestors': ancestors, 'categories': categories, }
     return render(request, 'ManageGesfi/transactions_by_category.html', context)
+
 
 @login_required
 def display_meta(request):
@@ -141,6 +144,7 @@ def check_weboob_repositories(w):
     else:
         print("Répertoires à jour\n")
     return w
+
 
 @login_required
 def get_list_of_managed_banks(request):
@@ -249,7 +253,7 @@ def get_list_of_available_accounts(request):
 
         else:
             # print('Else: ==>> REAL ACCOUNT.ID: {}'.format(real_account.id))
-            # print('Else: ===> LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
+            #  print('Else: ===> LIST_OF_DB_ACCOUNTS: {}'.format(list_of_db_accounts))
             # create account
             new_account = db_Accounts()
             new_account.num_of_account = real_account.id
@@ -260,10 +264,10 @@ def get_list_of_available_accounts(request):
             # print('new_account.name_of_account = {}'.format(new_account.name_of_account))
             new_account.save()
             # new_account.owner_of_account.set(request.user)
-            #new_account.create()
+            # new_account.create()
 
     # list_of_accounts.sort(key=lambda k: k['label'])
-    context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts,}
+    context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts, }
 
     return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
 
@@ -276,6 +280,7 @@ def list_unique_numbers(request):
     logger.debug('List of unique Numbers ==> ==> ==> : %s', list_unique)
     context = {'list_unique': list_unique}
     return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
+
 
 def list_unique_of_numbers():
     '''
@@ -290,6 +295,7 @@ def list_unique_of_numbers():
     # print('List of unique Numbers : {}'.format(list_of_numbers))
     logger.debug('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
     return list_of_numbers
+
 
 @login_required
 def load_transactions(request):
@@ -327,7 +333,7 @@ def load_transactions(request):
             if real_account.id == db_account.num_of_account:
                 print("------------------------------------")
                 print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
-                                                                                  db_account.num_of_account))
+                                                                                           db_account.num_of_account))
                 print("------------------------------------")
                 # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
                 transactions_of_banks_account = w.iter_history(real_account)
@@ -340,23 +346,26 @@ def load_transactions(request):
                     Trans.account = db_account
                     # print(Trans.account)
 
-                    transac['date'] = transaction.date          # Debit date on the bank statement
+                    transac['date'] = transaction.date  # Debit date on the bank statement
                     Trans.date_of_transaction = transaction.date
                     # print(Trans.date_of_transaction)
 
-                    transac['rdate'] = transaction.rdate        # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    transac[
+                        'rdate'] = transaction.rdate  # Real date, when the payment has been made; usually extracted from the label or from credit card info
                     Trans.real_date_of_transaction = transaction.rdate
                     # print(Trans.real_date_of_transaction)
 
-                    transac['vdate'] = transaction.vdate        # Value date, or accounting date; usually for professional accounts
+                    transac[
+                        'vdate'] = transaction.vdate  # Value date, or accounting date; usually for professional accounts
                     Trans.value_date_of_transaction = transaction.vdate
                     # print(Trans.value_date_of_transaction)
 
-                    transac['type'] = transaction.type          # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                    transac[
+                        'type'] = transaction.type  # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
                     Trans.type_int_of_transaction = transaction.type
                     # print(Trans.type_int_of_transaction)
 
-                    transac['raw'] = transaction.raw            # Raw label of the transaction
+                    transac['raw'] = transaction.raw  # Raw label of the transaction
                     Trans.name_of_transaction = transaction.raw
                     # print(Trans.name_of_transaction)
 
@@ -364,11 +373,11 @@ def load_transactions(request):
                     Trans.type_of_transaction = transaction.category
                     # print(Trans.type_of_transaction)
 
-                    transac['label'] = transaction.label        # Pretty label
+                    transac['label'] = transaction.label  # Pretty label
                     Trans.label_of_transaction = transaction.label
                     # print(Trans.label_of_transaction)
 
-                    transac['amount'] = transaction.amount      # Amount of the transaction
+                    transac['amount'] = transaction.amount  # Amount of the transaction
                     Trans.amount_of_transaction = transaction.amount
                     # print(Trans.amount_of_transaction)
 
@@ -388,5 +397,3 @@ def load_transactions(request):
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 
     return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
-
-
