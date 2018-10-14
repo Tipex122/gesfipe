@@ -172,10 +172,10 @@ def get_list_of_managed_banks(request):
     logger.info("+++ workdir : %s", w.workdir)
     logger.info("+++ repositories : %s", w.repositories.modules_dir)
 
-    print("========================================================================================================\n")
-    print('workdir : {}'.format(w.workdir))
-    print('repositories : {}'.format(w.repositories.modules_dir))
-    print("========================================================================================================\n")
+    # print("========================================================================================================\n")
+    # print('workdir : {}'.format(w.workdir))
+    # print('repositories : {}'.format(w.repositories.modules_dir))
+    # print("========================================================================================================\n")
 
     list_of_banks = []
     for key, val in listbanks.items():
@@ -272,7 +272,7 @@ def list_unique_numbers(request):
     # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
     list_unique = Transactions.objects.all()
     list_unique_of_numbers()
-    logger.debug('List of unique Numbers ==> ==> ==> : ', list_unique)
+    logger.debug('List of unique Numbers ==> ==> ==> : %s', list_unique)
     context = {'list_unique': list_unique}
     return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
 
@@ -287,7 +287,7 @@ def list_unique_of_numbers():
     for num in list_unique:
         list_of_numbers.append(num.unique_id_of_transaction)
     # print('List of unique Numbers : {}'.format(list_of_numbers))
-    logger.debug('List of unique Numbers ==> ==> ==> : ', list_of_numbers)
+    logger.debug('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
     return list_of_numbers
 
 @login_required
@@ -332,61 +332,57 @@ def load_transactions(request):
                 transactions_of_banks_account = w.iter_history(real_account)
 
                 for transaction in transactions_of_banks_account:
-                    print(transaction)
+                    # print(transaction)
                     transac = {}
                     Trans = Transactions()
 
                     Trans.account = db_account
-                    print(Trans.account)
+                    # print(Trans.account)
 
                     transac['date'] = transaction.date          # Debit date on the bank statement
                     Trans.date_of_transaction = transaction.date
-                    print(Trans.date_of_transaction)
+                    # print(Trans.date_of_transaction)
 
                     transac['rdate'] = transaction.rdate        # Real date, when the payment has been made; usually extracted from the label or from credit card info
                     Trans.real_date_of_transaction = transaction.rdate
-                    print(Trans.real_date_of_transaction)
+                    # print(Trans.real_date_of_transaction)
 
                     transac['vdate'] = transaction.vdate        # Value date, or accounting date; usually for professional accounts
                     Trans.value_date_of_transaction = transaction.vdate
-                    print(Trans.value_date_of_transaction)
+                    # print(Trans.value_date_of_transaction)
 
                     transac['type'] = transaction.type          # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
                     Trans.type_int_of_transaction = transaction.type
-                    print(Trans.type_int_of_transaction)
+                    # print(Trans.type_int_of_transaction)
 
                     transac['raw'] = transaction.raw            # Raw label of the transaction
                     Trans.name_of_transaction = transaction.raw
-                    print(Trans.name_of_transaction)
+                    # print(Trans.name_of_transaction)
 
                     transac['category'] = transaction.category  # Category of the transaction
                     Trans.type_of_transaction = transaction.category
-                    print(Trans.type_of_transaction)
+                    # print(Trans.type_of_transaction)
 
                     transac['label'] = transaction.label        # Pretty label
                     Trans.label_of_transaction = transaction.label
-                    print(Trans.label_of_transaction)
+                    # print(Trans.label_of_transaction)
 
                     transac['amount'] = transaction.amount      # Amount of the transaction
                     Trans.amount_of_transaction = transaction.amount
-                    print(Trans.amount_of_transaction)
+                    # print(Trans.amount_of_transaction)
 
                     Trans.create_key_words()
-                    print(Trans.key_words)
+                    # print(Trans.key_words)
 
                     Trans.unique_id_of_transaction = Trans.unique_id(account_id=db_account.num_of_account)
-                    print(Trans.unique_id_of_transaction)
+                    # print(Trans.unique_id_of_transaction)
 
                     if Trans.unique_id_of_transaction not in list_uniques:
                         Trans.save()
                         list_uniques.append(Trans.unique_id_of_transaction)
                         list_of_transactions.append(transac)
                         # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
-                        logger.debug('Sauvegarde de Trans: ===>>>>>>', Trans)
-                    # else:
-                    #     print('Trans.label : {} with unique id: {} already exist'.format(Trans.__str__(), Trans.unique_id_of_transaction))
-
-                    # list_of_transactions.append(transac)
+                        logger.debug('Sauvegarde de Trans: ===>>>>>> %s', Trans)
 
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 
