@@ -203,6 +203,7 @@ def get_list_of_available_accounts(request):
     :param request:
     :return: render: to render list_of_banks and list_of_accounts (but banks and account are not linked (to be updated)
     '''
+    logger.info("Entering in function get_list_of_available_accounts")
     w = Weboob()
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
@@ -268,6 +269,8 @@ def get_list_of_available_accounts(request):
 
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts, }
+
+    logger.info("Entering in function get_list_of_available_accounts")
 
     return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
 
