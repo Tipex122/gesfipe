@@ -220,7 +220,8 @@ def get_list_of_available_accounts(request):
         list_of_banks.append(data_bank)
     list_of_banks.sort(key=lambda k: k['module'])
 
-    print('************************ : {}'.format(list_of_banks))
+    # print('************************ : {}'.format(list_of_banks))
+    logger.debug('list_of_banks ==> ==> ==> : %s', list_of_banks)
 
     # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
     # TODO: il manque donc l'association account et banque

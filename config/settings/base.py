@@ -257,7 +257,7 @@ SOCIALACCOUNT_ADAPTER = 'gesfipe.users.adapters.SocialAccountAdapter'
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 
-LOGGING_CONFIG = None
+# LOGGING_CONFIG = None
 # DJANGO_LOG_LEVEL = DEBUG
 
 LOGGING = {
@@ -280,9 +280,13 @@ LOGGING = {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
-    'root': {
+        'console': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+        },
+        'root': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
 }

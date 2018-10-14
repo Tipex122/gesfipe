@@ -5,6 +5,10 @@ from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 # from weboob.core.backendscfg import BackendsConfig
 
+
+import logging
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 
 
@@ -59,8 +63,14 @@ def update_list_of_managed_banks(request):
     # print('\n ********** \n {}\n **********\n'.format(bal))
 
     print('workdir : {}'.format(w.workdir))
-    print('repositories : {} \n'.format(w.repositories.modules_dir))
-    print("========================================================================================================\n")
+    print('repositories : {}'.format(w.repositories.modules_dir))
+    print("========================================================================================================")
+
+    logger.debug("=================================================================================================")
+    logger.debug('Workdir ==> ==> ==> : %s', w.workdir)
+    logger.debug('Repositories ==> ==> ==> : %s', w.repositories.modules_dir)
+    logger.debug("=================================================================================================")
+
 
     list_of_banks = []
     for key, val in listbanks.items():
