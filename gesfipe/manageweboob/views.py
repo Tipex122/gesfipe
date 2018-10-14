@@ -66,10 +66,10 @@ def update_list_of_managed_banks(request):
     print('repositories : {}'.format(w.repositories.modules_dir))
     print("========================================================================================================")
 
-    logger.debug("=================================================================================================")
-    logger.debug('Workdir ==> ==> ==> : %s', w.workdir)
-    logger.debug('Repositories ==> ==> ==> : %s', w.repositories.modules_dir)
-    logger.debug("=================================================================================================")
+    logger.warning("=================================================================================================")
+    logger.warning('Workdir ==> ==> ==> : %s', w.workdir)
+    logger.warning('Repositories ==> ==> ==> : %s', w.repositories.modules_dir)
+    logger.warning("=================================================================================================")
 
 
     list_of_banks = []
