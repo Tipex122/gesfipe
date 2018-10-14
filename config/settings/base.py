@@ -262,7 +262,7 @@ DJANGO_LOG_LEVEL = DEBUG
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'f': {'format':
               '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
