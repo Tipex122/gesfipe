@@ -260,36 +260,39 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 LOGGING_CONFIG = None
 DJANGO_LOG_LEVEL = DEBUG
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
-        'f': {'format':
-              '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        'f': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
         },
     },
-    'handlers':{
+
+    'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'f',
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
+
     'loggers': {
         'django': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-
         },
+
         'console': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-
         },
+
         'root': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-
         },
     },
 }
+

@@ -21,25 +21,36 @@ from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 
 import logging
+# import logging.config
+
+# TODO: Following line doesn't work :
+# logging.config.dictConfig('LOGGING')
 
 logger = logging.getLogger(__name__)
 
+
 # set up logging to file - see previous section for more details
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    format='%(asctime)s %(levelname)-8s %(name)-12s %(message)s',
                     datefmt='%m-%d %H:%M',
                     filename='logs/gesfipe.log',
                     filemode='w')
+
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
+console.setLevel(logging.INFO)
+
+
 # set a format which is simpler for console use
-formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)-12s: %(message)s')
+# formatter = logging.Formatter('LOGGING.formatters.f')
+
 # tell the handler to use this format
 console.setFormatter(formatter)
 # add the handler to the root logger
 logging.getLogger('').addHandler(console)
 
+'''
 # Now, we can log to the root logger, or any other logger. First the root...
 logging.info('Jackdaws love my big sphinx of quartz.')
 
@@ -53,8 +64,9 @@ logger1.debug('Quick zephyrs blow, vexing daft Jim.')
 logger1.info('How quickly daft jumping zebras vex.')
 logger2.warning('Jail zesty vixen who grabbed pay from quack.')
 logger2.error('The five boxing wizards jump quickly.')
+'''
 
-
+# logger3 = logging.getLogger('console')
 
 
 # Create your views here.

@@ -18,6 +18,10 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 # Create your views here.
 '''
 def accounts_info(account_id=0):
@@ -123,6 +127,8 @@ def transactions_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         transactions = paginator.page(paginator.num_pages)
+
+    logger.warning('In transaction_list : %s', transactions)
 
     context = {
         'banks_list': banks_list,
