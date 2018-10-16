@@ -17,10 +17,9 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-
 import logging
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 '''
@@ -78,10 +77,11 @@ def accounts_info2(request, account_id=0):
 
 @login_required
 def banks_and_accounts_list(request):
-    banks_list = Banks.objects.all() # .filter(accounts__owner_of_account=request.user)
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
     accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
-    account_total =\
-        Transactions.objects.filter(account__owner_of_account=request.user).aggregate(total=Sum('amount_of_transaction'))
+    account_total = \
+        Transactions.objects.filter(account__owner_of_account=request.user).aggregate(
+            total=Sum('amount_of_transaction'))
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
@@ -170,7 +170,7 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
         # context['accounts_info'] = accounts_info(0)
         context['accounts_info'] = accounts_info2(self.request, 0)
         # context['all_accounts'] = accounts_info(0)
-        context['all_accounts'] = accounts_info2(self.request,0)
+        context['all_accounts'] = accounts_info2(self.request, 0)
 
         return context
 
@@ -178,13 +178,12 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
         return Transactions.objects.filter(account__owner_of_account=self.request.user)
 
     context_object_name = 'transactions_list'  # your own name for the list as a template variable
-    queryset = Transactions.objects.all() #[:55] Get 55 transactions
+    queryset = Transactions.objects.all()  # [:55] Get 55 transactions
     template_name = 'BanksAndAccounts/transactions_list3.html'  # Specify your own template name/location
 
 
 @login_required
 def account_list(request, account_id):
-
     # accounts = Accounts.objects.all()
     banks_list = Banks.objects.all()
     # banks = Banks.objects.all().filter(accounts__owner_of_account=request.user)
@@ -196,7 +195,6 @@ def account_list(request, account_id):
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
-
 
     # Page de 25 lignes
     num_of_lines_per_page = 25
@@ -242,6 +240,7 @@ def transaction_detail(request, transaction_id):
     transaction = Transactions.objects.get(id=transaction_id)
     context = {'transaction': transaction}
     return render(request, 'BanksAndAccounts/transaction_detail.html', context)
+
 
 @login_required
 def transaction_create(request):
@@ -313,7 +312,7 @@ def transaction_edit(request, pk):
 
             # return redirect('budget')
     else:
-        data = {'Account':list_accounts,}
+        data = {'Account': list_accounts, }
         # print(data)
         form = TransactionForm(instance=transaction)
         # print('############## form = TransactionForm(instance=transaction)  {}'.format(form))
@@ -346,7 +345,7 @@ def transactions_with_tag(request, tag_name):
     if tag_name == "*ALL*":
         transactions = Transactions.objects.all()
     else:
-        transactions =\
+        transactions = \
             Transactions.objects.filter(
                 name_of_transaction__icontains=tag_name
             )
@@ -362,4 +361,3 @@ def transactions_with_tag(request, tag_name):
         'BanksAndAccounts/transactions_with_tag.html',
         context
     )
-

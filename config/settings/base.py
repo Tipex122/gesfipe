@@ -4,6 +4,7 @@ Base settings to build other settings files upon.
 
 import environ
 import os
+import logging.config
 
 ROOT_DIR = environ.Path(__file__) - 3  # (gesfipe/config/settings/base.py - 3 = gesfipe/)
 APPS_DIR = ROOT_DIR.path('gesfipe')
@@ -29,7 +30,6 @@ TIME_ZONE = 'Europe/Paris'
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 # LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'fr-fr'
-
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
@@ -65,7 +65,7 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize', # Handy template tags
+    'django.contrib.humanize',  # Handy template tags
     'django.contrib.admin',
 ]
 
@@ -236,7 +236,6 @@ ADMINS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
-
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
@@ -251,22 +250,19 @@ ACCOUNT_ADAPTER = 'gesfipe.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'gesfipe.users.adapters.SocialAccountAdapter'
 
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
-
 LOGGING_CONFIG = None
 DJANGO_LOG_LEVEL = DEBUG
-
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
         'f': {
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+            'format': '%(asctime)s %(levelname)-8s %(name)-12s %(message)s'
         },
     },
 
@@ -296,3 +292,5 @@ LOGGING = {
     },
 }
 
+logging.config.dictConfig(LOGGING)
+# logger = logging.getLogger(__name__)

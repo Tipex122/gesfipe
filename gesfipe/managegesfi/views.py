@@ -21,12 +21,13 @@ from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 
 import logging
-# import logging.config
 
-# TODO: Following line doesn't work :
-# logging.config.dictConfig('LOGGING')
+
 
 logger = logging.getLogger(__name__)
+# logging.getLogger('console').addHandler('console')
+# logging.getLogger('console')
+
 
 
 # set up logging to file - see previous section for more details
@@ -65,8 +66,6 @@ logger1.info('How quickly daft jumping zebras vex.')
 logger2.warning('Jail zesty vixen who grabbed pay from quack.')
 logger2.error('The five boxing wizards jump quickly.')
 '''
-
-# logger3 = logging.getLogger('console')
 
 
 # Create your views here.
@@ -217,8 +216,8 @@ def get_list_of_managed_banks(request):
     # print('\n ********** \n {}\n **********\n'.format(acc))
     # print('\n ********** \n {}\n **********\n'.format(bal))
 
-    logger.info("+++ workdir : %s", w.workdir)
-    logger.info("+++ repositories : %s", w.repositories.modules_dir)
+    logger.warning("+++ workdir : %s", w.workdir)
+    logger.warning("+++ repositories : %s", w.repositories.modules_dir)
 
     print("========================================================================================================")
     print('workdir : {}'.format(w.workdir))
