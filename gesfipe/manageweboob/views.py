@@ -8,7 +8,9 @@ from weboob.capabilities.bank import CapBank
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 
@@ -20,6 +22,7 @@ def check_weboob_repositories(w):
     else:
         print("Répertoires à jour\n")
     return w
+
 
 @login_required
 def update_list_of_managed_banks(request):
@@ -46,7 +49,6 @@ def update_list_of_managed_banks(request):
     listbanks = w.repositories.get_all_modules_info(CapBank)
     amex = w.load_backend('americanexpress', 'American Express', {'login': '', 'password': ''})
     list_accounts = list(amex.iter_accounts())
-
 
     logger.warning("=================================================================================================")
     logger.warning("info sur amex : _____/\_______ : %s", amex)
@@ -95,8 +97,8 @@ def update_list_of_managed_banks(request):
 
     # print('\n _____#####_____\n iter_backedns : {} \n _____####_____\n'.format(list(w.backends_config.iter_backends())))
 
-#    print('********************* w.backends_config.get_backend: {}'.format(
-#        w.backends_config.get_backend('axabanque')))
+    #    print('********************* w.backends_config.get_backend: {}'.format(
+    #        w.backends_config.get_backend('axabanque')))
 
     # acc = next(iter(w.iter_accounts()))
     # bal = acc.balance
@@ -106,13 +108,12 @@ def update_list_of_managed_banks(request):
     # print("========================================================================================================")
     # print('workdir : {}'.format(w.workdir))
     # print('repositories : {}'.format(w.repositories.modules_dir))
-    # print("========================================================================================================")
+    #  print("========================================================================================================")
 
     logger.warning("=================================================================================================")
     logger.warning('logger.warning Workdir ==> ==> ==> : %s', w.workdir)
     logger.warning('logger.warning Repositories ==> ==> ==> : %s', w.repositories.modules_dir)
     logger.warning("=================================================================================================")
-
 
     list_of_banks = []
     for key, val in listbanks.items():
@@ -127,4 +128,3 @@ def update_list_of_managed_banks(request):
     context = {'list_of_banks': list_of_banks}
 
     return render(request, 'ManageWeboob/list_of_available_backends.html', context)
-
