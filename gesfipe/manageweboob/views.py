@@ -5,6 +5,7 @@ from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 # from weboob.core.backendscfg import BackendsConfig
 
+from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 
 import logging
 logger = logging.getLogger(__name__)
@@ -43,6 +44,46 @@ def update_list_of_managed_banks(request):
     '''
 
     listbanks = w.repositories.get_all_modules_info(CapBank)
+    amex = w.load_backend('americanexpress', 'American Express', {'login': '', 'password': ''})
+    list_accounts = list(amex.iter_accounts())
+
+
+    logger.warning("=================================================================================================")
+    logger.warning("info sur amex : _____/\_______ : %s", amex)
+    logger.warning("info sur amex : _____/\_______ : %s", amex.CONFIG)
+    logger.warning("info sur amex : _____/\_______ : %s", amex.iter_accounts())
+    # logger.info("info sur amex : _____/\_______ : %s", amex.type)
+    for account in list_accounts:
+        logger.warning("Accounts of AMEX: ...... : %s", account)
+    logger.warning("=================================================================================================")
+
+    # db_accounts_list = db_Accounts.objects.all().filter(owner_of_account=request.user)
+    db_accounts_list = db_Accounts.objects.all()
+
+    list_of_db_accounts = []
+
+    for key in db_accounts_list:
+        list_of_db_accounts.append(key.num_of_account)
+    '''
+    if amex.id not in list_of_db_accounts:
+        new_account = db_Accounts()
+        new_account.num_of_account = amex.id
+        new_account.name_of_account = amex.label
+        new_account.type_int_of_account = amex.type
+        # TODO: affecter un user + le type (en texte)
+        # new_account.owner_of_account = request.user
+        # print('new_account.name_of_account = {}'.format(new_account.name_of_account))
+        new_account.save()
+    
+    
+    logger.info("=================================================================================================")
+    logger.info("info sur amex : _____/\_______ : %s", amex)
+    logger.info("info sur amex : _____/\_______ : %s", amex.id)
+    logger.info("info sur amex : _____/\_______ : %s", amex.label)
+    logger.info("info sur amex : _____/\_______ : %s", amex.type)
+    logger.info("=================================================================================================")
+    '''
+
     # module = w.load_backend("societegenerale", "societegenerale")
     # print('********************* w.load_backend(): {} \n'.format(module))
     # print('********************* w.backends_config.get_backend: {}'.format(w.backends_config.get_backend('societegenerale')))
@@ -62,10 +103,10 @@ def update_list_of_managed_banks(request):
     # print('\n ********** \n {}\n **********\n'.format(acc))
     # print('\n ********** \n {}\n **********\n'.format(bal))
 
-    print("========================================================================================================")
-    print('workdir : {}'.format(w.workdir))
-    print('repositories : {}'.format(w.repositories.modules_dir))
-    print("========================================================================================================")
+    # print("========================================================================================================")
+    # print('workdir : {}'.format(w.workdir))
+    # print('repositories : {}'.format(w.repositories.modules_dir))
+    # print("========================================================================================================")
 
     logger.warning("=================================================================================================")
     logger.warning('logger.warning Workdir ==> ==> ==> : %s', w.workdir)
