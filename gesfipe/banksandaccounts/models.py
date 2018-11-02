@@ -39,45 +39,49 @@ class Banks(models.Model):
 
 
 class Accounts(models.Model):
-    TYPE_UNKNOWN = 0
-    TYPE_CHECKING = 1
-    "Transaction, everyday transactions"
-    TYPE_SAVINGS = 2
-    "Savings/Deposit, can be used for every banking"
-    TYPE_DEPOSIT = 3
-    "Term of Fixed Deposit, has time/amount constraints"
-    TYPE_LOAN = 4
-    "Loan account"
-    TYPE_MARKET = 5
-    "Stock market or other variable investments"
-    TYPE_JOINT = 6
-    "Joint account"
-    TYPE_CARD = 7
-    "Card account"
-    TYPE_LIFE_INSURANCE = 8
-    "Life insurances"
-    TYPE_PEE = 9
-    "Employee savings PEE"
-    TYPE_PERCO = 10
-    "Employee savings PERCO"
-    TYPE_ARTICLE_83 = 11
-    "Article 83"
-    TYPE_RSP = 12
-    "Employee savings RSP"
-    TYPE_PEA = 13
-    "Share savings"
-    TYPE_CAPITALISATION = 14
-    "Life Insurance capitalisation"
-    TYPE_PERP = 15
-    "Retirement savings"
-    TYPE_MADELIN = 16
-    "Complementary retirement savings"
-    TYPE_MORTGAGE = 17
-    "Mortgage"
-    TYPE_CONSUMER_CREDIT = 18
-    "Consumer credit"
-    TYPE_REVOLVING_CREDIT = 19
-    "Revolving credit"
+    TYPE_UNKNOWN = 0            # Unknown
+    TYPE_CHECKING = 1           # Transaction, everyday transactions
+    TYPE_SAVINGS = 2            # Savings/Deposit, can be used for every banking
+    TYPE_DEPOSIT = 3            # Term of Fixed Deposit, has time/amount constraints
+    TYPE_LOAN = 4               # Loan account
+    TYPE_MARKET = 5             # Stock market or other variable investments
+    TYPE_JOINT = 6              # Joint account
+    TYPE_CARD = 7               # Card account
+    TYPE_LIFE_INSURANCE = 8     # Life insurances
+    TYPE_PEE = 9                # Employee savings PEE
+    TYPE_PERCO = 10             # Employee savings PERCO
+    TYPE_ARTICLE_83 = 11        # Article 83
+    TYPE_RSP = 12               # Employee savings RSP
+    TYPE_PEA = 13               # Share savings
+    TYPE_CAPITALISATION = 14    # Life Insurance capitalisation
+    TYPE_PERP = 15              # Retirement savings
+    TYPE_MADELIN = 16           # Complementary retirement savings
+    TYPE_MORTGAGE = 17          # Mortgage
+    TYPE_CONSUMER_CREDIT = 18   # Consumer credit
+    TYPE_REVOLVING_CREDIT = 19  # Revolving credit
+
+    TYPE_ACCOUNT_CHOICE = (
+        (TYPE_UNKNOWN, 'Unknown'),
+        (TYPE_CHECKING, 'Transaction, everyday transactions'),
+        (TYPE_SAVINGS, 'Transaction, everyday transactions'),
+        (TYPE_DEPOSIT, 'Term of Fixed Deposit, has time/amount constraints'),
+        (TYPE_LOAN, 'Loan account'),
+        (TYPE_MARKET, 'Stock market or other variable investments'),
+        (TYPE_JOINT, 'Joint account'),
+        (TYPE_CARD, 'Card account'),
+        (TYPE_LIFE_INSURANCE, 'Life insurances'),
+        (TYPE_PEE, 'Employee savings PEE'),
+        (TYPE_PERCO, 'Employee savings PERCO'),
+        (TYPE_ARTICLE_83, 'Article 83'),
+        (TYPE_RSP, 'Employee savings RSP'),
+        (TYPE_PEA, 'Share savings'),
+        (TYPE_CAPITALISATION, 'Life Insurance capitalisation'),
+        (TYPE_PERP, 'Retirement savings'),
+        (TYPE_MADELIN, 'Complementary retirement savings'),
+        (TYPE_MORTGAGE, 'Mortgage'),
+        (TYPE_CONSUMER_CREDIT, 'Consumer credit"'),
+        (TYPE_REVOLVING_CREDIT, 'Revolving credit'),
+    )
 
     name_of_account = models.CharField(
         'Name of the account',
@@ -95,12 +99,16 @@ class Accounts(models.Model):
 
     type_int_of_account = models.IntegerField(
         'Type of account (int)',  # use TYPE_* constants
-        default=TYPE_UNKNOWN
+        default=TYPE_UNKNOWN,
+        choices=TYPE_ACCOUNT_CHOICE,
     )
 
+    # TODO: A priori à supprimer: type_int_of_account suffit
     type_of_account = models.CharField(
         'Type of account',
-        default='Unknown',
+        default=TYPE_UNKNOWN,
+        # choices=TYPE_ACCOUNT_CHOICE,
+        # default='Unknown',
         max_length=128
     )
 
@@ -135,6 +143,21 @@ class Transactions(models.Model):
     TYPE_CARD_SUMMARY  = 11
     TYPE_DEFERRED_CARD = 12
 
+    TYPE_TRANSACTION_CHOICE = (
+        (TYPE_UNKNOWN, 'Unknown'),
+        (TYPE_TRANSFER, 'Transfer'),
+        (TYPE_ORDER, 'Order'),
+        (TYPE_CHECK,'Check'),
+        (TYPE_DEPOSIT,'Deposit'),
+        (TYPE_PAYBACK, 'Payback'),
+        (TYPE_WITHDRAWAL, 'Withdrawal'),
+        (TYPE_CARD, 'Credit card'),
+        (TYPE_LOAN_PAYMENT, 'Loan payment'),
+        (TYPE_BANK, 'Bank'),
+        (TYPE_CASH_DEPOSIT, 'Cash deposit'),
+        (TYPE_CARD_SUMMARY, 'Card summary'),
+        (TYPE_DEFERRED_CARD, 'Deferred card'),
+    )
     date_of_transaction = models.DateField(
         'Debit date on the bank statement',
         default=datetime.datetime.now
@@ -151,12 +174,16 @@ class Transactions(models.Model):
     )
 
     type_int_of_transaction = models.IntegerField(
-        'Type of transaction (int)', # use TYPE_* constants
-        default=TYPE_UNKNOWN
+        'Type of transaction (int)',  # use TYPE_* constants
+        default=TYPE_UNKNOWN,
+        choices=TYPE_TRANSACTION_CHOICE,
     )
 
+    # TODO: A priori à supprimer: type_int_of_transaction suffit
     type_of_transaction = models.CharField(
         'Type of transaction',
+        default=TYPE_UNKNOWN,
+        # choices=TYPE_TRANSACTION_CHOICE,
         max_length=128
     )
 

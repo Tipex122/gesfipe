@@ -16,14 +16,14 @@
         </a>
         <div class="card-body">
           <h4 class="card-title">Account name: {{account.name_of_account}}</h4>
-          <h6 class="card-subtitle mb-2 text-muted">{{bank}} - Type of account: {{account.type_of_account}}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">{{bank}} - Type of account: {{account.get_type_int_of_account_display}}</h6>
           <p class="card-text">
             <i>
               <br>Total :
               {% if account.total_amount_by_account >= 0 %}
-                  <span>{{account.total_amount_by_account}}</span>
+              <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
               {% else %}
-                  <span class="font-red">{{account.total_amount_by_account}}</span>
+              <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
               {% endif %}
               <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
             </i>

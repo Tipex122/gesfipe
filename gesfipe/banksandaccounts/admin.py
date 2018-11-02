@@ -47,9 +47,9 @@ class TransactionsAdmin(ImportExportModelAdmin):
               ['date_of_transaction',
                'real_date_of_transaction',
                'value_date_of_transaction',
-               # 'type_int_of_transaction',
+               'type_int_of_transaction',
                'type_of_transaction',
-               # 'name_of_transaction',
+               'name_of_transaction',
                'label_of_transaction',
                               ]
           }

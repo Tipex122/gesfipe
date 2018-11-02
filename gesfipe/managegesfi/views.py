@@ -409,6 +409,7 @@ def load_transactions(request):
                     transac[
                         'type'] = transaction.type  # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
                     Trans.type_int_of_transaction = transaction.type
+                    # Trans.type_of_transaction = transaction.type
                     # print(Trans.type_int_of_transaction)
 
                     transac['raw'] = transaction.raw  # Raw label of the transaction

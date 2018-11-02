@@ -47,6 +47,7 @@ def update_list_of_managed_banks(request):
     '''
 
     listbanks = w.repositories.get_all_modules_info(CapBank)
+    # TODO: créer form quand on clique sur banque pour entrer login et password
     amex = w.load_backend('americanexpress', 'American Express', {'login': '', 'password': ''})
     list_accounts = list(amex.iter_accounts())
 

@@ -25,6 +25,7 @@ class TransactionForm(LoginRequiredMixin, forms.ModelForm):
                   'category_of_transaction',
                   'key_words',
                   )
+    # type_of_transaction = forms.ChoiceField(choices=Transactions.TYPE_TRANSACTION_CHOICE)
     category_of_transaction = TreeNodeChoiceField(queryset=Category.objects.all(), level_indicator=u'+--')
     # TODO: How to obtain the list of accounts only available for the connected user ?
     # account = forms.ChoiceField(queryset=Accounts.objects.all().filter(owner_of_account=User.get_username))
