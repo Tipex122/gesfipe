@@ -23,49 +23,48 @@ from weboob.capabilities.bank import CapBank
 import logging
 
 
-
 logger = logging.getLogger(__name__)
-# logging.getLogger('console').addHandler('console')
-# logging.getLogger('console')
-
 
 
 # set up logging to file - see previous section for more details
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.WARNING,
                     format='%(asctime)s %(levelname)-8s %(name)-12s %(message)s',
                     datefmt='%m-%d %H:%M',
                     filename='logs/gesfipe.log',
                     filemode='w')
 
+
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
-console.setLevel(logging.INFO)
+console.setLevel(logging.DEBUG)
 
 
 # set a format which is simpler for console use
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)-12s: %(message)s')
-# formatter = logging.Formatter('LOGGING.formatters.f')
 
 # tell the handler to use this format
 console.setFormatter(formatter)
+
 # add the handler to the root logger
 logging.getLogger('').addHandler(console)
 
-'''
 # Now, we can log to the root logger, or any other logger. First the root...
 logging.info('Jackdaws love my big sphinx of quartz.')
+logging.debug('Test de debug sur "logging"')
 
 # Now, define a couple of other loggers which might represent areas in your
 # application:
 
-logger1 = logging.getLogger('myapp.area1')
+logger1 = logging.getLogger(__name__)
 logger2 = logging.getLogger('myapp.area2')
 
-logger1.debug('Quick zephyrs blow, vexing daft Jim.')
-logger1.info('How quickly daft jumping zebras vex.')
-logger2.warning('Jail zesty vixen who grabbed pay from quack.')
-logger2.error('The five boxing wizards jump quickly.')
-'''
+logger.debug('## LOGGER ## - Test de LOGGER')
+
+logger1.info('## logger1 ## zephyrs blow, vexing daft Jim.')
+logger1.warning('## logger1 ## How quickly daft jumping zebras vex.')
+logger2.warning('## logger2 ## Jail zesty vixen who grabbed pay from quack.')
+logger2.error('## logger2 ## The five boxing wizards jump quickly.')
+
 
 
 # Create your views here.
@@ -246,7 +245,7 @@ def get_list_of_available_accounts(request):
     :param request:
     :return: render: to render list_of_banks and list_of_accounts (but banks and account are not linked (to be updated)
     '''
-    logger.info("Entering in function get_list_of_available_accounts")
+    logger.warning("Entering in function get_list_of_available_accounts")
     w = Weboob()
     check_weboob_repositories(w)
     listbanks = w.load_backends(CapBank)
@@ -269,7 +268,7 @@ def get_list_of_available_accounts(request):
     list_of_banks.sort(key=lambda k: k['module'])
 
     # print('************************ : {}'.format(list_of_banks))
-    logger.debug('list_of_banks ==> ==> ==> : %s', list_of_banks)
+    logger.warning('list_of_banks ==> ==> ==> : %s', list_of_banks)
 
     # TODO: cela fonctionne car je n'ai qu'une banque  en backends mais sinon la liste des "accounts" sera globale.
     # TODO: il manque donc l'association account et banque
@@ -313,7 +312,7 @@ def get_list_of_available_accounts(request):
     # list_of_accounts.sort(key=lambda k: k['label'])
     context = {'list_of_banks': list_of_banks, 'list_of_accounts': list_of_accounts, }
 
-    logger.info("Entering in function get_list_of_available_accounts")
+    logger.warning("Entering in function get_list_of_available_accounts")
 
     return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
 
@@ -323,7 +322,7 @@ def list_unique_numbers(request):
     # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
     list_unique = Transactions.objects.all()
     list_unique_of_numbers()
-    logger.debug('List of unique Numbers ==> ==> ==> : %s', list_unique)
+    logger.warning('List of unique Numbers ==> ==> ==> : %s', list_unique)
     context = {'list_unique': list_unique}
     return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
 
@@ -339,7 +338,7 @@ def list_unique_of_numbers():
     for num in list_unique:
         list_of_numbers.append(num.unique_id_of_transaction)
     # print('List of unique Numbers : {}'.format(list_of_numbers))
-    logger.debug('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
+    logger.warning('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
     return list_of_numbers
 
 
@@ -418,6 +417,8 @@ def load_transactions(request):
 
                     transac['category'] = transaction.category  # Category of the transaction
                     Trans.type_of_transaction = transaction.category
+                    logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
+                    # Trans.category_of_transaction = transaction.category
                     # print(Trans.type_of_transaction)
 
                     transac['label'] = transaction.label  # Pretty label
@@ -439,7 +440,7 @@ def load_transactions(request):
                         list_uniques.append(Trans.unique_id_of_transaction)
                         list_of_transactions.append(transac)
                         # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
-                        logger.debug('Sauvegarde de Trans: ===>>>>>> %s', Trans)
+                        logger.warning('Sauvegarde de Trans: ===>>>>>> %s', Trans)
 
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 

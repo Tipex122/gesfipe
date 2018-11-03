@@ -242,7 +242,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag
 
-    # Not tested !!!!
+    # TODO: Not tested !!!!
     @staticmethod
     def get_popular_tags():
         tags = Tag.objects.all()

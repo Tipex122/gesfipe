@@ -13,7 +13,10 @@
 {% endblock heading %}
 
 {% block content %}
-  {% if transaction %}
+    {% if list_of_transactions %}
+    <tr>
+      <h3>New transactions loaded in database : </h3>
+    </tr>
     <table class="table table-striped ">
       <thead>
         <tr>
@@ -29,21 +32,24 @@
       </thead>
       <tbody>
         {% for transaction in list_of_transactions %}
-          <tr>
-            <td> {{transaction.date}} </td>
-            <td> {{transaction.rdate}} </td>
-            <td> {{transaction.vdate}} </td>
-            <td> {{transaction.type}} </td>
-            <td> {{transaction.raw}} </td>
-            <td> {{transaction.category}} </td>
-            <td> {{transaction.label}} </td>
-            <td> {{transaction.amount}} </td>
-          </tr>
+            <tr>
+              <td> {{transaction.date}} </td>
+              <td> {{transaction.rdate}} </td>
+              <td> {{transaction.vdate}} </td>
+              <td> {{transaction.type}} </td>
+              <td> {{transaction.raw}} </td>
+              <td> {{transaction.category}} </td>
+              <td> {{transaction.label}} </td>
+              <td> {{transaction.amount}} </td>
+            </tr>
         {% endfor %}
       </tbody>
     </table>
-  {% else %}
-    <tr><h3>Database is up to date: there is no new transaction to load !</h3></tr>
-  {% endif %}
+    {% else %}
+        <tr>
+          <h3>Database is up to date: there is no new transaction to load !</h3>
+        </tr>
+    {% endif %}
+
 {% endblock %}
 
