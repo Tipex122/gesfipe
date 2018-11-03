@@ -5,23 +5,23 @@
 
 
 {% block title %}
-    {% if create %} - Create{% else %} - Edit{% endif %} account {{ form.instance.name }}
+    {% if create %} - Create{% else %} - Edit{% endif %} bank {{ form.instance.name }}
 {% endblock %}
 
 {% block heading %}
     {% if create %}
-        <h2>Create account</h2>
+        <h2>Create bank</h2>
     {% else %}
-        <h2>Edit account:</h2>
-        <h4><i>{{ account.name_of_account }}</i></h4>
+        <h2>Edit bank:</h2>
+        <h4><i>{{ bank.name_of_bank }}</i></h4>
     {% endif %}
 {% endblock %}
 
 {% block content %}
     {% if create %}
-        {% url "account_create" as action_url %}
+        {% url "bank_create" as action_url %}
     {% else %}
-        {% url "account_edit" pk=form.instance.pk as action_url %}
+        {% url "bank_edit" pk=form.instance.pk as action_url %}
     {% endif %}
     <form action="{{ action_url }}" method="post" accept-charset="utf-8">
         {{ form|crispy }}

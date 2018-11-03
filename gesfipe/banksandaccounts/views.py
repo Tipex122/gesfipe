@@ -236,6 +236,80 @@ def account_list(request, account_id):
 
 
 @login_required
+def bank_detail(request, bank_id):
+    bank = Banks.objects.get(id=bank_id)
+    context = {'bank': bank}
+    return render(request, 'BanksAndAccounts/bank_detail.html', context)
+
+@login_required
+def bank_create(request):
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+
+    if request.method == 'POST':
+        form = BankForm(data=request.POST)
+
+        if form.is_valid():
+            bank = form.save(commit=False)
+            # category.owner = request.user
+            bank.save()
+            # form.save_m2m()
+            # return redirect('transactions_list', transaction.account.id)
+            return redirect('banks_and_accounts_list')
+
+    else:
+        form = BankForm()
+
+    context = {
+        'all_accounts': accounts_info2(request, 0),
+        # general information related to all accounts (due to "0") and used in sidebar
+
+        'form': form,
+        'banks_list': banks_list,
+        'create': True
+    }
+    return render(request, 'BanksAndAccounts/bank_edit.html', context)
+
+
+@login_required
+def bank_edit(request, pk):
+    bank = get_object_or_404(Banks, pk=pk)
+
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+
+    accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+
+    if request.method == 'POST':
+        form = BankForm(instance=bank, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            # TODO: prévoir une redirection vers la liste des banques car la banque ne s'affiche pas tant qu'il n'y a pas un compte associé à la banque
+            # TODO: par défaut il faudrait que le propriétaire du compte soit défini dés la création (celui qui le crée est propriétaire)
+            return redirect('banks_and_accounts_list')
+
+            # return redirect('budget')
+    else:
+        data = {'Bank': banks_list, }
+        # print(data)
+        form = BankForm(instance=bank)
+
+    form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
+
+    context = {
+        'bank': bank,
+        'all_accounts': accounts_info2(request, 0),
+        # general information related
+        # to all accounts (due to "0") and used in sidebar
+        # 'account': account,
+        'banks_list': banks_list,
+        'accounts_list': accounts_list,
+        'form': form,
+        'create': False
+    }
+    return render(request, 'BanksAndAccounts/bank_edit.html', context)
+
+
+@login_required
 def account_detail(request, account_id):
     account = Accounts.objects.get(id=account_id)
     context = {'account': account}
@@ -255,8 +329,9 @@ def account_create(request):
             account.save()
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
-            return redirect('account_list', account.account.id)
-
+            # TODO: prévoir une redirection vers la liste des comptes par banque
+            # TODO: par défaut il faudrait que le propriétaire du compte soit défini dés la création (celui qui le crée est propriétaire)
+            return redirect('banks_and_accounts_list')
     else:
         form = AccountForm()
 
@@ -278,7 +353,6 @@ def account_edit(request, pk):
     banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
 
     list_accounts = Accounts.objects.all().filter(owner_of_account=request.user)
-
 
     if request.method == 'POST':
         form = AccountForm(instance=account, data=request.POST)
