@@ -20,13 +20,13 @@ from weboob.tools.compat import unicode
 
 class Banks(models.Model):
     name_of_bank = models.CharField(
-        'Nom de la banque',
-        default='Nom de la banque',
+        'Name of Bank',
+        default='Name of Bank',
         max_length=256)
 
     num_of_bank = models.CharField(
-        'Identifiant de la banque',
-        default='Identifiant',
+        'Id of Bank',
+        default='Id',
         max_length=256)
 
     def __str__(self):
@@ -62,8 +62,8 @@ class Accounts(models.Model):
 
     TYPE_ACCOUNT_CHOICE = (
         (TYPE_UNKNOWN, 'Unknown'),
-        (TYPE_CHECKING, 'Transaction, everyday transactions'),
-        (TYPE_SAVINGS, 'Transaction, everyday transactions'),
+        (TYPE_CHECKING, 'Everyday transactions'),
+        (TYPE_SAVINGS, 'Savings/Deposit'),
         (TYPE_DEPOSIT, 'Term of Fixed Deposit, has time/amount constraints'),
         (TYPE_LOAN, 'Loan account'),
         (TYPE_MARKET, 'Stock market or other variable investments'),
@@ -179,10 +179,10 @@ class Transactions(models.Model):
         choices=TYPE_TRANSACTION_CHOICE,
     )
 
-    # TODO: A priori à supprimer: type_int_of_transaction suffit
+    # type_of_transaction is used to store weboob account category
     type_of_transaction = models.CharField(
         'Type of transaction',
-        default=TYPE_UNKNOWN,
+        default='Unknown',
         # choices=TYPE_TRANSACTION_CHOICE,
         max_length=128
     )
@@ -201,6 +201,7 @@ class Transactions(models.Model):
     card_transaction = models.CharField(
         'Card number (if any)',
         default='Credit Card',
+        blank=True,
         max_length=128
     )
 
@@ -228,6 +229,7 @@ class Transactions(models.Model):
         max_length=3
     )
 
+    # Date of creation of the transaction in the database server (not in the bank)
     creation_date = models.DateField(
         'Creation date of the transaction in  database',
         default=datetime.datetime.now
@@ -249,6 +251,7 @@ class Transactions(models.Model):
     category_of_transaction = models.ForeignKey(
         Category,
         null=True,
+        # default='Budget',
         blank=True,
         on_delete=models.CASCADE
     )

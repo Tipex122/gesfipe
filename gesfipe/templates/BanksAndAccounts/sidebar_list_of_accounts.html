@@ -15,7 +15,7 @@
                alt="Card image cap">
         </a>
         <div class="card-body">
-          <h4 class="card-title">Account name: {{account.name_of_account}}</h4>
+          <h4 class="card-title">Account name: <a href="/account_detail/{{account.id}}/"> {{account.name_of_account}}</a></h4>
           <h6 class="card-subtitle mb-2 text-muted">{{bank}} - Type of account: {{account.get_type_int_of_account_display}}</h6>
           <p class="card-text">
             <i>

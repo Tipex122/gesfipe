@@ -236,6 +236,80 @@ def account_list(request, account_id):
 
 
 @login_required
+def account_detail(request, account_id):
+    account = Accounts.objects.get(id=account_id)
+    context = {'account': account}
+    return render(request, 'BanksAndAccounts/account_detail.html', context)
+
+
+@login_required
+def account_create(request):
+    accounts_list = Accounts.objects.all()  # .filter(accounts__owner_of_account=request.user)
+
+    if request.method == 'POST':
+        form = AccountForm(data=request.POST)
+
+        if form.is_valid():
+            account = form.save(commit=False)
+            # category.owner = request.user
+            account.save()
+            # form.save_m2m()
+            # return redirect('transactions_list', transaction.account.id)
+            return redirect('account_list', account.account.id)
+
+    else:
+        form = AccountForm()
+
+    context = {
+        'all_accounts': accounts_info2(request, 0),
+        # general information related to all accounts (due to "0") and used in sidebar
+
+        'form': form,
+        'accounts_list': accounts_list,
+        'create': True
+    }
+    return render(request, 'BanksAndAccounts/account_edit.html', context)
+
+
+@login_required
+def account_edit(request, pk):
+    account = get_object_or_404(Accounts, pk=pk)
+
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+
+    list_accounts = Accounts.objects.all().filter(owner_of_account=request.user)
+
+
+    if request.method == 'POST':
+        form = AccountForm(instance=account, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('account_list', account.id)
+
+            # return redirect('budget')
+    else:
+        data = {'Account': list_accounts, }
+        # print(data)
+        form = AccountForm(instance=account)
+
+    form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
+
+    context = {
+        'account': account,
+        'all_accounts': accounts_info2(request, 0),
+        # general information related
+        # to all accounts (due to "0") and used in sidebar
+        # 'account': account,
+        'banks_list': banks_list,
+        'form': form,
+        'create': False
+    }
+    return render(request, 'BanksAndAccounts/account_edit.html', context)
+
+
+
+@login_required
 def transaction_detail(request, transaction_id):
     transaction = Transactions.objects.get(id=transaction_id)
     context = {'transaction': transaction}

@@ -24,7 +24,7 @@
                          alt="Card image cap">
                   </a>
                     <div class="card-body">
-                        <h4 class="card-title">Account name: <br>{{account.name_of_account}}</h4>
+                      <h4 class="card-title">Account name: <br><a href="/account_detail/{{account.id}}/"> {{account.name_of_account}}</a></h4>
                         <h6 class="card-subtitle mb-2 text-muted">{{bank}} - Type of account: {{account.get_type_int_of_account_display}}</h6>
                         <p class="card-text">
                             <br> Total :
@@ -62,28 +62,15 @@
   </div>
 {% endblock content %}
 
+
 {% block sidesearch %}
-  <div class="content">
-  {% if not hide_search %}
-    <form class="search-sidebar"
-          data-toggle="tooltip"
-          data-placement="bottom"
-          title="Search any text in any field of banks, accounts, transactions and categories data"
-          role="search"
-          action="{% url 'search' %}">
-      <div class="input-group">
-        <input type="text" class="form-control" name="q" placeholder="Search">
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary search-sidebar">
-              Submit
-              <!-- <span class="glyphicon glyphicon-search"></span> -->
-            </button>
-          </span>
-      </div>
-    </form>
-  {% endif %}
+
+  {% include 'BanksAndAccounts/sidebar_search.html' %}
+
 {% endblock sidesearch %}
 
+
 {% block sidebar %}
+
 {% endblock sidebar %}
 

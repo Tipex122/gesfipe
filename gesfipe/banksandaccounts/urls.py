@@ -11,6 +11,10 @@ urlpatterns = [
     # url(r'^toto/$', views.transactions_list2, name='transactions_list2'),
     # url(r'^$', views.TransactionsListView.as_view(), name='transactions_list'),
 
+    url(r'^account_detail/(?P<account_id>[0-9]+)/$', views.account_detail, name='account_detail'),
+    url(r'^account_edit/(?P<pk>[0-9]+)/$', views.account_edit, name='account_edit'),
+    url(r'^account_create/$', views.account_create, name='account_create'),
+
     url(r'^transaction_detail/(?P<transaction_id>[0-9]+)/$', views.transaction_detail, name='transaction_detail'),
     url(r'^transaction_edit/(?P<pk>[0-9]+)/$', views.transaction_edit, name='transaction_edit'),
     url(r'^transaction_create/$', views.transaction_create, name='transaction_create'),

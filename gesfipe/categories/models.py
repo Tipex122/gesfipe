@@ -132,7 +132,12 @@ class Category(MPTTModel):
     Preorder Tree Traversal)
     At this stage, one can manage categories hierarchy only through admin interface
     """
-    name = models.CharField(max_length=100, blank=False, unique=True)
+    name = models.CharField(max_length=100,
+                            # default='Budget',
+                            blank=False,
+                            # blank=True,
+                            unique=True
+                            )
     description = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10,
                                  decimal_places=2,

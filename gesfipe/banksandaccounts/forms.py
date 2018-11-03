@@ -1,10 +1,31 @@
 from django import forms
-from .models import Accounts, Transactions
+from .models import Banks, Accounts, Transactions
 from gesfipe.categories.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
 
 from mptt.forms import TreeNodeChoiceField
+
+
+class BankForm(LoginRequiredMixin, forms.ModelForm):
+    class Meta:
+        model = Banks
+        fields = (
+            'name_of_bank',
+            'num_of_bank',
+        )
+
+
+class AccountForm(LoginRequiredMixin, forms.ModelForm):
+    class Meta:
+        model = Accounts
+        fields = (
+            'name_of_account',
+            'num_of_account',
+            'type_int_of_account',
+            'type_of_account',  # TODO: to be deleted if deleted in Accounts models
+            'bank'  # TODO: How to obtain the list of banks and account only available for the connected user ?
+        )
 
 
 class TransactionForm(LoginRequiredMixin, forms.ModelForm):
@@ -31,3 +52,4 @@ class TransactionForm(LoginRequiredMixin, forms.ModelForm):
     # account = forms.ChoiceField(queryset=Accounts.objects.all().filter(owner_of_account=User.get_username))
     # date_of_transaction = forms.DateField(widget=forms.SelectDateWidget())
     # key_words = forms.MultipleChoiceField()
+
