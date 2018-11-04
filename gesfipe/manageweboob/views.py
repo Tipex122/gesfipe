@@ -6,6 +6,7 @@ from weboob.capabilities.bank import CapBank
 # from weboob.core.backendscfg import BackendsConfig
 
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
+from gesfipe.manageweboob.models import WeboobModules
 
 import logging
 
@@ -129,3 +130,44 @@ def update_list_of_managed_banks(request):
     context = {'list_of_banks': list_of_banks}
 
     return render(request, 'ManageWeboob/list_of_available_backends.html', context)
+
+
+@login_required
+def load_list_of_modules_in_database(request):
+    '''
+    function to load list of weboob modules in database
+    :param request:
+    :return:
+    '''
+    w = Weboob()
+    w.update()
+
+    listbanks = w.repositories.get_all_modules_info(CapBank)
+
+    db_wm_list = WeboobModules.objects.all()
+
+    list_of_db_modules = []
+
+    for key in db_wm_list:
+        list_of_db_modules.append(key.name_of_module)
+
+    list_of_banks = []
+    for key, val in listbanks.items():
+        wm = WeboobModules()
+        data_bank = {}
+
+        data_bank['module'] = key
+        wm.name_of_module = key
+
+        data_bank['description'] = val.description
+        wm.description_of_module = val.description
+
+        list_of_banks.append(data_bank)
+        if wm.name_of_module not in list_of_db_modules:
+            wm.save()
+
+    list_of_banks.sort(key=lambda k: k['module'])
+
+    context = {'list_of_banks': list_of_banks}
+
+    return render(request, 'ManageWeboob/list_of_available_modules.html', context)

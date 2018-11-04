@@ -187,26 +187,26 @@ def check_weboob_repositories(w):
         print("Répertoires à jour\n")
     return w
 
-
+'''
 @login_required
 def get_list_of_managed_banks(request):
     w = Weboob()
     w.update()
     # check_weboob_repositories(w)
 
-    '''
-    w.load_backends(CapBank)
-    print('get_all_modules_info societegenerale:::: \n {}'.format(
-        w.repositories.get_all_modules_info(CapBank)['societegenerale'].description))
-    print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))
+    
+    # w.load_backends(CapBank)
+    # print('get_all_modules_info societegenerale:::: \n {}'.format(
+    #     w.repositories.get_all_modules_info(CapBank)['societegenerale'].description))
+    # print('\n *************************\n {} \n *************************** \n'.format(list(w.iter_accounts())))
 
-    l = list(w.iter_accounts())
-    for account in l:
-        # Test if get_account works
-        print("\n====================================================================================================")
-        print('Account Id: {0} \t\t Account description: {1}'.format(account.id, account.label))
-        print("====================================================================================================")
-    '''
+    # l = list(w.iter_accounts())
+    # for account in l:
+    #     # Test if get_account works
+    #     print("\n====================================================================================================")
+    #     print('Account Id: {0} \t\t Account description: {1}'.format(account.id, account.label))
+    #     print("====================================================================================================")
+    
 
     listbanks = w.repositories.get_all_modules_info('CapBank')
 
@@ -236,7 +236,7 @@ def get_list_of_managed_banks(request):
     context = {'list_of_banks': list_of_banks}
 
     return render(request, 'ManageGesfi/list_of_available_backends.html', context)
-
+'''
 
 @login_required
 def get_list_of_available_accounts(request):
@@ -445,3 +445,32 @@ def load_transactions(request):
     context = {'list_of_accounts': list_of_accounts, 'list_of_transactions': list_of_transactions, }
 
     return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
+
+
+
+# TODO: prévoir une fonction qui vérifie si la banque existe, sinon la créer et créer une "form" pour récupérer login et password
+# TODO: fonction non testée
+@login_required
+def connect_bank(request, **kwargs):
+    '''
+    Function to connect to a bank
+    :param request:
+    :param kwargs:
+    :return: HttpResponse
+    '''
+    w = Weboob()
+    bank = w.load_backend(kwargs['name_of_module'], kwargs['description_of_module'], kwargs['login_data'])
+    list_of_accounts = list(bank.iter_accounts())
+
+    logger.warning("=================================================================================================")
+    logger.warning("info sur bank : _____/\_______ : %s", bank)
+    logger.warning("info sur bank : _____/\_______ : %s", bank.CONFIG)
+    logger.warning("info sur bank : _____/\_______ : %s", bank.iter_accounts())
+    # logger.info("info sur bank : _____/\_______ : %s", bank.type)
+    for account in list_accounts:
+        logger.warning("Accounts of AMEX: ...... : %s", account)
+    logger.warning("=================================================================================================")
+
+    context = {'list_of_accounts': list_of_accounts}
+
+    return render(request, 'ManageGesfi/list_of_available_accounts.html', context)

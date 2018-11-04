@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load mptt_tags %}
+
+{% block title %}
+    {% trans 'List of banks available' %}
+{% endblock %}
+
+{% block heading %}
+    <h2>{% trans 'List of banks that can be connected' %} </h2>
+    <p><i>Select a bank</i>  </p>
+{% endblock heading %}
+
+{% block content %}
+  <table class="table table-striped ">
+    <thead>
+      <tr>
+        <th>Name of module</th>
+        <th>Bank description</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for info_bank in list_of_banks %}
+        <tr>
+          <td> {{info_bank.module}} </td>
+          <td> {{info_bank.description}} </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
