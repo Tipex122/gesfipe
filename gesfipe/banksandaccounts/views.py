@@ -241,6 +241,14 @@ def bank_detail(request, bank_id):
     context = {'bank': bank}
     return render(request, 'BanksAndAccounts/bank_detail.html', context)
 
+
+@login_required
+def banks_list(request):
+    banks = Banks.objects.all()
+    context = {'banks': banks}
+    return render(request, 'BanksAndAccounts/banks_list.html', context)
+
+
 @login_required
 def bank_create(request):
     banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)

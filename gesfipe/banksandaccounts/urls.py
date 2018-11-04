@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^bank_detail/(?P<bank_id>[0-9]+)/$', views.bank_detail, name='bank_detail'),
     url(r'^bank_edit/(?P<pk>[0-9]+)/$', views.bank_edit, name='bank_edit'),
     url(r'^bank_create/$', views.bank_create, name='bank_create'),
+    url(r'^banks_list/$', views.banks_list, name='banks_list'),
 
     url(r'^account_detail/(?P<account_id>[0-9]+)/$', views.account_detail, name='account_detail'),
     url(r'^account_edit/(?P<pk>[0-9]+)/$', views.account_edit, name='account_edit'),

@@ -13,6 +13,7 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
         fields = (
             'name_of_bank',
             'num_of_bank',
+            'module_weboob',
         )
 
 

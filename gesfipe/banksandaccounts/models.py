@@ -22,12 +22,27 @@ class Banks(models.Model):
     name_of_bank = models.CharField(
         'Name of Bank',
         default='Name of Bank',
-        max_length=256)
+        max_length=256
+    )
 
     num_of_bank = models.CharField(
         'Id of Bank',
         default='Id',
-        max_length=256)
+        max_length=256
+    )
+
+    bank_password = models.CharField(
+        'password',
+        blank=True,
+        max_length=64
+    )
+
+    # TODO: Plutôt prévoir une ForeignKey to modules weboob database ?
+    module_weboob = models.CharField(
+        'Bank module',
+        blank=True,
+        max_length=64
+    )
 
     def __str__(self):
         return "%s" % self.name_of_bank

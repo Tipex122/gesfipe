@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from .models import WeboobModules
 
+
 class WeboobModulesAdmin(admin.ModelAdmin):
     list_display = ('name_of_module', 'description_of_module')
 
