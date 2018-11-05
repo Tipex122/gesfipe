@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^search/$', search_views, name='search'),
     url(r'display_meta/$', display_meta, name='display_meta'),
 
+    url(r'^info_to_print/(?P<pk>[0-9]+)/$', connect_bank, name='info_to_print'),
+
 #    url(r'^keywords/search_tags/$', search_tags, name='search_tags'),
 #    url(r'^tag_edit/(?P<pk>)$', tag_edit, name='tag_edit'),
 #    url(r'^tag_edit/(?P<pk>[0-9]+)/$', tag_edit, name = 'tag_edit'),

@@ -13,7 +13,7 @@ from gesfipe.banksandaccounts.models import *
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 from gesfipe.categories.models import *
 from gesfipe.users.models import User
-
+from gesfipe.manageweboob.models import WeboobModules
 # from categories.forms import TagForm
 
 # import re
@@ -451,12 +451,26 @@ def load_transactions(request):
 # TODO: prévoir une fonction qui vérifie si la banque existe, sinon la créer et créer une "form" pour récupérer login et password
 # TODO: fonction non testée
 @login_required
-def connect_bank(request, **kwargs):
+def connect_bank(request, pk):
     '''
     Function to connect to a bank
     :param request:
     :param kwargs:
     :return: HttpResponse
+    '''
+
+    module = get_object_or_404(WeboobModules, pk=pk)
+    # banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+
+    bank_in_database = Banks.objects.filter(module_weboob=module.name_of_module)
+
+    if bank_in_database:
+        logger.warning("bank in database with corresponding webbo module: %s", bank_in_database)
+        context = {'data_to_print': module.name_of_module}
+    else:
+        logger.warning("No bank found with weboob module names: %s", module.name_of_module)
+        context = {'data_to_print': "No module found"}
+
     '''
     w = Weboob()
     bank = w.load_backend(kwargs['name_of_module'], kwargs['description_of_module'], kwargs['login_data'])
@@ -474,3 +488,5 @@ def connect_bank(request, **kwargs):
     context = {'list_of_accounts': list_of_accounts}
 
     return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
+    '''
+    return render(request, 'info_to_print.html', context)

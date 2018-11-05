@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^users/', include('gesfipe.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
 
+
     # Your stuff: custom urls includes go here
     # url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
     # url(r'^categories/', include('gesfipe.categories.urls')),

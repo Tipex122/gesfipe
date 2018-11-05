@@ -147,7 +147,6 @@ def load_list_of_modules_in_database(request):
     db_wm_list = WeboobModules.objects.all()
 
     list_of_db_modules = []
-
     for key in db_wm_list:
         list_of_db_modules.append(key.name_of_module)
 
@@ -168,6 +167,10 @@ def load_list_of_modules_in_database(request):
 
     list_of_banks.sort(key=lambda k: k['module'])
 
-    context = {'list_of_banks': list_of_banks}
+    db_wm_list = WeboobModules.objects.all()
+
+
+    # context = {'list_of_banks': list_of_banks}
+    context = {'list_of_banks': db_wm_list}
 
     return render(request, 'ManageWeboob/list_of_available_modules.html', context)
