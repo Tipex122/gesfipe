@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^account_detail/(?P<account_id>[0-9]+)/$', views.account_detail, name='account_detail'),
     url(r'^account_edit/(?P<pk>[0-9]+)/$', views.account_edit, name='account_edit'),
     url(r'^account_create/$', views.account_create, name='account_create'),
+    url(r'^accounts_list/$', views.AccountListView.as_view(), name='accounts_list'),
 
     url(r'^transaction_detail/(?P<transaction_id>[0-9]+)/$', views.transaction_detail, name='transaction_detail'),
     url(r'^transaction_edit/(?P<pk>[0-9]+)/$', views.transaction_edit, name='transaction_edit'),

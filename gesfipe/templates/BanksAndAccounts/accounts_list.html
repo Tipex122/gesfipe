@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Lisy of accounts' %}
+{% endblock %}
+
+
+{% block heading %}
+
+{% endblock heading %}
+
+
+{% block content %}
+    {% if accounts_list %}
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Num. </th>
+                    <th>Total amount</th>
+                    <th>Type</th>
+                    <th>Bank</th>
+                    <th>Owner(s)</th>
+                    <!-- <th>Currency</th>
+                    <th>N° Account</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts_list %}
+                    <tr>
+                        <td><a href="/account_edit/{{account.id}}/">{{ account.name_of_account }}</a></td>
+                        <td><a href="/account/{{account.id}}/">{{ account.num_of_account }}</a></td>
+                        <td>{{ account.account_total }}</td>
+                        <td>{{ account.get_type_int_of_account_display}}</td>
+                        <td>{{ account.bank.name_of_bank }}</td>
+                        <td>{{ account.owner_of_account }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no available account for this user.</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+    <div class="row">
+
+    </div>
+{% endblock %}

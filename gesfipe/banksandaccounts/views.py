@@ -390,6 +390,29 @@ def account_edit(request, pk):
     return render(request, 'BanksAndAccounts/account_edit.html', context)
 
 
+class AccountListView(LoginRequiredMixin, generic.ListView):
+    model = Accounts
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(AccountListView, self).get_context_data(**kwargs)
+        # Get the blog from id and add it to the context
+        context['account_total'] = Transactions.objects.aggregate(Sum('amount_of_transaction'))
+        # context['banks'] = Banks.objects.all()
+        context['banks'] = Banks.objects.all().filter(accounts__owner_of_account=self.request.user)
+        # context['accounts_info'] = accounts_info(0)
+        context['accounts_info'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
+        # context['all_accounts'] = accounts_info(0)
+        context['all_accounts'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
+
+        return context
+
+    def get_queryset(self):
+        return Accounts.objects.filter(owner_of_account=self.request.user)
+
+    context_object_name = 'accounts_list'  # your own name for the list as a template variable
+    queryset = Accounts.objects.all()  # [:55] Get 55 transactions
+    template_name = 'BanksAndAccounts/accounts_list.html'  # Specify your own template name/location
 
 @login_required
 def transaction_detail(request, transaction_id):
