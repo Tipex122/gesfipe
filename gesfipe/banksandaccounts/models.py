@@ -101,7 +101,8 @@ class Accounts(models.Model):
     name_of_account = models.CharField(
         'Name of the account',
         default='Name of bank account',
-        max_length=256
+        max_length=256,
+        help_text='Enter name of account'
     )
 
     def get_users(self):
@@ -110,7 +111,9 @@ class Accounts(models.Model):
     num_of_account = models.CharField(
         'Account Id',
         default='Id',
-        max_length=256)
+        max_length=256,
+        help_text='Enter number of account'
+    )
 
     type_int_of_account = models.IntegerField(
         'Type of account (int)',  # use TYPE_* constants
@@ -124,15 +127,16 @@ class Accounts(models.Model):
         default=TYPE_UNKNOWN,
         # choices=TYPE_ACCOUNT_CHOICE,
         # default='Unknown',
-        max_length=128
+        max_length=128,
+        help_text='Enter type of account (this field will be deleted in next version)'
     )
 
-    bank = models.ForeignKey('Banks', null=True, blank=True, on_delete=models.CASCADE)
+    bank = models.ForeignKey('Banks', null=True, blank=False, on_delete=models.SET_NULL)
 
     # owner_of_account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # TODO: Il faut pouvoir affecter un User à un 'Bank account' (ce n'est pas le cas: tout le monde est 'owner'
     # Nota: remplacer "get_users" par "owner_of_account" dans "AccountsAdmin" pour revenir à la solution "ForeignKey"
-    owner_of_account = models.ManyToManyField(User)
+    owner_of_account = models.ManyToManyField(User, related_name='user_of_account')
 
     def __str__(self):
         return "%s" % self.name_of_account

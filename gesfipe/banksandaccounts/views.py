@@ -335,6 +335,7 @@ def account_create(request):
             account = form.save(commit=False)
             # category.owner = request.user
             account.save()
+            # account.owner_of_account.set(request.user.id)
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
             # TODO: prévoir une redirection vers la liste des comptes par banque
@@ -360,19 +361,12 @@ def account_edit(request, pk):
 
     banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
 
-    list_accounts = Accounts.objects.all().filter(owner_of_account=request.user)
-
     if request.method == 'POST':
         form = AccountForm(instance=account, data=request.POST)
-
         if form.is_valid():
             form.save()
             return redirect('account_list', account.id)
-
-            # return redirect('budget')
     else:
-        data = {'Account': list_accounts, }
-        # print(data)
         form = AccountForm(instance=account)
 
     form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
@@ -380,9 +374,6 @@ def account_edit(request, pk):
     context = {
         'account': account,
         'all_accounts': accounts_info2(request, 0),
-        # general information related
-        # to all accounts (due to "0") and used in sidebar
-        # 'account': account,
         'banks_list': banks_list,
         'form': form,
         'create': False
@@ -403,7 +394,9 @@ class AccountListView(LoginRequiredMixin, generic.ListView):
         # context['accounts_info'] = accounts_info(0)
         context['accounts_info'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
         # context['all_accounts'] = accounts_info(0)
-        context['all_accounts'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
+        # context['all_accounts'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
+        logger.warning("context['account_total']: %s", context['account_total'])
+        logger.warning("accounts_info: %s", context['accounts_info'])
 
         return context
 
