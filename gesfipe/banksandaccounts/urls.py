@@ -1,5 +1,9 @@
-from django.conf.urls import url
 
+# Django
+from django.conf.urls import url
+from django.urls import path
+
+# GesFiPe
 from . import views
 
 #TODO: Mettre à jour de Django 2.0
@@ -30,5 +34,7 @@ urlpatterns = [
     url(r'^$', views.banks_and_accounts_list, name='home'),
     #    url(r'^keywords/(?P<tag_name>[a-z,\',\*,A-Z]+)/$',
     #    views.transactions_with_tag, name='transactions_with_tag'),
+
+    path('banks/<int:pk>/delete/', views.BankDelete.as_view(), name='bank_delete'),
 ]
 

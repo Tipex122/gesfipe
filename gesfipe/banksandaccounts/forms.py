@@ -29,6 +29,10 @@ class AccountForm(LoginRequiredMixin, forms.ModelForm):
             'owner_of_account',
         )
 
+    def form_valid(self, form):
+        form.instance.owner_of_account = self.request.user
+        return super().form_valid(form)
+
 
 class TransactionForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:

@@ -7,6 +7,7 @@ import datetime
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
 # GesFiPe
 from gesfipe.categories.models import Category
@@ -51,6 +52,9 @@ class Banks(models.Model):
         verbose_name = _('bank')
         verbose_name_plural = _('banks')
         ordering = ['name_of_bank']
+
+    def get_absolute_url(self):
+        return reverse('bank_detail', kwargs={'pk': self.pk})
 
 
 class Accounts(models.Model):
@@ -145,6 +149,9 @@ class Accounts(models.Model):
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
         ordering = ['name_of_account']
+
+    def get_absolute_url(self):
+        return reverse('account_detail', kwargs={'pk': self.pk})
 
 
 class Transactions(models.Model):
@@ -276,6 +283,9 @@ class Transactions(models.Model):
     )
 
     key_words = ArrayField(models.CharField(max_length=256, blank=True, null=True), blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('transaction_detail', kwargs={'pk': self.pk})
 
     def unique_id(self, seen=None, account_id=None):
         """

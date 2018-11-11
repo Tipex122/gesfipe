@@ -1,23 +1,24 @@
-from django.shortcuts import render
-
 # Create your views here.
+
+# Python
+import logging
+
 # from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import *
-from .forms import *
+# django
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from django.http import HttpResponse
 from django.db.models import Avg, Sum, Min, Max, Count
-
-from gesfipe.categories.models import Tag
-
 from django.contrib.auth.decorators import login_required
-
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-import logging
+# Gesfipe
+from .forms import *
+from gesfipe.categories.models import Tag
+
 
 logger = logging.getLogger(__name__)
 
@@ -235,6 +236,16 @@ def account_list(request, account_id):
     return render(request, 'BanksAndAccounts/transactions_list.html', context)
 
 
+class BankUpdate(LoginRequiredMixin, UpdateView):
+    model = Banks
+    fields = ['name_of_bank', 'num_of_bank', ]
+
+
+class BankDelete(LoginRequiredMixin, DeleteView):
+    model = Banks
+    success_url = reverse_lazy('banks_list')
+
+
 @login_required
 def bank_detail(request, bank_id):
     bank = Banks.objects.get(id=bank_id)
@@ -383,6 +394,9 @@ def account_edit(request, pk):
 
 class AccountListView(LoginRequiredMixin, generic.ListView):
     model = Accounts
+
+    class Meta:
+        ordering = ['bank.name_of_bank', 'name_of_account']
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
