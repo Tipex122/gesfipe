@@ -36,5 +36,7 @@ urlpatterns = [
     #    views.transactions_with_tag, name='transactions_with_tag'),
 
     path('banks/<int:pk>/delete/', views.BankDelete.as_view(), name='bank_delete'),
+    # url(r'^banks/(?P<pk>[0-9]+)/delete/$', views.BankDelete.as_view(), name='bank_delete'),
+
 ]
 

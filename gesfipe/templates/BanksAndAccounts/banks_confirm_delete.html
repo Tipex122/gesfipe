@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Banks deletion' %}
+{% endblock %}
+
+
+{% block heading %}
+
+{% endblock heading %}
+
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm">
+</form>
+
+{% endblock %}
+
+{% block sidebar %}
+    <div class="row">
+
+    </div>
+{% endblock %}
