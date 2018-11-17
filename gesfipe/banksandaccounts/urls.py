@@ -8,6 +8,8 @@ from . import views
 
 #TODO: Mettre à jour de Django 2.0
 
+# app_name = 'banksandaccounts'
+
 urlpatterns = [
     url(r'^transactions_list/$', views.transactions_list, name='transactions_list'),
     url(r'^toto/$', views.TransactionsListView.as_view(), name='transactions_list3'),
@@ -32,6 +34,7 @@ urlpatterns = [
     url(r'^account/(?P<account_id>[0-9]+)/$', views.account_list, name='account_list'),
     url(r'^banks_and_accounts_list/$', views.banks_and_accounts_list, name='banks_and_accounts_list'),
     url(r'^$', views.banks_and_accounts_list, name='home'),
+
     #    url(r'^keywords/(?P<tag_name>[a-z,\',\*,A-Z]+)/$',
     #    views.transactions_with_tag, name='transactions_with_tag'),
 

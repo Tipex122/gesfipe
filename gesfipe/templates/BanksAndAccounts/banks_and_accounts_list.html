@@ -18,14 +18,14 @@
                      data-toggle="tooltip"
                      data-placement="top"
                      title="Click to get list of transactions related to this account">
-                  <a href="/account/{{account.id}}/">
+                  <a href="{% url 'account_list' account.id %}">
                     <img class="card-img-top"
                          src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
                          alt="Card image cap">
                   </a>
                     <div class="card-body">
-                      <h4 class="card-title">Account name: <br><a href="/account_detail/{{account.id}}/"> {{account.name_of_account}}</a></h4>
-                      <h6 class="card-subtitle mb-2 text-muted"><a href="/bank_detail/{{bank.id}}/">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+                      <h4 class="card-title">Account name: <br><a href="{% url 'account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
+                      <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
                         <p class="card-text">
                             <br> Total :
                                 {% if account.total_amount_by_account >= 0 %}
@@ -50,7 +50,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                      <a href="/account/{{account.id}}/" class="card-link">Transactions</a>
+                      <a href="{% url 'account_list' account.id %}">Transactions</a>
                       {# <a href="#" class="card-link">Another link</a> #}
                     </div>
                 </div>

@@ -8,15 +8,15 @@
   {% for account in all_accounts %}
     {% if account.bank == bank %}
       <div class="card">
-        <a href="/account/{{account.id}}/">
+        <a href="{% url 'account_list' account.id %}">
           <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
           <img class="card-img-top"
                src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
                alt="Card image cap">
         </a>
         <div class="card-body">
-          <h4 class="card-title">Account name: <a href="/account_detail/{{account.id}}/"> {{account.name_of_account}}</a></h4>
-          <h6 class="card-subtitle mb-2 text-muted"><a href="/bank_detail/{{bank.id}}/">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+          <h4 class="card-title">Account name: <a href="{% url 'account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
+          <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
           <p class="card-text">
             <i>
               <br>Total :
@@ -30,7 +30,8 @@
           </p>
         </div>
         <div class="card-footer">
-          <a href="/transaction_create/">Create new transaction</a>
+          {# <a href="/transaction_create/">Create new transaction</a> #}
+          <a href="{% url 'transaction_create' %}">Create new transaction</a>
         </div>
       </div>
     {% endif %}

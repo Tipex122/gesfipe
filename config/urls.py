@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import include, url
+from django.urls import path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
@@ -26,7 +27,10 @@ urlpatterns = [
     url(r'^', include('gesfipe.categories.urls')),
     url(r'^', include('gesfipe.banksandaccounts.urls')),
 
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # path('', include(('gesfipe.banksandaccounts.urls', 'banksandaccounts'), namespace='banksandaccounts')),
+    # path('', include('gesfipe.banksandaccounts.urls', namespace='banksandaccounts')),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
