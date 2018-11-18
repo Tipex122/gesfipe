@@ -24,7 +24,8 @@
 
       {% for info_bank in list_of_banks %}
         <tr>
-          <td> <a href="/info_to_print/{{info_bank.id}}/"> {{info_bank.name_of_module}} </a> </td>
+          {# <td> <a href="/info_to_print/{{info_bank.id}}/"> {{info_bank.name_of_module}} </a> </td> #}
+          <td> <a href="{# 'manageweboob:info_to_print' info_bank.id %}"> {{info_bank.name_of_module}} </a> </td>
           <td> {{info_bank.description_of_module}} </td>
         </tr>
       {% endfor %}

@@ -21,7 +21,7 @@ def category_list(request):
     categories = Category.objects.all()
     jsondata = serializers.serialize('json', categories)
     context = {'categories': categories, 'jsondata': jsondata}
-    return render(request, 'Categories/categories_list.html', context)
+    return render(request, 'categories/categories_list.html', context)
 
 
 def category_json(request):
@@ -96,7 +96,7 @@ def search_tags(request):
         'headers': list_of_headers,
     }
 
-    return render(request, 'Categories/search_tags.html', context)
+    return render(request, 'categories/search_tags.html', context)
 
 
 LIST_HEADERS_EDIT_TAG = (
@@ -141,7 +141,7 @@ def tag_edit(request, pk):
         'form': form,
         'headers': list_of_headers,
     }
-    return render(request, 'Categories/tag_edit.html', context)
+    return render(request, 'categories/tag_edit.html', context)
 
 
 @login_required
@@ -172,7 +172,7 @@ def show_category(request, node=None):
         else:
             ancestors = current.get_ancestors(include_self=True)
 
-    return render(request, 'Categories/categories.html',
+    return render(request, 'categories/categories.html',
                   {'cats': cats,
                    'ancestors': ancestors,
                    'children': children,
@@ -193,7 +193,7 @@ def category_create(request):
     else:
         form = CategoryForm()
     context = {'form': form, 'create': True}
-    return render(request, 'Categories/category_edit.html', context)
+    return render(request, 'categories/category_edit.html', context)
 
 
 @login_required
@@ -211,4 +211,4 @@ def category_edit(request, pk):
     else:
         form = CategoryForm(instance=category)
     context = {'cats': cats, 'form': form, 'create': False}
-    return render(request, 'Categories/category_edit.html', context)
+    return render(request, 'categories/category_edit.html', context)

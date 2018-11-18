@@ -54,7 +54,7 @@
 {% block sidebar %}
     <!-- <div class="row"> -->
         <div class="list-group">
-            <a class="list-group-item active" href="{% url 'transactions_by_category' pk=Null %}"> Categories</a>
+            <a class="list-group-item active" href="{% url 'managegesfi:transactions_by_category' pk=Null %}"> Categories</a>
             <ul>
                 {% recursetree cats %}
                     <li>
