@@ -36,7 +36,7 @@
     <tbody>
       <tr>
           {# <td><a href="/account_edit/{{account.id}}/">{{ account.name_of_account }}</a></td> #}
-          <td><a href="{% url 'account_edit' account.id %}">{{ account.name_of_account }}</a></td>
+          <td><a href="{% url 'banksandaccounts:account_edit' account.id %}">{{ account.name_of_account }}</a></td>
           <td>{{ account.num_of_account }}</td>
           <td>{{ account.get_type_int_of_account_display }}</td>
           <td>{{ account.type_of_account }}</td>

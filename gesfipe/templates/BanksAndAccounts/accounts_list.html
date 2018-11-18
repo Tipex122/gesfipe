@@ -30,8 +30,8 @@
             <tbody>
                 {% for account in accounts_list %}
                     <tr>
-                        <td><a href="{% url 'account_edit' account.id %}">{{ account.name_of_account }}</a></td>
-                        <td><a href="{% url 'account_list' account.id %}">{{ account.num_of_account }}</a></td>
+                        <td><a href="{% url 'banksandaccounts:account_edit' account.id %}">{{ account.name_of_account }}</a></td>
+                        <td><a href="{% url 'banksandaccounts:account_list' account.id %}">{{ account.num_of_account }}</a></td>
                         <td>{{ account_total.amount_of_transaction__sum }}</td>
                         <td>{{ account.get_type_int_of_account_display }}</td>
                         <td>{{ account.bank.name_of_bank }}</td>
