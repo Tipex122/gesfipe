@@ -19,7 +19,7 @@
 <div class="row" style="padding-top: 4em; padding-bottom: 8em;">
     <div class="col-md-9 col-md-offset-2">
         <h3>{% trans 'Search into : Banks, Accounts, Transactions and Categories' %}</h3>
-            <form class="search-sidebar" role="search" action="{% url 'search' %}">
+            <form class="search-sidebar" role="search" action="{% url 'managegesfi:search' %}">
                 <div class="input-group">
                     <input type="text" class="form-control input-lg" name="q" placeholder="{% trans 'Search' %}">
                     <span class="input-group-btn">

@@ -8,22 +8,22 @@
        class="list-group-item active">
         <span>{% trans 'Number of result(s) found in :' %}</span>
     </div>
-    <a href="{% url 'search' %}?q={{ querystring }}&type=banks"
+    <a href="{% url 'managegesfi:search' %}?q={{ querystring }}&type=banks"
        class="list-group-item{% if active == 'banks' %} list-group-item-primary{% endif %}">
         <span>{% trans 'Banks' %}</span>
         <span class="badge">{{ count.banks }}</span>
     </a>
-    <a href="{% url 'search' %}?q={{ querystring }}&type=accounts"
+    <a href="{% url 'managegesfi:search' %}?q={{ querystring }}&type=accounts"
        class="list-group-item{% if active == 'accounts' %} list-group-item-primary{% endif %}">
         <span>{% trans 'Accounts' %}</span>
         <span class="badge">{{ count.accounts }}</span>
     </a>
-    <a href="{% url 'search' %}?q={{ querystring }}&type=transactions"
+    <a href="{% url 'managegesfi:search' %}?q={{ querystring }}&type=transactions"
        class="list-group-item{% if active == 'transactions' %} list-group-item-primary{% endif %}">
         <span>{% trans 'Transactions' %}</span>
         <span class="badge">{{ count.transactions }}</span>
     </a>
-    <a href="{% url 'search' %}?q={{ querystring }}&type=categories"
+    <a href="{% url 'managegesfi:search' %}?q={{ querystring }}&type=categories"
        class="list-group-item{% if active == 'categories' %} list-group-item-primary{% endif %}">
         <span>{% trans 'Categories' %}</span>
         <span class="badge">{{ count.categories }}</span>

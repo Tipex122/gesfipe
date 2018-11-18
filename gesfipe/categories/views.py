@@ -189,7 +189,7 @@ def category_create(request):
             # category.owner = request.user
             category.save()
             # form.save_m2m()
-            return redirect('show_category')
+            return redirect('categories:show_category')
     else:
         form = CategoryForm()
     context = {'form': form, 'create': True}
@@ -206,7 +206,7 @@ def category_edit(request, pk):
         form = CategoryForm(instance=category, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('show_category', node=category.parent.name)
+            return redirect('categories:show_category', node=category.parent.name)
             # return redirect('budget')
     else:
         form = CategoryForm(instance=category)

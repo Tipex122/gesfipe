@@ -4,6 +4,8 @@ from .views import *
 
 # TODO: Mettre à jour en fonction de Django 2.0
 
+app_name = 'categories'
+
 urlpatterns = [
     #    url(r'^$', 'categories.views.category_list', name='category_list'),
     url(r'^category/(?P<node>.+)/$', show_category, name='show_category'),

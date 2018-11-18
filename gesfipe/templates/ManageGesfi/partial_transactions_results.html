@@ -19,7 +19,8 @@
         <tr>
             <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
             <td>{{ transaction.type_of_transaction }}</td>
-            <td><a href="/transaction_detail/{{transaction.id}}/"> {{ transaction.name_of_transaction }} </a></td>
+            {# <td><a href="/transaction_detail/{{transaction.id}}/"> {{ transaction.name_of_transaction }} </a></td> #}
+            <td><a href="{% url 'banksandaccounts:transaction_detail' transaction.id %}"> {{ transaction.name_of_transaction }} </a></td>
             {% if transaction.amount_of_transaction >= 0 %}
                 <td class="font-blue"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
             {% else %}

@@ -22,7 +22,7 @@
             <!-- This "div" tag just to keep align form below and the results under research area -->
         </div>
         <div class="col-md-9">
-            <form class="search-sidebar" role="search" action="{% url 'search' %}">
+            <form class="search-sidebar" role="search" action="{% url 'managegesfi:search' %}">
                 <input type="hidden" name="type" value="{{ active }}">
                 <div class="input-group">
                     <input type="text" class="form-control" name="q"

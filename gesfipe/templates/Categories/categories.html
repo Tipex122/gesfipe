@@ -12,7 +12,7 @@
 
   <ol class="breadcrumb">
       {% for i in ancestors %}
-          <li class="breadcrumb-item active"><a href="{% url 'show_category' node=i.name %}"> {{ i.name }} </a></li>
+          <li class="breadcrumb-item active"><a href="{% url 'categories:show_category' node=i.name %}"> {{ i.name }} </a></li>
       {% endfor %}
   </ol>
 
@@ -34,13 +34,13 @@
       </h5>
       {% for i in children %}
         {% if i.is_leaf_node %}
-          <a href="{% url 'category_edit' pk=i.pk %}" class="list-group-item">
+          <a href="{% url 'categories:category_edit' pk=i.pk %}" class="list-group-item">
             <span>{{ i.name }}</span>
             <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
           </a>
         {% else %}
           <!-- <a href="{{ i.name }}" class="list-group-item"> -->
-          <a href="{% url 'show_category' node=i.name %}" class="list-group-item">
+          <a href="{% url 'categories:show_category' node=i.name %}" class="list-group-item">
             <span>{{ i.name }}</span>
             <span class="badge badge-pill badge-info" style="float:right;">{{i.amount}}</span>
           </a>
@@ -64,7 +64,7 @@
                                 {{ children }}
                             </ul>
                         {% else %}
-                            <a href="{% url 'category_edit' pk=node.pk %}"> {{ node.name }}</a>
+                            <a href="{% url 'categories:category_edit' pk=node.pk %}"> {{ node.name }}</a>
                         {% endif %}
                     </li>
                 {% endrecursetree %}

@@ -68,12 +68,12 @@
 {% block sidebar %}
     <div class="row">
         <div class="list-group">
-            <a class="list-group-item active" href="{% url 'tag_edit' pk=Null %}"> Tags</a>
+            <a class="list-group-item active" href="{% url 'categories:tag_edit' pk=Null %}"> Tags</a>
             {% for tag in tags_list %}
                 {% if tag.is_new_tag == False %}
-                    <a class="list-group-item font-blue" href="{% url 'tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
+                    <a class="list-group-item font-blue" href="{% url 'categories:tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
                 {% else %}
-                    <a class="list-group-item" href="{% url 'tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
+                    <a class="list-group-item" href="{% url 'categories:tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
                 {% endif %}
             {% endfor %}
         </div>

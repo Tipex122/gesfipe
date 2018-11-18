@@ -15,7 +15,7 @@
 
 {% block heading %}
     <h2>{% trans 'New Tags identified:' %} {{listtagnew.count}} </h2>
-    <p><i>{% trans "New tags are identified by searching words in all transactions name stored in database. To edit tags, plesae click" %} <a href="{% url 'tag_edit' pk=Null %}"> <u>here</u> </a></i></p>
+    <p><i>{% trans "New tags are identified by searching words in all transactions name stored in database. To edit tags, plesae click" %} <a href="{% url 'categories:tag_edit' pk=Null %}"> <u>here</u> </a></i></p>
 {% endblock heading %}
 
 
@@ -79,12 +79,12 @@
 {% block sidebar %}
     <div class="row">
         <div class="list-group">
-            <a class="list-group-item active" href="{% url 'tag_edit' pk=Null %}"> Tags</a>
+            <a class="list-group-item active" href="{% url 'categories:tag_edit' pk=Null %}"> Tags</a>
             {% for tag in listtagnew %}
                 {% if tag.is_new_tag == False %}
-                    <a class="list-group-item font-blue" href="{% url 'tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
+                    <a class="list-group-item font-blue" href="{% url 'categories:tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
                 {% else %}
-                    <a class="list-group-item" href="{% url 'tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
+                    <a class="list-group-item" href="{% url 'categories:tag_edit' pk=tag.pk %}"> {{tag.tag}}</a>
                 {% endif %}
             {% endfor %}
         </div>

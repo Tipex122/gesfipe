@@ -22,7 +22,7 @@
     {% if create %}
         {% url "category_create" as action_url %}
     {% else %}
-        {% url "category_edit" pk=form.instance.pk as action_url %}
+        {% url "categories:category_edit" pk=form.instance.pk as action_url %}
     {% endif %}
     <form action="{{ action_url }}" method="post" accept-charset="utf-8">
         {{ form|crispy }}
@@ -39,12 +39,12 @@
                 {% recursetree cats %}
                     <li>
                         {% if not node.is_leaf_node %}
-                        <a href="{% url 'show_category' node=node.name %}">{{ node.name }}</a>
+                        <a href="{% url 'categories:show_category' node=node.name %}">{{ node.name }}</a>
                             <ul class="children">
                                 {{ children }}
                             </ul>
                         {% else %}
-                            <a href="{% url 'category_edit' pk=node.pk %}"> {{ node.name }}</a>
+                            <a href="{% url 'categories:category_edit' pk=node.pk %}"> {{ node.name }}</a>
                         {% endif %}
                     </li>
                 {% endrecursetree %}
