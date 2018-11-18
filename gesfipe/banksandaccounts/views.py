@@ -96,7 +96,7 @@ def banks_and_accounts_list(request):
     }
     return render(
         request,
-        'BanksAndAccounts/banks_and_accounts_list.html',
+        'banksandaccounts/banks_and_accounts_list.html',
         context
     )
 
@@ -152,7 +152,7 @@ def transactions_list(request):
         # to count the number of visit on the main page (transactions_list2.html only)
         # just for test to use django.sessions middleware
     }
-    return render(request, 'BanksAndAccounts/transactions_list.html', context)
+    return render(request, 'banksandaccounts/transactions_list.html', context)
 
 
 # TODO: Access management ==> to be improved with ListView
@@ -180,7 +180,7 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
 
     context_object_name = 'transactions_list'  # your own name for the list as a template variable
     queryset = Transactions.objects.all()  # [:55] Get 55 transactions
-    template_name = 'BanksAndAccounts/transactions_list3.html'  # Specify your own template name/location
+    template_name = 'banksandaccounts/transactions_list3.html'  # Specify your own template name/location
 
 
 @login_required
@@ -233,7 +233,7 @@ def account_list(request, account_id):
 
     }
 
-    return render(request, 'BanksAndAccounts/transactions_list.html', context)
+    return render(request, 'banksandaccounts/transactions_list.html', context)
 
 
 class BankUpdate(LoginRequiredMixin, UpdateView):
@@ -250,14 +250,14 @@ class BankDelete(LoginRequiredMixin, DeleteView):
 def bank_detail(request, bank_id):
     bank = Banks.objects.get(id=bank_id)
     context = {'bank': bank}
-    return render(request, 'BanksAndAccounts/bank_detail.html', context)
+    return render(request, 'banksandaccounts/bank_detail.html', context)
 
 
 @login_required
 def banks_list(request):
     banks = Banks.objects.all()
     context = {'banks': banks}
-    return render(request, 'BanksAndAccounts/banks_list.html', context)
+    return render(request, 'banksandaccounts/banks_list.html', context)
 
 
 @login_required
@@ -286,7 +286,7 @@ def bank_create(request):
         'banks_list': banks_list,
         'create': True
     }
-    return render(request, 'BanksAndAccounts/bank_edit.html', context)
+    return render(request, 'banksandaccounts/bank_edit.html', context)
 
 
 @login_required
@@ -325,14 +325,14 @@ def bank_edit(request, pk):
         'form': form,
         'create': False
     }
-    return render(request, 'BanksAndAccounts/bank_edit.html', context)
+    return render(request, 'banksandaccounts/bank_edit.html', context)
 
 
 @login_required
 def account_detail(request, account_id):
     account = Accounts.objects.get(id=account_id)
     context = {'account': account}
-    return render(request, 'BanksAndAccounts/account_detail.html', context)
+    return render(request, 'banksandaccounts/account_detail.html', context)
 
 
 @login_required
@@ -363,7 +363,7 @@ def account_create(request):
         'accounts_list': accounts_list,
         'create': True
     }
-    return render(request, 'BanksAndAccounts/account_edit.html', context)
+    return render(request, 'banksandaccounts/account_edit.html', context)
 
 
 @login_required
@@ -389,7 +389,7 @@ def account_edit(request, pk):
         'form': form,
         'create': False
     }
-    return render(request, 'BanksAndAccounts/account_edit.html', context)
+    return render(request, 'banksandaccounts/account_edit.html', context)
 
 
 class AccountListView(LoginRequiredMixin, generic.ListView):
@@ -419,13 +419,13 @@ class AccountListView(LoginRequiredMixin, generic.ListView):
 
     context_object_name = 'accounts_list'  # your own name for the list as a template variable
     queryset = Accounts.objects.all()  # [:55] Get 55 transactions
-    template_name = 'BanksAndAccounts/accounts_list.html'  # Specify your own template name/location
+    template_name = 'banksandaccounts/accounts_list.html'  # Specify your own template name/location
 
 @login_required
 def transaction_detail(request, transaction_id):
     transaction = Transactions.objects.get(id=transaction_id)
     context = {'transaction': transaction}
-    return render(request, 'BanksAndAccounts/transaction_detail.html', context)
+    return render(request, 'banksandaccounts/transaction_detail.html', context)
 
 
 @login_required
@@ -456,7 +456,7 @@ def transaction_create(request):
         'banks_list': banks_list,
         'create': True
     }
-    return render(request, 'BanksAndAccounts/transaction_edit.html', context)
+    return render(request, 'banksandaccounts/transaction_edit.html', context)
 
 
 @login_required
@@ -522,7 +522,7 @@ def transaction_edit(request, pk):
         'form': form,
         'create': False
     }
-    return render(request, 'BanksAndAccounts/transaction_edit.html', context)
+    return render(request, 'banksandaccounts/transaction_edit.html', context)
 
 
 # TODO: to verify if this function is used (transactions_with_tag ?: not sure)
@@ -544,6 +544,6 @@ def transactions_with_tag(request, tag_name):
     }
     return render(
         request,
-        'BanksAndAccounts/transactions_with_tag.html',
+        'banksandaccounts/transactions_with_tag.html',
         context
     )
