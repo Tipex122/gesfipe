@@ -243,7 +243,7 @@ class BankUpdate(LoginRequiredMixin, UpdateView):
 
 class BankDelete(LoginRequiredMixin, DeleteView):
     model = Banks
-    success_url = reverse_lazy('banks_list')
+    success_url = reverse_lazy('banksandaccounts:banks_list')
 
 
 @login_required

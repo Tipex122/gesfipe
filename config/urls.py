@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^manageweboob/', include('gesfipe.manageweboob.urls')),
     url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
     url(r'^categories/', include('gesfipe.categories.urls')),
-    url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls')),
+    url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls', namespace='banksandaccounts')),
 
 
     # path('', include(('gesfipe.banksandaccounts.urls', 'banksandaccounts'), namespace='banksandaccounts')),
