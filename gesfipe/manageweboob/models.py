@@ -22,7 +22,7 @@ class WeboobModules(models.Model):
     )
 
     def __str__(self):
-        return "%s" % self.description_of_module
+        return "%s" % self.name_of_module
 
     class Meta:
         verbose_name = _('weboob module')

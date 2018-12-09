@@ -279,7 +279,7 @@ def bank_create(request):
             bank.save()
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
-            return redirect('banksandaccounts:banks_and_accounts_list')
+            return redirect('banksandaccounts:banks_list')
 
     else:
         form = BankForm()
@@ -498,13 +498,15 @@ def account_create(request):
         if form.is_valid():
             account = form.save(commit=False)
             # category.owner = request.user
+            # account.owner_of_account.set(request.user.id)
+            logger.warning('Création compte: ==/\== owner_of_account : %s', form.cleaned_data['owner_of_account'])
             account.save()
             # account.owner_of_account.set(request.user.id)
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
             # TODO: prévoir une redirection vers la liste des comptes par banque
             # TODO: par défaut il faudrait que le propriétaire du compte soit défini dés la création (celui qui le crée est propriétaire)
-            return redirect('banks_and_accounts_list')
+            return redirect('banksandaccounts:accounts_list')
     else:
         form = AccountForm()
 
@@ -529,11 +531,11 @@ def account_edit(request, pk):
         form = AccountForm(instance=account, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('account_list', account.id)
+            return redirect('banksandaccounts:account_list', account.id)
     else:
         form = AccountForm(instance=account)
 
-    form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
+    # form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
 
     context = {
         'account': account,

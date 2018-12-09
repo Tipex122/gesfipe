@@ -12,6 +12,7 @@ from django.urls import reverse
 # GesFiPe
 from gesfipe.categories.models import Category
 from gesfipe.users.models import User
+from gesfipe.manageweboob.models import WeboobModules
 
 
 # WeBoob
@@ -42,8 +43,16 @@ class Banks(models.Model):
     module_weboob = models.CharField(
         'Bank module',
         blank=True,
+        null=True,
         max_length=64
     )
+
+    # module_weboob = models.ForeignKey(
+    #     'WeboobModules',
+    #     blank=True,
+    #     null=True,
+    #     on_delete=models.SET_NULL,
+    # )
 
     def __str__(self):
         return "%s" % self.name_of_bank
@@ -123,6 +132,7 @@ class Accounts(models.Model):
         'Type of account (int)',  # use TYPE_* constants
         default=TYPE_UNKNOWN,
         choices=TYPE_ACCOUNT_CHOICE,
+        help_text='Please select a type of account',
     )
 
     # TODO: A priori à supprimer: type_int_of_account suffit

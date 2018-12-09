@@ -1,8 +1,13 @@
-from django import forms
-from .models import Banks, Accounts, Transactions
-from gesfipe.categories.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
+
+from django import forms
+from django.forms import ModelChoiceField
+
+from gesfipe.categories.models import Category
+from gesfipe.manageweboob.models import WeboobModules
+from .models import Banks, Accounts, Transactions
+
 
 from mptt.forms import TreeNodeChoiceField
 
@@ -16,7 +21,8 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
             'bank_password',
             'module_weboob',
         )
-
+    # TODO: Comment faire pour que le champ module_weboob ne soit pas obligatoire
+    module_weboob = ModelChoiceField(WeboobModules.objects.all(), required=False)
 
 class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:
