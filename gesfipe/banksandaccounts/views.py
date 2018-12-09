@@ -310,7 +310,8 @@ def bank_edit(request, pk):
             form.save()
             # TODO: prévoir une redirection vers la liste des banques car la banque ne s'affiche pas tant qu'il n'y a pas un compte associé à la banque
             # TODO: par défaut il faudrait que le propriétaire du compte soit défini dés la création (celui qui le crée est propriétaire)
-            return redirect('banksandaccounts:banks_and_accounts_list')
+            # return redirect('banksandaccounts:banks_and_accounts_list')
+            return redirect('banksandaccounts:banks_list')
 
             # return redirect('budget')
     else:
