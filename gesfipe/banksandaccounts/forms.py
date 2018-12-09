@@ -13,7 +13,17 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
         fields = (
             'name_of_bank',
             'num_of_bank',
+            'bank_password',
             'module_weboob',
+        )
+
+
+class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):
+    class Meta:
+        model = Banks
+        fields =(
+            'num_of_bank',
+            'bank_password',
         )
 
 

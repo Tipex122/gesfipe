@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'search/$', search_views, name='search'),
     url(r'display_meta/$', display_meta, name='display_meta'),
 
+    # TODO: To delete following url 'info_to_print'
     url(r'^info_to_print/(?P<pk>[0-9]+)/$', connect_bank, name='info_to_print'),
 
     url(r'transactions_by_category/search_categories/$', tag_category_edit, name='tag_category_edit'),

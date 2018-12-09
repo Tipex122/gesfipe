@@ -320,7 +320,9 @@ def get_list_of_available_accounts(request):
 @login_required
 def list_unique_numbers(request):
     # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
+    # TODO: To delete following line which is not used
     list_unique = Transactions.objects.all()
+    
     list_unique_of_numbers()
     logger.warning('List of unique Numbers ==> ==> ==> : %s', list_unique)
     context = {'list_unique': list_unique}

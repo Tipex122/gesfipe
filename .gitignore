@@ -288,5 +288,8 @@ gesfipe/media/
 strt_gun.sh
 ./config/settings/production.py
 ./config/settings/prod.py
+csv/
+migrations/
+
 
 

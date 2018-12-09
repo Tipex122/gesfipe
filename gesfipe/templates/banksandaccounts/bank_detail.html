@@ -27,17 +27,21 @@
         <th>Name</th>
         <th>Num</th>
         <th>Weboob module</th>
-        <th>Edit / Delete</th>
+        <th>Load / Edit / Delete</th>
     </tr>
     </thead>
 
     <tbody>
       <tr>
           {# <td><a href="/bank_edit/{{bank.id}}/">{{ bank.name_of_bank }}</a></td> #}
-          <td><a href="{% url 'banksandaccounts:bank_edit' bank.id %}">{{ bank.name_of_bank }}</a></td>
-          <td>{{ bank.num_of_bank }}</td>
-          <td>{{ bank.module_weboob }}</td>
-          <td><a href="{% url 'banksandaccounts:bank_edit' bank.id %}">Edit</a> / <a href="{% url 'banksandaccounts:bank_delete' bank.id %}">Delete</a></td>
+            <td><a href="{% url 'banksandaccounts:bank_edit' bank.id %}">{{ bank.name_of_bank }}</a></td>
+            <td>{{ bank.num_of_bank }}</td>
+            <td>{{ bank.module_weboob }}</td>
+            <td>
+                <a href="{% url 'banksandaccounts:bank_connection_and_load_transactions' bank.id %}">Load</a> / 
+                <a href="{% url 'banksandaccounts:bank_edit' bank.id %}">Edit</a> / 
+                <a href="{% url 'banksandaccounts:bank_delete' bank.id %}">Delete</a>
+            </td>
       </tr>
     </tbody>
 

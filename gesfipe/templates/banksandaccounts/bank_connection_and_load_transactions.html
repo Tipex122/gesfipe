@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Connection to bank: {{ form.instance.name }}
+{% endblock %}
+
+{% block heading %}
+        <h2>Connecting to bank : {{ bank.name_of_bank}}</h2>
+{% endblock %}
+
+{% block content %}
+<h2>Connecting to bank : {{ bank.name_of_bank}}</h2>
+    {% url "bank_connection_and_load_transactions" pk=form.instance.pk as action_url %}
+    <form action="{{ action_url }}" method="post" accept-charset="utf-8">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <p><input type="submit" class="btn btn-primary" value="Load last transactions"></p>
+    </form>
+{% endblock %}
+
+
+{% block sidesearch %}
+
+  {% include 'banksandaccounts/sidebar_search.html' %}
+
+{% endblock sidesearch %}
+
+
+
+{% block sidebar %}
+
+{% endblock %}

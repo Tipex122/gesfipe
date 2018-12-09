@@ -33,7 +33,7 @@ class Banks(models.Model):
     )
 
     bank_password = models.CharField(
-        'password',
+        'Password',
         blank=True,
         max_length=64
     )
