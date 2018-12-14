@@ -118,9 +118,6 @@ class Accounts(models.Model):
         help_text='Enter name of account'
     )
 
-    def get_users(self):
-        return "\n".join([u.username for u in User.objects.all()])
-
     num_of_account = models.CharField(
         'Account Id',
         default='Id',
@@ -152,6 +149,21 @@ class Accounts(models.Model):
     # Nota: remplacer "get_users" par "owner_of_account" dans "AccountsAdmin" pour revenir à la solution "ForeignKey"
     owner_of_account = models.ManyToManyField(User, related_name='user_of_account')
 
+    def get_users(self):
+        return "\n".join([u.username for u in User.objects.all()])
+
+    def get_list_users(self):
+        return "\n".join([u.username for u in self.owner_of_account.all()])
+    
+    def get_absolute_url(self):
+        return reverse('account_detail', kwargs={'pk': self.pk})
+
+    # TODO: Implémenter fonction ramenant le total des transactions : PB trouver la liste des transactions associées à un Account
+    def get_total_amount(self):
+        total_amount = 0
+        # total_amount = Transactions.object.filter(name_of_account = self.name_of_account)
+        return total_amount
+
     def __str__(self):
         return "%s" % self.name_of_account
 
@@ -159,9 +171,6 @@ class Accounts(models.Model):
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
         ordering = ['name_of_account']
-
-    def get_absolute_url(self):
-        return reverse('account_detail', kwargs={'pk': self.pk})
 
 
 class Transactions(models.Model):
@@ -275,6 +284,7 @@ class Transactions(models.Model):
         Accounts,
         # null=True,
         # blank=True,
+        related_name='transactions',
         on_delete=models.CASCADE
     )
 
@@ -329,11 +339,7 @@ class Transactions(models.Model):
         if seen is not None:
             while crc in seen:
                 crc = crc32(b"*", crc)
-
             seen.add(crc)
-
-        # print('+++++ Value of uniq_id transaction octal: {} ++++++'.format("%08x" % (crc & 0xffffffff)))
-        # print('+++++ Value of uniq_id transaction: {} ++++++'.format(crc))
 
         return "%08x" % (crc & 0xffffffff)
 

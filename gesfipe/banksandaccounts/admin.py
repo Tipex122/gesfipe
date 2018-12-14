@@ -103,7 +103,9 @@ class AccountsAdmin(admin.ModelAdmin):
                     'name_of_account',
                     'type_int_of_account',
                     'type_of_account',
-                    'get_users',
+                    # 'get_users',
+                    'get_list_users',
+                    # 'owner_of_account',
                     'bank')
 
     list_filter = ('bank','owner_of_account',)

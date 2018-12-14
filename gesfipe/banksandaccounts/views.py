@@ -564,7 +564,10 @@ class AccountListView(LoginRequiredMixin, generic.ListView):
         context['accounts_info'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
         # context['all_accounts'] = accounts_info(0)
         # context['all_accounts'] = accounts_info2(self.request, 0).filter(owner_of_account=self.request.user)
+        context['account_users'] = self.request.user.user_of_account.all()
+        # context['users_account'] = Accounts.objects.get(pk).owner_of_account
         logger.warning("context['account_total']: %s", context['account_total'])
+        
         logger.warning("accounts_info: %s", context['accounts_info'])
 
         return context
@@ -573,7 +576,7 @@ class AccountListView(LoginRequiredMixin, generic.ListView):
         return Accounts.objects.filter(owner_of_account=self.request.user)
 
     context_object_name = 'accounts_list'  # your own name for the list as a template variable
-    queryset = Accounts.objects.all()  # [:55] Get 55 transactions
+    queryset = Accounts.objects.all()  # [:55] Get 55 traaccountnsactions
     template_name = 'banksandaccounts/accounts_list.html'  # Specify your own template name/location
 
 @login_required

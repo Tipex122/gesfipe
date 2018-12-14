@@ -24,6 +24,7 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
     # TODO: Comment faire pour que le champ module_weboob ne soit pas obligatoire
     module_weboob = ModelChoiceField(WeboobModules.objects.all(), required=False)
 
+
 class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:
         model = Banks
