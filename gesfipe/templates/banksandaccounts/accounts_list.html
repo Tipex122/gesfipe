@@ -23,17 +23,14 @@
                     <th>Type</th>
                     <th>Bank</th>
                     <th>Owner(s)</th>
-                    <!-- <th>Currency</th>
-                    <th>N° Account</th> -->
                 </tr>
             </thead>
             <tbody>
-                {% for account in accounts_list %}
+                {% for account in accounts_info %}
                     <tr>
                         <td><a href="{% url 'banksandaccounts:account_edit' account.id %}">{{ account.name_of_account }}</a></td>
                         <td><a href="{% url 'banksandaccounts:account_list' account.id %}">{{ account.num_of_account }}</a></td>
-                        {#<td>{{ account_total.amount_of_transaction__sum }}</td>#}
-                        <td>{{ account.transactions.all}}</td>#}
+                        <td>{{ account.total_amount_by_account}}</td>
                         <td>{{ account.get_type_int_of_account_display }}</td>
                         <td>{{ account.bank.name_of_bank }}</td>
                         <td>
@@ -43,6 +40,16 @@
                         </td>
                     </tr>
                 {% endfor %}
+            </tbody>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>Total : </td>
+                    <td>{{ account_total.amount_of_transaction__sum }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
     {% else %}

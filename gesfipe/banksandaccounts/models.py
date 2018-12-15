@@ -144,25 +144,24 @@ class Accounts(models.Model):
 
     bank = models.ForeignKey('Banks', null=True, blank=False, on_delete=models.SET_NULL)
 
-    # owner_of_account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    # TODO: Il faut pouvoir affecter un User à un 'Bank account' (ce n'est pas le cas: tout le monde est 'owner'
-    # Nota: remplacer "get_users" par "owner_of_account" dans "AccountsAdmin" pour revenir à la solution "ForeignKey"
+    # TODO: Il faut pouvoir affecter un User à un 'Bank account' (ce n'est pas le cas: tout le monde est 'owner'). Voir bank_edit en MultiSelect et faire un "add"
     owner_of_account = models.ManyToManyField(User, related_name='user_of_account')
 
+    # Get lis of all users
     def get_users(self):
         return "\n".join([u.username for u in User.objects.all()])
 
+    # Get list of users, owner of account
     def get_list_users(self):
         return "\n".join([u.username for u in self.owner_of_account.all()])
     
     def get_absolute_url(self):
         return reverse('account_detail', kwargs={'pk': self.pk})
 
-    # TODO: Implémenter fonction ramenant le total des transactions : PB trouver la liste des transactions associées à un Account
+    # TODO: To be tested
     def get_total_amount(self):
         total_amount = 0
-        # total_amount = Transactions.object.filter(name_of_account = self.name_of_account)
-        return total_amount
+        return Transactions.objects.filter(account__owner_of_account=self.request.user).aggregate(Sum('amount_of_transaction'))
 
     def __str__(self):
         return "%s" % self.name_of_account
