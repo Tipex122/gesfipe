@@ -54,6 +54,9 @@ class Banks(models.Model):
     #     on_delete=models.SET_NULL,
     # )
 
+    def get_weboob_module(self):
+        return self.module_weboob
+
     def __str__(self):
         return "%s" % self.name_of_bank
 

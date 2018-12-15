@@ -19,24 +19,23 @@
         <thead>
             <tr>
                 <th><h4>Bank</h4></th>
-                <!-- <th><h4>Type</h4></th> -->
                 <th><h4>Num.</h4></th>
-                <!-- <th><h4>Category</h4></th> -->
                 <th><h4>Weboob module</h4></th>
-                <!-- <th>Currency</th>
-                <th>N° Account</th> -->
                 <th>Load / Edit / Delete</th>
             </tr>
         </thead>
         <tbody>
             {% for bank in banks %}
                 <tr>
-                    {# <td><a href="/bank_edit/{{bank.id}}/">{{bank.name_of_bank}}</a></td> #}
                     <td><a href="{% url 'banksandaccounts:bank_edit' bank.id %}">{{ bank.name_of_bank }}</a></td>
                     <td>{{ bank.num_of_bank }}</td>
                     <td>{{ bank.module_weboob }}</td>
                     <td>
-                         <a href="{% url 'banksandaccounts:bank_connection_and_load_transactions' bank.id %}">Load</a> /
+                        {% if bank.module_weboob is None %}
+                            -------  / 
+                        {% else %}
+                            <a href="{% url 'banksandaccounts:bank_connection_and_load_transactions' bank.id %}">Load</a> /
+                        {% endif %}
                         <a href="{% url 'banksandaccounts:bank_edit' bank.id %}">Edit</a> / 
                         <a href="{% url 'banksandaccounts:bank_delete' bank.id %}">Delete</a></td>
                 </tr>
@@ -49,13 +48,9 @@
 
 {% block sidesearch %}
 
-  {% include 'banksandaccounts/sidebar_search.html' %}
-
 {% endblock sidesearch %}
 
 
 {% block sidebar %}
-
-  {% include 'banksandaccounts/sidebar_list_of_accounts.html' with all_accounts=all_accounts banks_list=banks_list  %}
 
 {% endblock %}

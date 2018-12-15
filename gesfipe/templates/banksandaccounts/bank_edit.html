@@ -33,18 +33,9 @@
 
 {% block sidesearch %}
 
-  {% include 'banksandaccounts/sidebar_search.html' %}
-
 {% endblock sidesearch %}
 
 
-
 {% block sidebar %}
-
-<!-- TODO: To search why card-text is so long (maybe have a look on project.css ?) -->
-<!-- TODO: To search why "Account" isn't obligatory -->
-<!-- TODO: To fill automatically some field such as Account when comming from a link of the sidebar Card (transaction_list.html -->
-
-  {% include 'banksandaccounts/sidebar_list_of_accounts.html' with all_accounts=all_accounts banks_list=banks_list  %}
 
 {% endblock %}

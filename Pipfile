@@ -43,6 +43,7 @@ weboob = "*"
 
 [dev-packages]
 
+pylint = "*"
 
 
 [requires]

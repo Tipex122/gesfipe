@@ -28,7 +28,6 @@
         <th>Name</th>
         <th>Num</th>
         <th>Type</th>
-        <th>Category</th>
         <th>Bank</th>
     </tr>
     </thead>
@@ -39,7 +38,6 @@
           <td><a href="{% url 'banksandaccounts:account_edit' account.id %}">{{ account.name_of_account }}</a></td>
           <td>{{ account.num_of_account }}</td>
           <td>{{ account.get_type_int_of_account_display }}</td>
-          <td>{{ account.type_of_account }}</td>
           <td>{{ account.bank.name_of_bank }}</td>
       </tr>
     </tbody>
@@ -51,14 +49,10 @@
 
 {% block sidesearch %}
 
-  {% include 'banksandaccounts/sidebar_search.html' %}
-
 {% endblock sidesearch %}
 
 
 {% block sidebar %}
-
-  {% include 'banksandaccounts/sidebar_list_of_accounts.html' with all_accounts=all_accounts banks_list=banks_list  %}
 
 {% endblock %}
 

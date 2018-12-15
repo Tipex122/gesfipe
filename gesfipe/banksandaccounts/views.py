@@ -261,7 +261,7 @@ def bank_detail(request, bank_id):
 
 @login_required
 def banks_list(request):
-    banks = Banks.objects.all()
+    banks = Banks.objects.all() # TODO: with filter we repeat Banks as many times as it exists accounts: .filter(accounts__owner_of_account=request.user)
     context = {'banks': banks}
     return render(request, 'banksandaccounts/banks_list.html', context)
 
@@ -299,36 +299,32 @@ def bank_create(request):
 def bank_edit(request, pk):
     bank = get_object_or_404(Banks, pk=pk)
 
-    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+    ## banks_list = Banks.objects.all()   # .filter(accounts__owner_of_account=request.user)
 
-    accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+    ## accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
 
     if request.method == 'POST':
         form = BankForm(instance=bank, data=request.POST)
-
         if form.is_valid():
             form.save()
-            # TODO: prévoir une redirection vers la liste des banques car la banque ne s'affiche pas tant qu'il n'y a pas un compte associé à la banque
-            # TODO: par défaut il faudrait que le propriétaire du compte soit défini dés la création (celui qui le crée est propriétaire)
-            # return redirect('banksandaccounts:banks_and_accounts_list')
             return redirect('banksandaccounts:banks_list')
 
             # return redirect('budget')
     else:
-        data = {'Bank': banks_list, }
+        ## data = {'Bank': banks_list, }
         # print(data)
         form = BankForm(instance=bank)
 
-    form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
+    # form.account = forms.Select(choices=Accounts.objects.all().filter(owner_of_account=request.user))
 
     context = {
         'bank': bank,
-        'all_accounts': accounts_info2(request, 0),
+        ## 'all_accounts': accounts_info2(request, 0),
         # general information related
         # to all accounts (due to "0") and used in sidebar
         # 'account': account,
-        'banks_list': banks_list,
-        'accounts_list': accounts_list,
+        ## 'banks_list': banks_list,
+        ## 'accounts_list': accounts_list,
         'form': form,
         'create': False
     }
@@ -339,7 +335,7 @@ def bank_edit(request, pk):
 def load_transactions(request, w = Weboob(), list_of_accounts = []):
     '''
     Function to download transactions (or any related information) from banks through backends managed by Weboob
-    And load them in the database managed by Gesfi
+    And load them in the database managed by GesfiPe
     :param request:
     :return: render: to render the list of transactions got from accounts managed by Weboob Backends
     '''
@@ -642,7 +638,7 @@ def transaction_edit(request, pk):
         # form = form.as_ul()
         if form.is_valid():
             form.save()
-            return redirect('account_list', transaction.account.id)
+            return redirect('banksandaccounts:account_list', transaction.account.id)
 
             # return redirect('budget')
     else:

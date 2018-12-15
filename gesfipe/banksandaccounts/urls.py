@@ -39,6 +39,9 @@ urlpatterns = [
     url(r'^transaction_edit/(?P<pk>[0-9]+)/$', views.transaction_edit, name='transaction_edit'),
     url(r'^transaction_create/$', views.transaction_create, name='transaction_create'),
 
+    # Not used for the moment
+    url(r'load_transactions/$', views.load_transactions, name='load_transactions'),
+
     url(r'^account/(?P<account_id>[0-9]+)/$', views.account_list, name='account_list'),
     url(r'^banks_and_accounts_list/$', views.banks_and_accounts_list, name='banks_and_accounts_list'),
 

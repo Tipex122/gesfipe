@@ -22,6 +22,7 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
             'module_weboob',
         )
     # TODO: Comment faire pour que le champ module_weboob ne soit pas obligatoire
+    # module_weboob = ModelChoiceField(WeboobModules.objects.all(), initial={'name_of_module': self.fields.module_weboob}, required=False)
     module_weboob = ModelChoiceField(WeboobModules.objects.all(), required=False)
 
 
@@ -41,7 +42,6 @@ class AccountForm(LoginRequiredMixin, forms.ModelForm):
             'name_of_account',
             'num_of_account',
             'type_int_of_account',
-            'type_of_account',  # TODO: to be deleted if deleted in Accounts models
             'bank',  # TODO: How to obtain the list of banks only available for the connected user ?
             'owner_of_account',
         )

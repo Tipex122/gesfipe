@@ -116,7 +116,7 @@ admin.site.register(Accounts, AccountsAdmin)
 
 
 class BanksAdmin(admin.ModelAdmin):
-    list_display = ('num_of_bank', 'name_of_bank')
+    list_display = ('name_of_bank', 'num_of_bank')
 
 
 admin.site.register(Banks, BanksAdmin)
