@@ -324,7 +324,7 @@ def list_unique_numbers(request):
     list_unique = Transactions.objects.all()
     
     list_unique_of_numbers()
-    logger.warning('List of unique Numbers ==> ==> ==> : %s', list_unique)
+    # logger.warning('List of unique Numbers ==> ==> ==> : %s', list_unique)
     context = {'list_unique': list_unique}
     return render(request, 'ManageGesfi/list_of_unique_numbers.html', context)
 
@@ -334,13 +334,20 @@ def list_unique_of_numbers():
     Function to obtain the list of unique Id of each transaction
     :return: list of Transactions.unique_id_of_transaction
     '''
-    # list_unique = get_list_or_404(Transactions, unique_id_of_transaction<>False)
-    list_unique = Transactions.objects.all()
+    transac = Transactions.objects.all()
     list_of_numbers = []
-    for num in list_unique:
-        list_of_numbers.append(num.unique_id_of_transaction)
-    # print('List of unique Numbers : {}'.format(list_of_numbers))
-    logger.warning('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
+    for trans in transac:
+        num_id = trans.unique_id_of_transaction
+        if num_id == 'unique_id':
+            # To compute a real 'unique_id' (due to creation of "unique_id_of_transaction" 
+            # filled with 'unique_id' when this field has been created)
+            num_id = trans.unique_id(account_id=trans.account.num_of_account)
+            trans.unique_id_of_transaction = num_id
+            trans.save()
+
+        list_of_numbers.append(trans.unique_id_of_transaction)
+    
+    # logger.warning('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
     return list_of_numbers
 
 

@@ -332,38 +332,62 @@ def bank_edit(request, pk):
 
 
 @login_required
-def load_transactions(request, w = Weboob(), list_of_accounts = []):
+def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = []):
     '''
     Function to download transactions (or any related information) from banks through backends managed by Weboob
     And load them in the database managed by GesfiPe
-    :param request:
+    :param request: request parameter
+    :param w: Weboob instance
+    :param list_of_accounts: list of accounts provided by banks
     :return: render: to render the list of transactions got from accounts managed by Weboob Backends
     '''
 
-    # 2018-12-09 - w = Weboob()
+    # List of accounts in Gesfipe DataBase
+    db_accounts_list = Accounts.objects.all() # .filter(owner_of_account=request.user)
+    
+    # First chek if real_account exist in database. If not: one must create new account in Gesfipe Database
+    for real_account in list_of_accounts:
 
-    # Check if repositories where à located Backends are up to date
-    # 2018-12-09 - check_weboob_repositories(w)
+        if real_account not in db_accounts_list:
+            act = Accounts()
+            act.name_of_account = real_account.label
+            logger.warning('act.name_of_account = real_account.label ++++++> : %s', act.name_of_account)
+            act.num_of_account = real_account.id
+            logger.warning('act.name_of_account = act.num_of_account ++++++> : %s', act.num_of_account)
+            act.type_int_of_account = real_account.type
+            act.bank = bank
+            act.save()
+            # TODO: how to set owner_of_account ?
+            # act.owner_of_account = request.user
+    
+    db_accounts_list = Accounts.objects.all()
 
-    # List of Banks in Backends with Weboob (for which we have te capability to connect with to get information)
-    # 2018-12-09 - listbanks = w.load_backends(CapBank)
-
-    # List of accounts got from Banks
-    # 2018-12-09 - list_of_accounts = list(w.iter_accounts())
-
-    # List of accounts in DataBase manage by Gesfipe
-    db_accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
-    print(db_accounts_list)
-
-    # list_trans = Transactions.objects.all()
+    # Get unique_number of each transaction 
+    # (to identify if the new transactions coming from banks have been already loaded or not)
     list_uniques = list_unique_of_numbers()
-    # TODO: Vérifier d'abord si la liste chargée existe déjà dans la base de données (via comparaison avec unique_id_of_transaction)
 
+    # To store new transactions coming from bank history and show them
+    # TODO: To set in place a flag to be able to show, when needed, those "newly" loaded transactions in Gesfipe database
     list_of_transactions = []
 
+    # real_account: account given by bank
     for real_account in list_of_accounts:
-        # print(real_account)
+
+        if real_account not in db_accounts_list:
+            act = Accounts()
+            act.name_of_account = real_account.label
+            logger.warning('act.name_of_account = real_account.label ++++++> : %s', act.name_of_account)
+            act.num_of_account = real_account.id
+            logger.warning('act.name_of_account = act.num_of_account ++++++> : %s', act.num_of_account)
+            act.type_int_of_account = real_account.type
+            act.bank = bank
+            act.save()
+            # act.owner_of_account = request.user
+            
+
+        # db_account: account in gesfipe database
         for db_account in db_accounts_list:
+
             if real_account.id == db_account.num_of_account:
                 print("------------------------------------")
                 print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
@@ -404,14 +428,25 @@ def load_transactions(request, w = Weboob(), list_of_accounts = []):
                     Trans.name_of_transaction = transaction.raw
                     # print(Trans.name_of_transaction)
 
-                    transac['category'] = transaction.category  # Category of the transaction
-                    Trans.type_of_transaction = transaction.category
-                    logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
+                    if transaction.category:
+                        transac['category'] = transaction.category  # Category of the transaction
+                        Trans.type_of_transaction = transaction.category
+                        logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
+                    else:
+                        transac['category'] = 'Unknown'  # Category of the transaction
+                        Trans.type_of_transaction = 'Unknown'
+                        logger.warning('transaction.category ==> ==> ==> %s : NO CATEGORY PROVIDED BY BANK', transac['category'])
                     # Trans.category_of_transaction = transaction.category
                     # print(Trans.type_of_transaction)
 
-                    transac['label'] = transaction.label  # Pretty label
-                    Trans.label_of_transaction = transaction.label
+                    if transaction.label:
+                        transac['label'] = transaction.label  # Pretty label
+                        logger.warning('transac["label"] = transaction.label +++++ >>>> : %s', transaction.label)
+                        Trans.label_of_transaction = transaction.label
+                    else:
+                        transac['label'] = transaction.raw 
+                        Trans.label_of_transaction = transaction.raw
+                        logger.warning('transac["label"] = transaction.label +++++ >>>> : %s : NO LABEL FOUND - REPLACED BY RAW', transac['label'])
                     # print(Trans.label_of_transaction)
 
                     transac['amount'] = transaction.amount  # Amount of the transaction
@@ -431,11 +466,9 @@ def load_transactions(request, w = Weboob(), list_of_accounts = []):
                         # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
                         logger.warning('Sauvegarde de Trans: ===>>>>>> %s', Trans)
 
-    context = {
-        # 'list_of_accounts': list_of_accounts, 
-        'list_of_transactions': list_of_transactions, }
 
-    return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
+    context = {'list_of_transactions': list_of_transactions, }
+    return context
 
 
 
@@ -446,34 +479,27 @@ def bank_connection_and_load_transactions(request, pk):
 
     if request.method == 'POST':
         form = BankConnectionForm(instance=bank, data=request.POST)
-        # form = BankForm(instance=bank, data=request.POST)
 
         if form.is_valid():
-            form.save()
-            # amex = w.load_backend('americanexpress', 'American Express', {'login': '', 'password': ''})
             w.load_backend(
                 bank.module_weboob, 
                 bank.name_of_bank, 
-                {'login': form.cleaned_data['num_of_bank'], 'password': form.cleaned_data['bank_password']}
+                {'login': form.cleaned_data['num_of_bank'], 
+                'password': form.cleaned_data['bank_password']}
             )
+            
+            # Get list of available account(s) in the bank
             list_of_accounts = list(w.iter_accounts())
             
-            load_transactions(request, w, list_of_accounts)
+            # Get list of transactions coming from bank history
+            context = load_transactions(request, w, bank, list_of_accounts)
 
-            # TODO: Renvoyer vers une liste de transactions chargées en base
-            return redirect('banksandaccounts:banks_and_accounts_list')
+            return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
-            # return redirect('budget')
     else:
-        # data = {'Bank': banks_list, }
-        # print(data)
         form = BankConnectionForm(instance=bank)
-        # form = BankForm(instance=bank)
     
-    context = {
-        'bank': bank,
-        'form': form,
-        }
+    context = {'bank': bank, 'form': form, }
     return render(request, 'banksandaccounts/bank_connection_and_load_transactions.html', context)
 
 
