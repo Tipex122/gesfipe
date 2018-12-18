@@ -88,10 +88,12 @@
                   <a class="dropdown-item" href="{% url 'managegesfi:load_transactions' %}">Load Transactions</a>
                   <div class="dropdown-divider"></div>
                   {# <a class="dropdown-item" href="/list_of_modules_in_database/">List of available banks</a> #}
-                  <a class="dropdown-item" href="{% url 'manageweboob:load_list_of_modules_in_database' %}">List of available banks</a>
+                  <a class="dropdown-item" href="{% url 'manageweboob:load_list_of_modules_in_database' %}">Load Weboob banks</a>
+                  <a class="dropdown-item" href="{% url 'manageweboob:list_of_modules_in_database' %}">List of Weboob banks in database</a>
                   <a class="dropdown-item" href="{% url 'banksandaccounts:banks_list' %}">List of banks</a>
                   <a class="dropdown-item" href="{% url 'banksandaccounts:accounts_list' %}">List of accounts</a>
                   <a class="dropdown-item" href="{% url 'banksandaccounts:bank_create' %}">Create new bank</a>
+                  <a class="dropdown-item" href="{% url 'banksandaccounts:bank_create_with_weboob_module' pk=0 %}">Create new bank with Weboob Module</a>
                   <a class="dropdown-item" href="{% url 'banksandaccounts:account_create' %}">Create new account</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'managegesfi:display_meta' %}">Meta Info</a>

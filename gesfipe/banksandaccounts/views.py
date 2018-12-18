@@ -285,12 +285,36 @@ def bank_create(request):
         form = BankForm()
 
     context = {
-        'all_accounts': accounts_info2(request, 0),
-        # general information related to all accounts (due to "0") and used in sidebar
-
         'form': form,
-        'banks_list': banks_list,
         'create': True
+    }
+    return render(request, 'banksandaccounts/bank_edit.html', context)
+
+@login_required
+def bank_create_with_weboob_module(request, pk):
+    # TODO: renvoyer vers un formulaire ayant été prérempli par pk = weboob_module
+    # name of banque = weboo_mdule.description_of_module
+    # au lieu de "save" ==> "save and load accounts"
+    # utiliser quelque chose comme cleaned_data.module_weboob = Weboob.objects.get(pk = pk)
+    # et cleaned_data.name_of_bank = Weboob.objects.get(pk = pk).description_of_module
+
+    if request.method == 'POST':
+        form = BankForm(data=request.POST)
+        if form.is_valid():
+            bank = form.save(commit=False)
+            # category.owner = request.user
+            bank.save()
+            # form.save_m2m()
+            # return redirect('transactions_list', transaction.account.id)
+            return redirect('banksandaccounts:banks_list')
+
+    else:
+        form = BankForm()
+    
+    context = {
+        'form': form,
+        'create': True
+        #TODO: ajouter un flag "create with weboob" pour rediriger vers load_transactions (et créer les comptes)
     }
     return render(request, 'banksandaccounts/bank_edit.html', context)
 

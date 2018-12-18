@@ -171,6 +171,13 @@ def load_list_of_modules_in_database(request):
 
 
     # context = {'list_of_banks': list_of_banks}
-    context = {'list_of_banks': db_wm_list}
+    context = {'list_of_banks': db_wm_list, 'load': True}
 
     return render(request, 'ManageWeboob/list_of_available_modules.html', context)
+
+@login_required
+def list_of_modules_in_database(request):
+    db_wm_list = WeboobModules.objects.all()
+    context = {'list_of_banks': db_wm_list, 'load': False}
+    return render(request, 'ManageWeboob/list_of_available_modules.html', context)
+

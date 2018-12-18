@@ -332,6 +332,7 @@ def list_unique_numbers(request):
 def list_unique_of_numbers():
     '''
     Function to obtain the list of unique Id of each transaction
+    In addition : replace 'unique_id' by a true unique number
     :return: list of Transactions.unique_id_of_transaction
     '''
     transac = Transactions.objects.all()
@@ -340,7 +341,7 @@ def list_unique_of_numbers():
         num_id = trans.unique_id_of_transaction
         if num_id == 'unique_id':
             # To compute a real 'unique_id' (due to creation of "unique_id_of_transaction" 
-            # filled with 'unique_id' when this field has been created)
+            # filled with 'unique_id' when this field has been created in database)
             num_id = trans.unique_id(account_id=trans.account.num_of_account)
             trans.unique_id_of_transaction = num_id
             trans.save()
@@ -350,7 +351,7 @@ def list_unique_of_numbers():
     # logger.warning('List of unique Numbers ==> ==> ==> : %s', list_of_numbers)
     return list_of_numbers
 
-
+# TODO: function to delete ==> use password stored on local disc
 @login_required
 def load_transactions(request):
     '''
@@ -469,7 +470,6 @@ def connect_bank(request, pk):
     '''
 
     module = get_object_or_404(WeboobModules, pk=pk)
-    # banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
 
     bank_in_database = Banks.objects.filter(module_weboob=module.name_of_module)
 
@@ -478,24 +478,6 @@ def connect_bank(request, pk):
         context = {'data_to_print': module.name_of_module}
     else:
         logger.warning("No bank found with weboob module names: %s", module.name_of_module)
-        context = {'data_to_print': "No module found"}
+        context = {'data_to_print': "No bank  found in database with module named {}".format(module.name_of_module)}
 
-    '''
-    w = Weboob()
-    bank = w.load_backend(kwargs['name_of_module'], kwargs['description_of_module'], kwargs['login_data'])
-    list_of_accounts = list(bank.iter_accounts())
-
-    logger.warning("=================================================================================================")
-    logger.warning("info sur bank : _____/\_______ : %s", bank)
-    logger.warning("info sur bank : _____/\_______ : %s", bank.CONFIG)
-    logger.warning("info sur bank : _____/\_______ : %s", bank.iter_accounts())
-    # logger.info("info sur bank : _____/\_______ : %s", bank.type)
-    for account in list_accounts:
-        logger.warning("Accounts of AMEX: ...... : %s", account)
-    logger.warning("=================================================================================================")
-
-    context = {'list_of_accounts': list_of_accounts}
-
-    return render(request, 'ManageGesfi/list_of_available_accounts.html', context)
-    '''
     return render(request, 'info_to_print.html', context)
