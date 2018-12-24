@@ -6,13 +6,13 @@ import environ
 import os
 import logging.config
 
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+# import sentry_sdk
+# from sentry_sdk.integrations.django import DjangoIntegration
 
-sentry_sdk.init(
-    dsn="https://5f898d41cece4fd49be252906d7b555a@sentry.io/1358312",
-    integrations=[DjangoIntegration()]
-)
+# sentry_sdk.init(
+#     dsn="https://5f898d41cece4fd49be252906d7b555a@sentry.io/1358312",
+#     integrations=[DjangoIntegration()]
+# )
 
 ROOT_DIR = environ.Path(__file__) - 3  # (gesfipe/config/settings/base.py - 3 = gesfipe/)
 APPS_DIR = ROOT_DIR.path('gesfipe')

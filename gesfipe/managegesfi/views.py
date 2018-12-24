@@ -9,14 +9,16 @@ from django.shortcuts import get_list_or_404
 from django.contrib.auth.decorators import login_required
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+# Gefipe
+from gesfipe.manageweboob.models import WeboobModules
 from gesfipe.banksandaccounts.models import *
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 from gesfipe.categories.models import *
 from gesfipe.users.models import User
-from gesfipe.manageweboob.models import WeboobModules
+
 # from categories.forms import TagForm
 
-# import re
+# Weboob
 from weboob.core import Weboob
 from weboob.capabilities.bank import CapBank
 

@@ -8,6 +8,8 @@ from django.views.generic.base import RedirectView
 # from django.shortcuts import redirect
 from django.views import defaults as default_views
 
+# GesFipe
+from gesfipe.manageweboob.models import WeboobModules
 from gesfipe.banksandaccounts.views import banks_and_accounts_list
 
 urlpatterns = [

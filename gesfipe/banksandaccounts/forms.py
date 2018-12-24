@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django import forms
 from django.forms import ModelChoiceField
 
-from gesfipe.categories.models import Category
 from gesfipe.manageweboob.models import WeboobModules
+from gesfipe.categories.models import Category
 from .models import Banks, Accounts, Transactions
 
 
@@ -21,9 +21,6 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
             'bank_password',
             'module_weboob',
         )
-    # TODO: Comment faire pour que le champ module_weboob ne soit pas obligatoire
-    # module_weboob = ModelChoiceField(WeboobModules.objects.all(), initial={'name_of_module': self.fields.module_weboob}, required=False)
-    module_weboob = ModelChoiceField(WeboobModules.objects.all(), required=False)
 
 
 class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):

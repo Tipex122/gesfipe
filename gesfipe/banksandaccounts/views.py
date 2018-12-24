@@ -367,24 +367,38 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
     '''
 
     # List of accounts in Gesfipe DataBase
-    db_accounts_list = Accounts.objects.all() # .filter(owner_of_account=request.user)
-    
-    # First chek if real_account exist in database. If not: one must create new account in Gesfipe Database
-    for real_account in list_of_accounts:
+    # db_accounts_list = Accounts.objects.all() # .filter(owner_of_account=request.user)
+    logger.warning('\n REGUEST: === @@@@@@@@@ === : %s \n', request.POST)
+    db_accounts_list_id = Accounts.objects.values_list('num_of_account', flat=True)
 
-        if real_account not in db_accounts_list:
+    logger.warning('list_of_accounts (param function) ++++++> : \n %s \n   ||| db_account_list ++++++> : \n %s \n', list_of_accounts, db_accounts_list_id)
+
+    # First chek if real_account (given by bank with weboob) exist in database. 
+    # If not: one must create new account in Gesfipe Database
+    for real_account in list_of_accounts:
+        logger.warning('_______ real_account _______  : %s', real_account)
+        if real_account.id not in db_accounts_list_id:
             act = Accounts()
             act.name_of_account = real_account.label
-            logger.warning('act.name_of_account = real_account.label ++++++> : %s', act.name_of_account)
             act.num_of_account = real_account.id
-            logger.warning('act.name_of_account = act.num_of_account ++++++> : %s', act.num_of_account)
-            act.type_int_of_account = real_account.type
+            act.type_int_of_account = real_account.type            
             act.bank = bank
+
+            logger.warning(
+                'Ceating new account: ++++++> : %s --- Num : %s --- Type : %s', 
+                act.name_of_account, 
+                act.num_of_account, 
+                act.type_int_of_account
+            )
             act.save()
             # TODO: how to set owner_of_account ?
             # act.owner_of_account = request.user
+        else:
+            logger.warning('Account already exists in GesFipe Database!!!!!')
     
+    # Updating list of accounts after potential creation of new ones
     db_accounts_list = Accounts.objects.all()
+    db_accounts_list_id = Accounts.objects.values_list('num_of_account', flat=True)
 
     # Get unique_number of each transaction 
     # (to identify if the new transactions coming from banks have been already loaded or not)
@@ -396,27 +410,29 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 
     # real_account: account given by bank
     for real_account in list_of_accounts:
-
-        if real_account not in db_accounts_list:
-            act = Accounts()
-            act.name_of_account = real_account.label
-            logger.warning('act.name_of_account = real_account.label ++++++> : %s', act.name_of_account)
-            act.num_of_account = real_account.id
-            logger.warning('act.name_of_account = act.num_of_account ++++++> : %s', act.num_of_account)
-            act.type_int_of_account = real_account.type
-            act.bank = bank
-            act.save()
-            # act.owner_of_account = request.user
+        # TODO: suivant que le compte est de type TYPE_LOAN ou TYPE_CARD ou ... les informations ou transactions à charger sont différente. Faire des tests et charger les "transactions en fonction dy type de compte."
+        
+        # Following test not necessary ==> already tested previously in this function : to remove ?
+        # if real_account.id not in db_accounts_list_id:
+        #     act = Accounts()
+        #     act.name_of_account = real_account.label
+        #     logger.warning('act.name_of_account = real_account.label ++++++> : %s', act.name_of_account)
+        #     act.num_of_account = real_account.id
+        #     logger.warning('act.name_of_account = act.num_of_account ++++++> : %s', act.num_of_account)
+        #     act.type_int_of_account = real_account.type
+        #     act.bank = bank
+        #     act.save()
+        #     # act.owner_of_account = request.user
             
 
         # db_account: account in gesfipe database
         for db_account in db_accounts_list:
 
             if real_account.id == db_account.num_of_account:
-                print("------------------------------------")
-                print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
-                                                                                           db_account.num_of_account))
-                print("------------------------------------")
+                logger.warning("------------------------------------")
+                logger.warning("db_account.num_of_account = {} --- Type of account = {}".format(db_account.num_of_account, db_account.type_int_of_account))
+                logger.warning("------------------------------------")
+                
                 # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
                 transactions_of_banks_account = w.iter_history(real_account)
 
@@ -428,49 +444,47 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
                     Trans.account = db_account
                     # print(Trans.account)
 
-                    transac['date'] = transaction.date  # Debit date on the bank statement
+                    # Debit date on the bank statement
+                    transac['date'] = transaction.date  
                     Trans.date_of_transaction = transaction.date
                     # print(Trans.date_of_transaction)
-
-                    transac[
-                        'rdate'] = transaction.rdate  # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    
+                    # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    transac['rdate'] = transaction.rdate  
                     Trans.real_date_of_transaction = transaction.rdate
                     # print(Trans.real_date_of_transaction)
 
-                    transac[
-                        'vdate'] = transaction.vdate  # Value date, or accounting date; usually for professional accounts
+                    # Value date, or accounting date; usually for professional accounts
+                    transac['vdate'] = transaction.vdate  
                     Trans.value_date_of_transaction = transaction.vdate
                     # print(Trans.value_date_of_transaction)
 
-                    transac[
-                        'type'] = transaction.type  # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                    # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                    transac['type'] = transaction.type  
                     Trans.type_int_of_transaction = transaction.type
                     # Trans.type_of_transaction = transaction.type
                     # print(Trans.type_int_of_transaction)
 
-                    transac['raw'] = transaction.raw  # Raw label of the transaction
+                    # Raw label of the transaction
+                    transac['raw'] = transaction.raw  
                     Trans.name_of_transaction = transaction.raw
                     # print(Trans.name_of_transaction)
 
                     if transaction.category:
                         transac['category'] = transaction.category  # Category of the transaction
                         Trans.type_of_transaction = transaction.category
-                        logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
                     else:
                         transac['category'] = 'Unknown'  # Category of the transaction
                         Trans.type_of_transaction = 'Unknown'
-                        logger.warning('transaction.category ==> ==> ==> %s : NO CATEGORY PROVIDED BY BANK', transac['category'])
-                    # Trans.category_of_transaction = transaction.category
-                    # print(Trans.type_of_transaction)
 
                     if transaction.label:
                         transac['label'] = transaction.label  # Pretty label
-                        logger.warning('transac["label"] = transaction.label +++++ >>>> : %s', transaction.label)
+                        # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s', transaction.label)
                         Trans.label_of_transaction = transaction.label
                     else:
                         transac['label'] = transaction.raw 
                         Trans.label_of_transaction = transaction.raw
-                        logger.warning('transac["label"] = transaction.label +++++ >>>> : %s : NO LABEL FOUND - REPLACED BY RAW', transac['label'])
+                        # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s : NO LABEL FOUND - REPLACED BY RAW', transac['label'])
                     # print(Trans.label_of_transaction)
 
                     transac['amount'] = transaction.amount  # Amount of the transaction
@@ -506,7 +520,7 @@ def bank_connection_and_load_transactions(request, pk):
 
         if form.is_valid():
             w.load_backend(
-                bank.module_weboob, 
+                bank.module_weboob.name_of_module, 
                 bank.name_of_bank, 
                 {'login': form.cleaned_data['num_of_bank'], 
                 'password': form.cleaned_data['bank_password']}
@@ -517,7 +531,7 @@ def bank_connection_and_load_transactions(request, pk):
             
             # Get list of transactions coming from bank history
             context = load_transactions(request, w, bank, list_of_accounts)
-
+            # TODO: Rediriger vaer la liste transactions chargées
             return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
     else:

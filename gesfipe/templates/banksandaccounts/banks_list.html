@@ -29,7 +29,7 @@
                 <tr>
                     <td><a href="{% url 'banksandaccounts:bank_edit' bank.id %}">{{ bank.name_of_bank }}</a></td>
                     <td>{{ bank.num_of_bank }}</td>
-                    <td>{{ bank.module_weboob }}</td>
+                    <td>{{ bank.module_weboob.description_of_module }}</td>
                     <td>
                         {% if bank.module_weboob is None %}
                             -------  / 

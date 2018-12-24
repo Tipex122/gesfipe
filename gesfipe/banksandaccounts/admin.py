@@ -94,7 +94,6 @@ class TransactionsAdmin(ImportExportModelAdmin):
                      'amount_of_transaction'
                      ]
 
-
 admin.site.register(Transactions, TransactionsAdmin)
 
 
@@ -111,13 +110,11 @@ class AccountsAdmin(admin.ModelAdmin):
     list_filter = ('bank','owner_of_account',)
     filter_horizontal = ('owner_of_account',)
 
-
 admin.site.register(Accounts, AccountsAdmin)
 
 
 class BanksAdmin(admin.ModelAdmin):
-    list_display = ('name_of_bank', 'num_of_bank')
-
+    list_display = ('name_of_bank', 'num_of_bank', 'bank_password', 'module_weboob',)
 
 admin.site.register(Banks, BanksAdmin)
 

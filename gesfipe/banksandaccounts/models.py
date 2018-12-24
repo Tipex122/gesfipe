@@ -9,15 +9,15 @@ from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 
-# GesFiPe
-from gesfipe.categories.models import Category
-from gesfipe.users.models import User
-from gesfipe.manageweboob.models import WeboobModules
-
-
 # WeBoob
 from weboob.capabilities.base import empty
 from weboob.tools.compat import unicode
+
+# GesFiPe
+from gesfipe.manageweboob.models import WeboobModules
+from gesfipe.categories.models import Category
+from gesfipe.users.models import User
+
 
 
 class Banks(models.Model):
@@ -40,23 +40,28 @@ class Banks(models.Model):
     )
 
     # TODO: Plutôt prévoir une ForeignKey to modules weboob database ?
-    module_weboob = models.CharField(
-        'Bank module',
-        blank=True,
-        null=True,
-        max_length=64
-    )
-
-    # module_weboob = models.ForeignKey(
-    #     'WeboobModules',
+    # module_weboob = models.CharField(
+    #     'Bank module',
     #     blank=True,
     #     null=True,
-    #     on_delete=models.SET_NULL,
+    #     max_length=64
     # )
+
+    module_weboob = models.ForeignKey(
+        WeboobModules,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
     def get_weboob_module(self):
         return self.module_weboob
 
+    def set_weboob_module(self, name=None):
+        self.module_weboob = name
+        self.save()
+        return self.module_weboob
+    
     def __str__(self):
         return "%s" % self.name_of_bank
 
@@ -145,10 +150,18 @@ class Accounts(models.Model):
         help_text='Enter type of account (this field will be deleted in next version)'
     )
 
-    bank = models.ForeignKey('Banks', null=True, blank=False, on_delete=models.SET_NULL)
+    bank = models.ForeignKey(
+        'Banks', 
+        null=True, 
+        blank=False, 
+        on_delete=models.SET_NULL
+    )
 
     # TODO: Il faut pouvoir affecter un User à un 'Bank account' (ce n'est pas le cas: tout le monde est 'owner'). Voir bank_edit en MultiSelect et faire un "add"
-    owner_of_account = models.ManyToManyField(User, related_name='user_of_account')
+    owner_of_account = models.ManyToManyField(
+        User, 
+        related_name='user_of_account'
+    )
 
     # Get lis of all users
     def get_users(self):
