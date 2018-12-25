@@ -243,7 +243,7 @@ def account_list(request, account_id):
 
 class BankUpdate(LoginRequiredMixin, UpdateView):
     model = Banks
-    fields = ['name_of_bank', 'num_of_bank', 'bank_password', 'module_weboob' ]
+    fields = ['name_of_bank', 'num_of_bank', 'bank_login', 'bank_password', 'module_weboob' ]
 
 
 class BankDelete(LoginRequiredMixin, DeleteView):
@@ -514,7 +514,8 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 def bank_connection_and_load_transactions(request, pk):
     bank = get_object_or_404(Banks, pk=pk)
     w = Weboob()
-
+    # TODO: Vérifier que les champs ne sont pas vide avant de lancer la connexion
+    # TODO: si erreur de connexion, alors raise une erreur et revenir vers une autre page ?
     if request.method == 'POST':
         form = BankConnectionForm(instance=bank, data=request.POST)
 
@@ -522,7 +523,7 @@ def bank_connection_and_load_transactions(request, pk):
             w.load_backend(
                 bank.module_weboob.name_of_module, 
                 bank.name_of_bank, 
-                {'login': form.cleaned_data['num_of_bank'], 
+                {'login': form.cleaned_data['bank_login'], 
                 'password': form.cleaned_data['bank_password']}
             )
             

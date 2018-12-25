@@ -18,6 +18,7 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
         fields = (
             'name_of_bank',
             'num_of_bank',
+            'bank_login',
             'bank_password',
             'module_weboob',
         )
@@ -26,8 +27,10 @@ class BankForm(LoginRequiredMixin, forms.ModelForm):
 class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:
         model = Banks
+        # TODO: Vérifier que les champs ne sont pas vide avant de lancer la connexion
+        # TODO: si erreur de connexion, alors raise une erreur et revenir vers une autre page ?
         fields =(
-            'num_of_bank',
+            'bank_login',
             'bank_password',
         )
 

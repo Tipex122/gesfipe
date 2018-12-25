@@ -33,6 +33,12 @@ class Banks(models.Model):
         max_length=256
     )
 
+    bank_login = models.CharField(
+        'Login',
+        blank=True,
+        max_length=64
+    )
+
     bank_password = models.CharField(
         'Password',
         blank=True,
