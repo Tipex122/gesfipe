@@ -23,8 +23,8 @@ class TransactionsResource(resources.ModelResource):
         skip_unchanged = True
 
         fields = (
-            'creation_date',
-            'type_of_transaction',
+            'real_date_of_transaction',
+            'type_int_of_transaction',
             'name_of_transaction',
             'amount_of_transaction',
             'currency_of_transaction',
@@ -74,10 +74,11 @@ class TransactionsAdmin(ImportExportModelAdmin):
          ),
     ]
     # TODO: Comment faire apparaître le nom de la banque associée à la transaction et au compte ? ==> A creuser
-    list_display = ('date_of_transaction',
-                    'type_of_transaction',
-                    'name_of_transaction',
+    list_display = ('real_date_of_transaction',
+                    'type_int_of_transaction',
+                    'label_of_transaction',
                     'account',
+                    # 'account__bank',
                     # 'account.bank',
                     'amount_of_transaction',
                     'category_of_transaction',

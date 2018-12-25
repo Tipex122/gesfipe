@@ -65,7 +65,7 @@
         <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
+                    <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
                     <!-- <td>{{ transaction.type_of_transaction }}</td> -->
                     <td><a href="{% url 'banksandaccounts:transaction_edit' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
                     <!-- <td>{{transaction.category_of_transaction}}</td> -->

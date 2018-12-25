@@ -224,7 +224,7 @@ class Transactions(models.Model):
     )
 
     real_date_of_transaction = models.DateField(
-        'Real date, when the payment has been made; usually extracted from the label or from credit card info',
+        'Real date, when the payment has been made', # usually extracted from the label or from credit card info',
         default=datetime.datetime.now
     )
 
