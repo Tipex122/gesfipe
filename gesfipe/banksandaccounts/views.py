@@ -275,17 +275,13 @@ def bank_create(request):
         form = BankForm(data=request.POST)
 
         if form.is_valid():
-            if form.cleaned_data['bank_password']:
-                form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
+            # if form.cleaned_data['bank_password']:
+            #     form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
 
-            logger.warning('############## bank_create __ bank_password = ::%s', form.cleaned_data['bank_password'])
             bank = form.save(commit=False)
-            # category.owner = request.user
             bank.bank_password=make_password(form.cleaned_data['bank_password'])
             bank.save()
-            logger.warning('############## bank_create __ bank.bank_password = ::%s', bank.bank_password)
-            # form.save_m2m()
-            # return redirect('transactions_list', transaction.account.id)
+
             return redirect('banksandaccounts:banks_list')
 
     else:
@@ -299,28 +295,29 @@ def bank_create(request):
 
 @login_required
 def bank_create_with_weboob_module(request, pk):
-    # TODO: renvoyer vers un formulaire ayant été prérempli par pk = weboob_module
-    # name of banque = weboo_mdule.description_of_module
-    # au lieu de "save" ==> "save and load accounts"
-    # utiliser quelque chose comme cleaned_data['module_weboob'] = Weboob.objects.get(pk = pk)
-    # et cleaned_data['name_of_bank'] = Weboob.objects.get(pk = pk).description_of_module
+
+    w = Weboob()
 
     if request.method == 'POST':
         form = BankForm(data=request.POST)
         if form.is_valid():
-            if form.cleaned_data['bank_password']:
-                form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
-            
-            logger.warning('############## bank_create_with_weboob __ bank_password = ::%s', form.cleaned_data['bank_password'])
-
             bank = form.save(commit=False)
-            # category.owner = request.user
             bank.bank_password=make_password(form.cleaned_data['bank_password'])
             bank.save()
-            logger.warning('############## bank_create_with_weboob __ bank.bank_password = ::%s', bank.bank_password)
-            # form.save_m2m()
-            # return redirect('transactions_list', transaction.account.id)
-            return redirect('banksandaccounts:banks_list')
+            
+            w.load_backend(
+                bank.module_weboob.name_of_module,
+                bank.name_of_bank,
+                {'login': form.cleaned_data['bank_login'], 
+                'password': form.cleaned_data['bank_password']}
+            )
+            
+            # Get list of available account(s) in the bank
+            list_of_accounts = list(w.iter_accounts())
+            
+            # Get list of transactions coming from bank history
+            context = load_transactions(request, w, bank, list_of_accounts)
+            return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
     else:
         form = BankForm()
@@ -403,7 +400,7 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
             act.num_of_account = real_account.id
             act.type_int_of_account = real_account.type            
             act.bank = bank
-
+            # TODO: affecter un owner_of_account lorsqu'un account est créé
             logger.warning(
                 'Ceating new account: ++++++> : %s --- Num : %s --- Type : %s', 
                 act.name_of_account, 
@@ -534,12 +531,17 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 def bank_connection_and_load_transactions(request, pk):
     bank = get_object_or_404(Banks, pk=pk)
     w = Weboob()
+    
     # TODO: Vérifier que les champs ne sont pas vide avant de lancer la connexion
     # TODO: si erreur de connexion, alors raise une erreur et revenir vers une autre page ?
+    # TODO: affecter un owner_of_account lorsqu'un account est créé
+
     if request.method == 'POST':
         form = BankConnectionForm(instance=bank, data=request.POST)
 
         if form.is_valid():
+            # TODO: vérifier que le mot de passe est identique à celui stocké en base if any (sous forme cryptée)
+            logger.warning('============= bank_connection_and_load_transactions __ bank.module_weboob.name_of_module = :: %s', bank.module_weboob.name_of_module)
             w.load_backend(
                 bank.module_weboob.name_of_module, 
                 bank.name_of_bank, 
@@ -552,7 +554,6 @@ def bank_connection_and_load_transactions(request, pk):
             
             # Get list of transactions coming from bank history
             context = load_transactions(request, w, bank, list_of_accounts)
-            # TODO: Rediriger vaer la liste transactions chargées
             return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
     else:

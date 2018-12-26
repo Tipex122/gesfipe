@@ -24,22 +24,22 @@
           <th>Real Date</th>
           <th>Value Date</th>
           <th>Type</th>
+          <th>Label</th>
           <th>Raw Label</th>
           <th>Category</th>
-          <th>Label</th>
           <th>Amount</th>
         </tr>
       </thead>
       <tbody>
         {% for transaction in list_of_transactions %}
             <tr>
-              <td> {{transaction.date}} </td>
-              <td> {{transaction.rdate}} </td>
-              <td> {{transaction.vdate}} </td>
+              <td> {{transaction.date|date:" Y/m/d"}} </td>
+              <td> {{transaction.rdate|date:" Y/m/d"}} </td>
+              <td> {{transaction.vdate|date:" Y/m/d"}} </td>
               <td> {{transaction.type}} </td>
+              <td> {{transaction.label}} </td>
               <td> {{transaction.raw}} </td>
               <td> {{transaction.category}} </td>
-              <td> {{transaction.label}} </td>
               <td> {{transaction.amount}} </td>
             </tr>
         {% endfor %}
