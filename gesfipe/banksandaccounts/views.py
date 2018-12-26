@@ -7,6 +7,7 @@ import logging
 from django.shortcuts import get_object_or_404, redirect, render
 
 # django
+from  django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -194,7 +195,7 @@ def account_list(request, account_id):
     banks_list = Banks.objects.all()
     # banks = Banks.objects.all().filter(accounts__owner_of_account=request.user)
 
-    transac_list = Transactions.objects.filter(account_id=account_id)
+    transac_list = Transactions.objects.filter(account_id=account_id).order_by('-real_date_of_transaction', 'name_of_transaction')
     # transactions_list = Transactions.objects.get(id=account_id)
 
     account_total = Transactions.objects.filter(account_id=account_id).aggregate(Sum('amount_of_transaction'))
@@ -203,7 +204,7 @@ def account_list(request, account_id):
     request.session['num_visits'] = num_visits + 1
 
     # Page de 25 lignes
-    num_of_lines_per_page = 25
+    num_of_lines_per_page = 50
     paginator = Paginator(transac_list, num_of_lines_per_page)
     page = request.GET.get('page')
 
@@ -274,9 +275,15 @@ def bank_create(request):
         form = BankForm(data=request.POST)
 
         if form.is_valid():
+            if form.cleaned_data['bank_password']:
+                form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
+
+            logger.warning('############## bank_create __ bank_password = ::%s', form.cleaned_data['bank_password'])
             bank = form.save(commit=False)
             # category.owner = request.user
+            bank.bank_password=make_password(form.cleaned_data['bank_password'])
             bank.save()
+            logger.warning('############## bank_create __ bank.bank_password = ::%s', bank.bank_password)
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
             return redirect('banksandaccounts:banks_list')
@@ -295,15 +302,22 @@ def bank_create_with_weboob_module(request, pk):
     # TODO: renvoyer vers un formulaire ayant été prérempli par pk = weboob_module
     # name of banque = weboo_mdule.description_of_module
     # au lieu de "save" ==> "save and load accounts"
-    # utiliser quelque chose comme cleaned_data.module_weboob = Weboob.objects.get(pk = pk)
-    # et cleaned_data.name_of_bank = Weboob.objects.get(pk = pk).description_of_module
+    # utiliser quelque chose comme cleaned_data['module_weboob'] = Weboob.objects.get(pk = pk)
+    # et cleaned_data['name_of_bank'] = Weboob.objects.get(pk = pk).description_of_module
 
     if request.method == 'POST':
         form = BankForm(data=request.POST)
         if form.is_valid():
+            if form.cleaned_data['bank_password']:
+                form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
+            
+            logger.warning('############## bank_create_with_weboob __ bank_password = ::%s', form.cleaned_data['bank_password'])
+
             bank = form.save(commit=False)
             # category.owner = request.user
+            bank.bank_password=make_password(form.cleaned_data['bank_password'])
             bank.save()
+            logger.warning('############## bank_create_with_weboob __ bank.bank_password = ::%s', bank.bank_password)
             # form.save_m2m()
             # return redirect('transactions_list', transaction.account.id)
             return redirect('banksandaccounts:banks_list')
@@ -330,7 +344,13 @@ def bank_edit(request, pk):
     if request.method == 'POST':
         form = BankForm(instance=bank, data=request.POST)
         if form.is_valid():
+            if form.cleaned_data['bank_password']:
+                form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
+            
+            logger.warning('############## bank_edit __ bank_password = ::%s', form.cleaned_data['bank_password'])
             form.save()
+            bank = get_object_or_404(Banks, pk=pk)
+            logger.warning('############## bank_edit __ bank.bank_password = ::%s', bank.bank_password)
             return redirect('banksandaccounts:banks_list')
 
             # return redirect('budget')

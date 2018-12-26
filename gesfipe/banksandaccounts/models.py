@@ -42,7 +42,7 @@ class Banks(models.Model):
     bank_password = models.CharField(
         'Password',
         blank=True,
-        max_length=64
+        max_length=512
     )
 
     # TODO: Plutôt prévoir une ForeignKey to modules weboob database ?

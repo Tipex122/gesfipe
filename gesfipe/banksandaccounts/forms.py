@@ -1,20 +1,24 @@
+# Django
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
 
 from django import forms
-from django.forms import ModelChoiceField
 
+# GesFiPe
 from gesfipe.manageweboob.models import WeboobModules
 from gesfipe.categories.models import Category
 from .models import Banks, Accounts, Transactions
 
-
+# Others
 from mptt.forms import TreeNodeChoiceField
 
 
 class BankForm(LoginRequiredMixin, forms.ModelForm):
     class Meta:
         model = Banks
+        widgets = {
+            'bank_password': forms.PasswordInput(),
+        }
         fields = (
             'name_of_bank',
             'num_of_bank',
@@ -29,10 +33,16 @@ class BankConnectionForm(LoginRequiredMixin, forms.ModelForm):
         model = Banks
         # TODO: Vérifier que les champs ne sont pas vide avant de lancer la connexion
         # TODO: si erreur de connexion, alors raise une erreur et revenir vers une autre page ?
+        widgets = {
+            'bank_password': forms.PasswordInput(),
+        }
         fields =(
             'bank_login',
             'bank_password',
         )
+
+
+        # bank_password = forms.CharField(widget=forms.PasswordInput)
 
 
 class AccountForm(LoginRequiredMixin, forms.ModelForm):
