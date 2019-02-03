@@ -371,7 +371,7 @@ def bank_edit(request, pk):
     }
     return render(request, 'banksandaccounts/bank_edit.html', context)
 
-
+# TODO: Faire une fonction à partir de celle ci-dessous pour ne charger qu'un seul account et non pas tous les accounts d'une banque
 @login_required
 def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = []):
     '''
@@ -542,7 +542,7 @@ def bank_connection_and_load_transactions(request, pk):
         if form.is_valid():
             # TODO: vérifier que le mot de passe est identique à celui stocké en base if any (sous forme cryptée)
             logger.warning('============= bank_connection_and_load_transactions __ bank.module_weboob.name_of_module = :: %s', bank.module_weboob.name_of_module)
-            w.load_backend(
+            wb=w.load_backend(
                 bank.module_weboob.name_of_module, 
                 bank.name_of_bank, 
                 {'login': form.cleaned_data['bank_login'], 
@@ -550,10 +550,10 @@ def bank_connection_and_load_transactions(request, pk):
             )
             
             # Get list of available account(s) in the bank
-            list_of_accounts = list(w.iter_accounts())
+            list_of_accounts = list(wb.iter_accounts())
             
             # Get list of transactions coming from bank history
-            context = load_transactions(request, w, bank, list_of_accounts)
+            context = load_transactions(request, wb, bank, list_of_accounts)
             return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
     else:
