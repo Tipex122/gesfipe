@@ -455,8 +455,8 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 
                 for transaction in transactions_of_banks_account:
                     # print(transaction)
-                    transac = {}
-                    Trans = Transactions()
+                    transac = {}    # used to send a context giving list of transaction loaded and saved in database
+                    Trans = Transactions()  # used to save loaded transactions in database
 
                     Trans.account = db_account
                     # print(Trans.account)
@@ -467,13 +467,21 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
                     # print(Trans.date_of_transaction)
                     
                     # Real date, when the payment has been made; usually extracted from the label or from credit card info
-                    transac['rdate'] = transaction.rdate  
-                    Trans.real_date_of_transaction = transaction.rdate
+                    if transaction.rdate:
+                        transac['rdate'] = transaction.rdate
+                        Trans.real_date_of_transaction = transaction.rdate
+                    else:
+                        transac['rdate'] = transaction.date
+                        Trans.real_date_of_transaction = transaction.date
                     # print(Trans.real_date_of_transaction)
 
                     # Value date, or accounting date; usually for professional accounts
-                    transac['vdate'] = transaction.vdate  
-                    Trans.value_date_of_transaction = transaction.vdate
+                    if transaction.vdate:
+                        transac['vdate'] = transaction.vdate
+                        Trans.value_date_of_transaction = transaction.vdate
+                    else:
+                        transac['vdate'] = transaction.rdate
+                        Trans.value_date_of_transaction = transaction.rdate
                     # print(Trans.value_date_of_transaction)
 
                     # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN

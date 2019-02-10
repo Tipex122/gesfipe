@@ -407,14 +407,22 @@ def load_transactions(request):
                     Trans.date_of_transaction = transaction.date
                     # print(Trans.date_of_transaction)
 
-                    transac[
-                        'rdate'] = transaction.rdate  # Real date, when the payment has been made; usually extracted from the label or from credit card info
-                    Trans.real_date_of_transaction = transaction.rdate
+                    # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                    if transaction.rdate:
+                        transac['rdate'] = transaction.rdate
+                        Trans.real_date_of_transaction = transaction.rdate
+                    else:
+                        transac['rdate'] = transaction.date
+                        Trans.real_date_of_transaction = transaction.date
                     # print(Trans.real_date_of_transaction)
 
-                    transac[
-                        'vdate'] = transaction.vdate  # Value date, or accounting date; usually for professional accounts
-                    Trans.value_date_of_transaction = transaction.vdate
+                    # Value date, or accounting date; usually for professional accounts
+                    if transaction.vdate:
+                        transac['vdate'] = transaction.vdate
+                        Trans.value_date_of_transaction = transaction.vdate
+                    else:
+                        transac['vdate'] = transaction.rdate
+                        Trans.value_date_of_transaction = transaction.rdate
                     # print(Trans.value_date_of_transaction)
 
                     transac[
