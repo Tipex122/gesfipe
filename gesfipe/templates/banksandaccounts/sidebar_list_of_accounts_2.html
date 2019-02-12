@@ -4,84 +4,104 @@
 {% load humanize %}
 {% load crispy_forms_tags %}
 
-
-    <!-- Latest compiled and minified Bootstrap 4 beta CSS
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    -->
-
-    <!-- Bootswatch Yeti - Added by XLH -->
-    <link rel="stylesheet" media="tv" href="{% static 'css/bootstrap.min.css' %}">
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet">
-    <!-- End Bootswatch Yeti - Added by XLH -->
-
-    <!-- Your stuff: Third-party CSS libraries go here -->
-
-    <!-- This file stores project-specific CSS -->
-
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-
-
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-    $( function() {
-        $( "#accordion" ).accordion({
-        collapsible: true,
-        heightStyle: function() {
-            $("#accordion").accordion( "refresh" );}
-        });
-    } );
-    $( function() {
-        $( "#accordion2" ).accordion({
-        collapsible: true,
-        heightStyle: function() {
-            $("#accordion2").accordion( "refresh" );}
-        });
-    } );
+<div class="accordion" id="BankAccordion">
+  
+    {% for bank in banks_list %}
     
-    </script>
-
- 
-<div id="accordion">
-    <h3>Section 1</h3>
-    <div>
-        <p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. 
-            Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. 
-            Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. 
-            Vestibulum a velit eu ante scelerisque vulputate.
-        </p>
-    </div>
-    <h3>Section 2</h3>
-    <div>
-        <p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. 
-            Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, 
-            faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. 
-        </p>
-    </div>
-    <h3>Section 3</h3>
-    <div>
-        <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. 
-            Quisque lobortis. Phasellus pellentesque purus in massa. 
-            Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. 
-            Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, 
-            eu iaculis leo purus venenatis dui. 
-        </p>    
-        <div id="accordion2">
-            <h3>Sub section 1</h3>
-            <div>
-                <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
-            </div>
-            <h3>Sub section 2</h3>
-            <div>
-                <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
-            </div>	
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls="collapseOne">
+                    {{bank}}
+                </button>
+            </h2>
         </div>
-    </div>    
-    <h3>Section 4</h3>
-    <div>
-        <p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+
+        {% for account in all_accounts %}
+
+            {% if account.bank == bank %}
+
+                <div id={{bank.id}} class="collapse show" aria-labelledby="headingOne" data-parent="#BankAccordion">
+                    <div class="card-body">
+
+                        <div class="card">
+                            <a href="{% url 'banksandaccounts:account_list' account.id %}">
+                            <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+                            <img class="card-img-top"
+                                src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                                alt="Card image cap">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
+                                <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+                                <p class="card-text">
+                                    <i>
+                                    <br>Total :
+                                    {% if account.total_amount_by_account >= 0 %}
+                                    <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    {% else %}
+                                    <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    {% endif %}
+                                    <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+                                    </i>
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                            {# <a href="/transaction_create/">Create new transaction</a> #}
+                            <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            {% endif %}
+            
+        {% endfor %}
+    {% endfor %}
+
+  
+  
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Collapsible Group Item #1
+        </button>
+      </h2>
     </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Collapsible Group Item #2
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Collapsible Group Item #3
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
 </div>
