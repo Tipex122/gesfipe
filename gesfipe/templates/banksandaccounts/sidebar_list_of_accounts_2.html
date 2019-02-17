@@ -4,104 +4,51 @@
 {% load humanize %}
 {% load crispy_forms_tags %}
 
-<div class="accordion" id="BankAccordion">
-  
+<div class="accordion" id="accordionBanks">
     {% for bank in banks_list %}
-    
-        <div class="card-header" id="headingOne">
+        <div class="card-header card-title" id=bank{{bank.id}}>
             <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls="collapseOne">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls={{bank.id}}>
                     {{bank}}
                 </button>
             </h2>
         </div>
+        <div id={{bank.id}} class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#BankAccordion">
+          {% for account in all_accounts %}
+              {% if account.bank == bank %}
 
-        {% for account in all_accounts %}
+                <div class="card-body">
 
-            {% if account.bank == bank %}
-
-                <div id={{bank.id}} class="collapse show" aria-labelledby="headingOne" data-parent="#BankAccordion">
-                    <div class="card-body">
-
-                        <div class="card">
-                            <a href="{% url 'banksandaccounts:account_list' account.id %}">
-                            <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
-                            <img class="card-img-top"
-                                src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
-                                alt="Card image cap">
-                            </a>
-                            <div class="card-body">
-                                <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
-                                <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
-                                <p class="card-text">
-                                    <i>
-                                    <br>Total :
-                                    {% if account.total_amount_by_account >= 0 %}
-                                    <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
-                                    {% else %}
-                                    <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
-                                    {% endif %}
-                                    <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
-                                    </i>
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                            {# <a href="/transaction_create/">Create new transaction</a> #}
-                            <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
-                            </div>
+                    <div class="card">
+                        <a href="{% url 'banksandaccounts:account_list' account.id %}">
+                        <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+                        <img class="card-img-top"
+                            src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                            alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
+                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+                            <p class="card-text">
+                                <i>
+                                <br>Total :
+                                {% if account.total_amount_by_account >= 0 %}
+                                <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                                {% else %}
+                                <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                {% endif %}
+                                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+                                </i>
+                            </p>
                         </div>
-
+                        <div class="card-footer">
+                        {# <a href="/transaction_create/">Create new transaction</a> #}
+                        <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
+                        </div>
                     </div>
-                </div>
-
-            {% endif %}
-            
-        {% endfor %}
+                </div> 
+              {% endif %}
+          {% endfor %}
+        </div>
     {% endfor %}
-
-  
-  
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Collapsible Group Item #1
-        </button>
-      </h2>
-    </div>
-
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Collapsible Group Item #2
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Collapsible Group Item #3
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
 </div>
