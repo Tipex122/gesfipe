@@ -388,10 +388,11 @@ def load_transactions(request):
         # print(real_account)
         for db_account in db_accounts_list:
             if real_account.id == db_account.num_of_account:
-                print("------------------------------------")
-                print("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
-                                                                                           db_account.num_of_account))
-                print("------------------------------------")
+                logger.warning("------------------------------------")
+                logger.warning("real_account.id = {} ******  db_account.num_of_account = {}".format(real_account.id,
+                                                                               db_account.num_of_account))
+                logger.warning("Type of account = {}".format(db_account.type_int_of_account))
+                logger.warning("------------------------------------")
                 # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
                 transactions_of_banks_account = w.iter_history(real_account)
 
@@ -437,7 +438,7 @@ def load_transactions(request):
 
                     transac['category'] = transaction.category  # Category of the transaction
                     Trans.type_of_transaction = transaction.category
-                    logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
+                    # logger.warning('transaction.category ==> ==> ==> : %s', transaction.category)
                     # Trans.category_of_transaction = transaction.category
                     # print(Trans.type_of_transaction)
 

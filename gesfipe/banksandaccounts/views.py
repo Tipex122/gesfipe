@@ -444,90 +444,100 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 
         # db_account: account in gesfipe database
         for db_account in db_accounts_list:
-
+            print(db_account)
             if real_account.id == db_account.num_of_account:
                 logger.warning("------------------------------------")
                 logger.warning("db_account.num_of_account = {} --- Type of account = {}".format(db_account.num_of_account, db_account.type_int_of_account))
+                logger.warning("real_account.id = {}".format(real_account.id))
                 logger.warning("------------------------------------")
                 
                 # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
-                transactions_of_banks_account = w.iter_history(real_account)
-
-                for transaction in transactions_of_banks_account:
-                    # print(transaction)
-                    transac = {}    # used to send a context giving list of transaction loaded and saved in database
-                    Trans = Transactions()  # used to save loaded transactions in database
-
-                    Trans.account = db_account
-                    # print(Trans.account)
-
-                    # Debit date on the bank statement
-                    transac['date'] = transaction.date  
-                    Trans.date_of_transaction = transaction.date
-                    # print(Trans.date_of_transaction)
+                # TODO: Retirer test ci-dessous lorsque weboob aura pris en compte les accounts de type: TYPE_UNKNOWN, TYPE_CARD et TYPE_LIFE_INSURANCE 
+                
+                if db_account.type_int_of_account not in (0,7,8):
+                    transactions_of_banks_account = w.iter_history(real_account)
+                    if db_account.type_int_of_account != 0:
+                        logger.warning("transactions_of_banks_account = {}".format(transactions_of_banks_account))
+                    else:
+                        logger.warning("db_account.type_int_of_account ************************* NON GERé !!!")
                     
-                    # Real date, when the payment has been made; usually extracted from the label or from credit card info
-                    if transaction.rdate:
-                        transac['rdate'] = transaction.rdate
-                        Trans.real_date_of_transaction = transaction.rdate
-                    else:
-                        transac['rdate'] = transaction.date
-                        Trans.real_date_of_transaction = transaction.date
-                    # print(Trans.real_date_of_transaction)
+                
+                    
+                    for transaction in transactions_of_banks_account:
+                        print(transaction)
+                        transac = {}    # used to send a context giving list of transaction loaded and saved in database
+                        Trans = Transactions()  # used to save loaded transactions in database
 
-                    # Value date, or accounting date; usually for professional accounts
-                    if transaction.vdate:
-                        transac['vdate'] = transaction.vdate
-                        Trans.value_date_of_transaction = transaction.vdate
-                    else:
-                        transac['vdate'] = transaction.rdate
-                        Trans.value_date_of_transaction = transaction.rdate
-                    # print(Trans.value_date_of_transaction)
+                        Trans.account = db_account
+                        print(Trans.account)
 
-                    # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
-                    transac['type'] = transaction.type  
-                    Trans.type_int_of_transaction = transaction.type
-                    # Trans.type_of_transaction = transaction.type
-                    # print(Trans.type_int_of_transaction)
+                        # Debit date on the bank statement
+                        transac['date'] = transaction.date  
+                        Trans.date_of_transaction = transaction.date
+                        # print(Trans.date_of_transaction)
+                        
+                        # Real date, when the payment has been made; usually extracted from the label or from credit card info
+                        if transaction.rdate:
+                            transac['rdate'] = transaction.rdate
+                            Trans.real_date_of_transaction = transaction.rdate
+                        else:
+                            transac['rdate'] = transaction.date
+                            Trans.real_date_of_transaction = transaction.date
+                        # print(Trans.real_date_of_transaction)
 
-                    # Raw label of the transaction
-                    transac['raw'] = transaction.raw  
-                    Trans.name_of_transaction = transaction.raw
-                    # print(Trans.name_of_transaction)
+                        # Value date, or accounting date; usually for professional accounts
+                        if transaction.vdate:
+                            transac['vdate'] = transaction.vdate
+                            Trans.value_date_of_transaction = transaction.vdate
+                        else:
+                            transac['vdate'] = transaction.rdate
+                            Trans.value_date_of_transaction = transaction.rdate
+                        # print(Trans.value_date_of_transaction)
 
-                    if transaction.category:
-                        transac['category'] = transaction.category  # Category of the transaction
-                        Trans.type_of_transaction = transaction.category
-                    else:
-                        transac['category'] = 'Unknown'  # Category of the transaction
-                        Trans.type_of_transaction = 'Unknown'
+                        # Type of transaction, use TYPE_* constants', default=TYPE_UNKNOWN
+                        transac['type'] = transaction.type  
+                        Trans.type_int_of_transaction = transaction.type
+                        # Trans.type_of_transaction = transaction.type
+                        # print(Trans.type_int_of_transaction)
 
-                    if transaction.label:
-                        transac['label'] = transaction.label  # Pretty label
-                        # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s', transaction.label)
-                        Trans.label_of_transaction = transaction.label
-                    else:
-                        transac['label'] = transaction.raw 
-                        Trans.label_of_transaction = transaction.raw
-                        # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s : NO LABEL FOUND - REPLACED BY RAW', transac['label'])
-                    # print(Trans.label_of_transaction)
+                        # Raw label of the transaction
+                        transac['raw'] = transaction.raw  
+                        Trans.name_of_transaction = transaction.raw
+                        # print(Trans.name_of_transaction)
 
-                    transac['amount'] = transaction.amount  # Amount of the transaction
-                    Trans.amount_of_transaction = transaction.amount
-                    # print(Trans.amount_of_transaction)
+                        if transaction.category:
+                            transac['category'] = transaction.category  # Category of the transaction
+                            Trans.type_of_transaction = transaction.category
+                        else:
+                            transac['category'] = 'Unknown'  # Category of the transaction
+                            Trans.type_of_transaction = 'Unknown'
 
-                    Trans.create_key_words()
-                    # print(Trans.key_words)
+                        if transaction.label:
+                            transac['label'] = transaction.label  # Pretty label
+                            # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s', transaction.label)
+                            Trans.label_of_transaction = transaction.label
+                        else:
+                            transac['label'] = transaction.raw 
+                            Trans.label_of_transaction = transaction.raw
+                            # logger.warning('transac["label"] = transaction.label +++++ >>>> : %s : NO LABEL FOUND - REPLACED BY RAW', transac['label'])
+                        # print(Trans.label_of_transaction)
 
-                    Trans.unique_id_of_transaction = Trans.unique_id(account_id=db_account.num_of_account)
-                    # print(Trans.unique_id_of_transaction)
+                        transac['amount'] = transaction.amount  # Amount of the transaction
+                        Trans.amount_of_transaction = transaction.amount
+                        # print(Trans.amount_of_transaction)
 
-                    if Trans.unique_id_of_transaction not in list_uniques:
-                        Trans.save()
-                        list_uniques.append(Trans.unique_id_of_transaction)
-                        list_of_transactions.append(transac)
-                        # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
-                        logger.warning('Sauvegarde de Trans: ===>>>>>> %s', Trans)
+                        Trans.create_key_words()
+                        # print(Trans.key_words)
+
+                        Trans.unique_id_of_transaction = Trans.unique_id(account_id=db_account.num_of_account)
+                        # print(Trans.unique_id_of_transaction)
+
+                        if Trans.unique_id_of_transaction not in list_uniques:
+                            Trans.save()
+                            list_uniques.append(Trans.unique_id_of_transaction)
+                            list_of_transactions.append(transac)
+                            # print('Sauvegarde de Trans: ===>>>>>> {}\n'.format(Trans))
+                            logger.warning('Sauvegarde de Trans: ===>>>>>> %s', Trans)
 
 
     context = {'list_of_transactions': list_of_transactions, }
