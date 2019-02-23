@@ -1,17 +1,15 @@
 {% load i18n %}
 {% load staticfiles %}
-{% load i18n %}
 {% load humanize %}
 {% load crispy_forms_tags %}
 
 <div class="accordion" id="accordionBanks">
     {% for bank in banks_list %}
-        <div class="card-header card-title" id=bank{{bank.id}}>
-            <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls={{bank.id}}>
+        <div class="card-header card-title" id=bank{{bank.id}}>                
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls={{bank.id}}>
+                <i class="fas fa-university fa-1x"></i>
                     {{bank}}
-                </button>
-            </h2>
+            </button>            
         </div>
         <div id={{bank.id}} class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#BankAccordion">
           {% for account in all_accounts %}

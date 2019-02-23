@@ -18,8 +18,12 @@
     <form action="{{ action_url }}" method="post" accept-charset="utf-8">
         {{ form|crispy }}
         {% csrf_token %}
-        <p><input type="submit" class="btn btn-primary" value="Load last transactions"></p>
+        <p>
+            <input type="submit" class="btn btn-primary" value="Load last transactions">
+        </p>
     </form>
+
+
 {% endblock %}
 
 
