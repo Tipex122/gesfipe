@@ -368,11 +368,20 @@ class Transactions(models.Model):
         '''
         function used to create keywords the first time data are loaded in database (via load-data.py)
         '''
+        # key_tags = []
+        
         # if key_words not empty we consider it has already been created or modified
         # As we don't want to modify what has already been saved we place an "if"
         # TODO: to create a form to modify manually the content of key_words (?)
         if not self.key_words:
             key_tags = self.name_of_transaction.split()
+
+            # if self.name_of_transaction:
+            #     key_tags = self.name_of_transaction.split()
+            # else:
+            #     # TODO: To verify that Transactions.name_of_transaction is stored in database
+            #     key_tags.append('No keywords')
+            
             key_words_list = []
             for key_tag in key_tags:
                 if len(key_tag) > 2 and key_tag.isalpha():

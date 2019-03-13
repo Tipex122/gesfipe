@@ -385,12 +385,12 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
 
     # List of accounts in Gesfipe DataBase
     # db_accounts_list = Accounts.objects.all() # .filter(owner_of_account=request.user)
-    logger.warning('\n REGUEST: === @@@@@@@@@ === : %s \n', request.POST)
+    # logger.warning('\n REGUEST: === @@@@@@@@@ === : %s \n', request.POST)
     db_accounts_list_id = Accounts.objects.values_list('num_of_account', flat=True)
 
     logger.warning('list_of_accounts (param function) ++++++> : \n %s \n   ||| db_account_list ++++++> : \n %s \n', list_of_accounts, db_accounts_list_id)
 
-    # First chek if real_account (given by bank with weboob) exist in database. 
+    # First chek if real_account (given by bank with weboob) exists in database. 
     # If not: one must create new account in Gesfipe Database
     for real_account in list_of_accounts:
         logger.warning('_______ real_account _______  : %s', real_account)
