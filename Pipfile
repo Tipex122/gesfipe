@@ -40,6 +40,7 @@ django-mptt-admin = "==0.5.0"
 weboob = "*"
 "psycopg2-binary" = "*"
 sentry-sdk = "*"
+gunicorn = "*"
 
 
 [dev-packages]
