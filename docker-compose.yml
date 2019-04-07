@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+
+  gesfipe_app:
+    build: .
+    volumes:
+      - .:/opt/services/gesfipe_app/src
+      - static_volume:/opt/services/gesfipe_app/src/staticfiles  # <-- bind the static volume
+      - media_volume:/opt/services/gesfipe_app/src/media  # <-- bind the media volume
+
+    networks:
+      - nginx_network
+      - database_gesfipe_network  # <-- connect to the bridge
+    depends_on:  # <-- wait for db to be "ready" before starting the app
+      - database_gesfipe
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 4000:80
+    volumes:
+      - ./config/docker/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/gesfipe_app/src/staticfiles  # <-- bind the static volume
+      - media_volume:/opt/services/gesfipe_app/src/media  # <-- bind the media volume
+
+    depends_on:  # <-- wait for djangoapp to be "ready" before starting this service
+      - gesfipe_app
+    networks:
+      - nginx_network
+
+  database_gesfipe:  # <-- IMPORTANT: same name as in DATABASES setting, otherwise Django won't find the database!
+    image: postgres:10
+    ports:
+      - "5432"
+    env_file:  # <-- we use the previously defined values
+      - ./config/docker/db/database_gesfipe_env
+    networks:  # <-- connect to the bridge
+      - database_gesfipe_network
+    volumes:
+      - database_gesfipe_volume:/var/lib/postgresql/data
+      # - database_gesfipe_volume:$HOME/data
+
+
+networks:
+  nginx_network:
+    driver: bridge
+  database_gesfipe_network:  # <-- add the bridge
+    driver: bridge
+
+volumes:
+  database_gesfipe_volume:
+  static_volume:  # <-- declare the static volume
+  media_volume:  # <-- declare the media volume

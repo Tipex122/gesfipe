@@ -1,0 +1,4 @@
+POSTGRES_USER=database_gesfipe_role
+POSTGRES_PASSWORD=database_gesfipe_password
+POSTGRES_DB=database_gesfipe
+
