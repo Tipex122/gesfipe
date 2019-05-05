@@ -304,28 +304,28 @@ def bank_create_with_weboob_module(request, pk):
             bank = form.save(commit=False)
             bank.bank_password=make_password(form.cleaned_data['bank_password'])
             bank.save()
-            
+
             w.load_backend(
                 bank.module_weboob.name_of_module,
                 bank.name_of_bank,
                 {'login': form.cleaned_data['bank_login'], 
                 'password': form.cleaned_data['bank_password']}
             )
-            
+
             # Get list of available account(s) in the bank
             list_of_accounts = list(w.iter_accounts())
-            
+
             # Get list of transactions coming from bank history
             context = load_transactions(request, w, bank, list_of_accounts)
             return render(request, 'ManageGesfi/load_transactions_from_account.html', context)
 
     else:
         form = BankForm()
-    
+
     context = {
         'form': form,
         'create': True
-        #TODO: ajouter un flag "create with weboob" pour rediriger vers load_transactions (et créer les comptes)
+        # TODO: ajouter un flag "create with weboob" pour rediriger vers load_transactions (et créer les comptes)
     }
     return render(request, 'banksandaccounts/bank_edit.html', context)
 
@@ -334,16 +334,16 @@ def bank_create_with_weboob_module(request, pk):
 def bank_edit(request, pk):
     bank = get_object_or_404(Banks, pk=pk)
 
-    ## banks_list = Banks.objects.all()   # .filter(accounts__owner_of_account=request.user)
+    # banks_list = Banks.objects.all()   # .filter(accounts__owner_of_account=request.user)
 
-    ## accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+    # accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
 
     if request.method == 'POST':
         form = BankForm(instance=bank, data=request.POST)
         if form.is_valid():
             if form.cleaned_data['bank_password']:
                 form.cleaned_data['bank_password'] = make_password(form.cleaned_data['bank_password'])
-            
+
             logger.warning('############## bank_edit __ bank_password = ::%s', form.cleaned_data['bank_password'])
             form.save()
             bank = get_object_or_404(Banks, pk=pk)
@@ -373,7 +373,7 @@ def bank_edit(request, pk):
 
 # TODO: Faire une fonction à partir de celle ci-dessous pour ne charger qu'un seul account et non pas tous les accounts d'une banque
 @login_required
-def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = []):
+def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
     '''
     Function to download transactions (or any related information) from banks through backends managed by Weboob
     And load them in the database managed by GesfiPe
@@ -412,7 +412,7 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
             # act.owner_of_account = request.user
         else:
             logger.warning('Account already exists in GesFipe Database!!!!!')
-    
+
     # Updating list of accounts after potential creation of new ones
     db_accounts_list = Accounts.objects.all()
     db_accounts_list_id = Accounts.objects.values_list('num_of_account', flat=True)
@@ -428,7 +428,7 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
     # real_account: account given by bank
     for real_account in list_of_accounts:
         # TODO: suivant que le compte est de type TYPE_LOAN ou TYPE_CARD ou ... les informations ou transactions à charger sont différente. Faire des tests et charger les "transactions en fonction dy type de compte."
-        
+
         # Following test not necessary ==> already tested previously in this function : to remove ?
         # if real_account.id not in db_accounts_list_id:
         #     act = Accounts()
@@ -440,7 +440,7 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
         #     act.bank = bank
         #     act.save()
         #     # act.owner_of_account = request.user
-            
+
 
         # db_account: account in gesfipe database
         for db_account in db_accounts_list:
@@ -450,11 +450,11 @@ def load_transactions(request, w = Weboob(), bank = Banks(), list_of_accounts = 
                 logger.warning("db_account.num_of_account = {} --- Type of account = {}".format(db_account.num_of_account, db_account.type_int_of_account))
                 logger.warning("real_account.id = {}".format(real_account.id))
                 logger.warning("------------------------------------")
-                
+
                 # TODO: Injecter la dernière date en base de donnée dans w.iter_history(real_account, date) afin de limiter la vérification
                 # TODO: Retirer test ci-dessous lorsque weboob aura pris en compte les accounts de type: TYPE_UNKNOWN, TYPE_CARD et TYPE_LIFE_INSURANCE 
-                
-                if db_account.type_int_of_account not in (0,7,8):
+
+                if db_account.type_int_of_account not in (0, 8):
                     transactions_of_banks_account = w.iter_history(real_account)
                     if db_account.type_int_of_account != 0:
                         logger.warning("transactions_of_banks_account = {}".format(transactions_of_banks_account))
