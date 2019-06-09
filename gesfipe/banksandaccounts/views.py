@@ -553,7 +553,6 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
     return context
 
 
-
 @login_required
 def bank_connection_and_load_transactions(request, pk):
     bank = get_object_or_404(Banks, pk=pk)
