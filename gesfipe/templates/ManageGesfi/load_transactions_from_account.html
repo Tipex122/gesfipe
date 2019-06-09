@@ -17,12 +17,13 @@
     <tr>
       <h3>New transactions loaded in database : </h3>
     </tr>
-    <table class="table table-striped ">
+    <table class="table table-striped table-responsive-sm table-bordered table-striped table-condensed">
       <thead>
         <tr>
           <th>Debit Date</th>
           <th>Real Date</th>
           <th>Value Date</th>
+          <th>Account</th>
           <th>Type</th>
           <th>Label</th>
           <th>Raw Label</th>
@@ -36,11 +37,17 @@
               <td> {{transaction.date|date:" Y/m/d"}} </td>
               <td> {{transaction.rdate|date:" Y/m/d"}} </td>
               <td> {{transaction.vdate|date:" Y/m/d"}} </td>
+              <td> {{transaction.account.name_of_account}} </td>
               <td> {{transaction.type}} </td>
               <td> {{transaction.label}} </td>
               <td> {{transaction.raw}} </td>
               <td> {{transaction.category}} </td>
-              <td> {{transaction.amount}} </td>
+              <!-- <td> {{transaction.amount}} </td> -->
+              {% if transaction.amount >= 0 %}
+                  <td class="font-blue" style="text-align: right"> {{ transaction.amount | rjust:"10" }} </td>
+              {% else %}
+                  <td class="font-red" style="text-align: right"> {{ transaction.amount | rjust:"10" }} </td>
+              {% endif %}
             </tr>
         {% endfor %}
       </tbody>
