@@ -288,6 +288,7 @@ def get_list_of_available_accounts(request):
             # print('if real_account.id == db_account.num_of_account en base de données: {}  -- à la banque: {}'.format(db_account.name_of_account, real_account.label))
             db_account.name_of_account = real_account.label
             db_account.type_int_of_account = real_account.type
+            db_account.balance_of_account = real_account.balance
             # TODO: ajouter le nom de la banque au compte
             # TODO: ajouter le user en cours
             # db_account.bank = real_account.parent.name
@@ -304,6 +305,7 @@ def get_list_of_available_accounts(request):
             new_account.num_of_account = real_account.id
             new_account.name_of_account = real_account.label
             new_account.type_int_of_account = real_account.type
+            new_account.balance_of_account = real_account.balance
             # TODO: affecter un user + le type (en texte)
             # new_account.owner_of_account = request.user
             # print('new_account.name_of_account = {}'.format(new_account.name_of_account))

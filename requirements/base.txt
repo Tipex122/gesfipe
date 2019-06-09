@@ -2,7 +2,8 @@ pytz==2018.3  # https://github.com/stub42/pytz
 awesome-slugify==1.6.5  # https://github.com/dimka665/awesome-slugify
 Pillow==5.0.0  # https://github.com/python-pillow/Pillow
 argon2-cffi==18.1.0  # https://github.com/hynek/argon2_cffi
-psycopg2==2.7.4 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
+# psycopg2==2.7.4 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
+psycopg2==2.8 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
 redis>=2.10.5  # https://github.com/antirez/redis
 
 django-mptt==0.9.0
@@ -19,3 +20,7 @@ django-model-utils==3.1.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.35.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.9.0  # https://github.com/niwinz/django-redis
+
+# Django REST Framework
+djangorestframework==3.9.4  # https://github.com/encode/django-rest-framework
+coreapi==2.3.3  # https://github.com/core-api/python-client

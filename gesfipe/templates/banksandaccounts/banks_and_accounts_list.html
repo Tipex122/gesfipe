@@ -28,11 +28,20 @@
                       <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
                         <p class="card-text">
                             <br> Total :
-                                {% if account.total_amount_by_account >= 0 %}
-                                    <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                                {% comment  %}
+                                    {% if account.total_amount_by_account >= 0 %}
+                                        <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    {% else %}
+                                        <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    {% endif %}
+                                {% endcomment %}
+
+                                {% if account.balance_of_account >= 0 %}
+                                    <span class="font-blue"><strong>{{account.balance_of_account}}</strong></span>
                                 {% else %}
-                                    <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                    <span class="font-red"><strong>{{account.balance_of_account}}</strong></span>
                                 {% endif %}
+
                             <br> Transaction Mini:
                                 {% if account.min_amount_by_account < 0 %}
                                     <span class="label label-danger"> {{account.min_amount_by_account}} </span>

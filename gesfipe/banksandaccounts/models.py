@@ -155,6 +155,15 @@ class Accounts(models.Model):
         max_length=128,
         help_text='Enter type of account (this field will be deleted in next version)'
     )
+    
+    balance_of_account = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name='Balance amount',
+        blank=True,
+        null=True
+    )
 
     bank = models.ForeignKey(
         'Banks', 
@@ -305,7 +314,8 @@ class Transactions(models.Model):
         Accounts,
         # null=True,
         # blank=True,
-        related_name='transactions',
+        # related_name='transactions',
+        related_name='account',
         on_delete=models.CASCADE
     )
 

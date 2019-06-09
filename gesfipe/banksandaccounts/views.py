@@ -24,6 +24,7 @@ from weboob.capabilities.bank import CapBank
 from .forms import *
 from gesfipe.categories.models import Tag
 from gesfipe.managegesfi.views import list_unique_of_numbers
+from gesfipe.banksandaccounts.models import Accounts
 
 
 logger = logging.getLogger(__name__)
@@ -65,19 +66,21 @@ def accounts_info2(request, account_id=0):
 def accounts_info2(request, account_id=0):
     if account_id == 0:
         account_info = Accounts.objects.filter(owner_of_account=request.user).annotate(
-            total_amount_by_account=Sum('transactions__amount_of_transaction'),
-            avg_amount_by_account=Avg('transactions__amount_of_transaction'),
-            min_amount_by_account=Min('transactions__amount_of_transaction'),
-            max_amount_by_account=Max('transactions__amount_of_transaction'),
-            num_transac_by_account=Count('transactions'))
+            total_amount_by_account=Sum('account__amount_of_transaction'), # related_name of foreignkey "account" in Trasactions
+            avg_amount_by_account=Avg('account__amount_of_transaction'),
+            min_amount_by_account=Min('account__amount_of_transaction'),
+            max_amount_by_account=Max('account__amount_of_transaction'),
+            # num_transac_by_account=Count('transactions'))
+            num_transac_by_account=Count('account'))
 
     elif account_id != 0:
         account_info = Accounts.objects.filter(owner_of_account=request.user).filter(id=account_id).annotate(
-            total_amount_by_account=Sum('transactions__amount_of_transaction'),
-            avg_amount_by_account=Avg('transactions__amount_of_transaction'),
-            min_amount_by_account=Min('transactions__amount_of_transaction'),
-            max_amount_by_account=Max('transactions__amount_of_transaction'),
-            num_transac_by_account=Count('transactions'))
+            total_amount_by_account=Sum('account__amount_of_transaction'),
+            avg_amount_by_account=Avg('account__amount_of_transaction'),
+            min_amount_by_account=Min('account__amount_of_transaction'),
+            max_amount_by_account=Max('account__amount_of_transaction'),
+            # num_transac_by_account=Count('transactions'))
+            num_transac_by_account=Count('account'))
 
     return account_info
 
@@ -398,7 +401,8 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
             act = Accounts()
             act.name_of_account = real_account.label
             act.num_of_account = real_account.id
-            act.type_int_of_account = real_account.type            
+            act.type_int_of_account = real_account.type
+            act.balance_of_account = real_account.balance            
             act.bank = bank
             # TODO: affecter un owner_of_account lorsqu'un account est créé
             logger.warning(
@@ -412,6 +416,13 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
             # act.owner_of_account = request.user
         else:
             logger.warning('Account already exists in GesFipe Database!!!!!')
+
+            # Take profit of a transactions loading operation to update accounts data, mainly balance amount 
+            db_account = Accounts.objects.get(num_of_account=real_account.id)
+            db_account.name_of_account = real_account.label
+            db_account.type_int_of_account = real_account.type
+            db_account.balance_of_account = real_account.balance
+            db_account.save()
 
     # Updating list of accounts after potential creation of new ones
     db_accounts_list = Accounts.objects.all()
@@ -444,7 +455,7 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
 
         # db_account: account in gesfipe database
         for db_account in db_accounts_list:
-            print(db_account)
+            # print(db_account)
             if real_account.id == db_account.num_of_account:
                 logger.warning("------------------------------------")
                 logger.warning("db_account.num_of_account = {} --- Type of account = {}".format(db_account.num_of_account, db_account.type_int_of_account))
@@ -461,15 +472,13 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
                     else:
                         logger.warning("db_account.type_int_of_account ************************* NON GERé !!!")
                     
-                
-                    
                     for transaction in transactions_of_banks_account:
-                        print(transaction)
+                        # print(transaction)
                         transac = {}    # used to send a context giving list of transaction loaded and saved in database
                         Trans = Transactions()  # used to save loaded transactions in database
 
                         Trans.account = db_account
-                        print(Trans.account)
+                        # print(Trans.account)
 
                         # Debit date on the bank statement
                         transac['date'] = transaction.date  
