@@ -26,10 +26,10 @@
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
-                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>
                             <p class="card-text">
                                 <i>
-                                <br>Total :
+                                Total :
                                 {% comment  %}
                                     {% if account.total_amount_by_account >= 0 %}
                                         <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>

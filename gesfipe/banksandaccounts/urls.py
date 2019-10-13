@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'^transactions_list/$', views.transactions_list, name='transactions_list'),
     url(r'^toto/$', views.TransactionsListView.as_view(), name='transactions_list3'),
+    url(r'^tata/$', views.transactions_list4, name='transactions_list4'),
 
     # url(r'^toto/$', views.transactions_list2, name='transactions_list2'),
     # url(r'^$', views.TransactionsListView.as_view(), name='transactions_list'),

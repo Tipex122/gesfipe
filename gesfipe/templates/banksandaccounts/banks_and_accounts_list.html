@@ -9,6 +9,7 @@
 {% endblock heading %}
 
 {% block content %}
+<div class="content"> 
   <div class="row">
     {% for bank in banks_list %}
         {% for account in accounts_info %}
@@ -25,9 +26,9 @@
                   </a>
                     <div class="card-body">
                       <h4 class="card-title">Account name: <br><a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
-                      <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - Type of account: {{account.get_type_int_of_account_display}}</h6>
+                      <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>
                         <p class="card-text">
-                            <br> Total :
+                            Total :
                                 {% comment  %}
                                     {% if account.total_amount_by_account >= 0 %}
                                         <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
@@ -44,15 +45,15 @@
 
                             <br> Transaction Mini:
                                 {% if account.min_amount_by_account < 0 %}
-                                    <span class="label label-danger"> {{account.min_amount_by_account}} </span>
+                                    <span class="font-red"> {{account.min_amount_by_account}} </span>
                                 {% else %}
-                                    <span class="label label-primary"> {{account.min_amount_by_account}} </span>
+                                    <span class="font-blue"> {{account.min_amount_by_account}} </span>
                                 {% endif %}
                             <br> Transaction Maxi:
                                 {% if account.max_amount_by_account < 0 %}
-                                    <span class="label label-danger"> {{account.max_amount_by_account}} </span>
+                                    <span class="font-red"> {{account.max_amount_by_account}} </span>
                                 {% else %}
-                                    <span class="label label-primary"> {{account.max_amount_by_account}} </span>
+                                    <span class="font-blue"> {{account.max_amount_by_account}} </span>
                                 {% endif %}
                             <br> Number of transactions: <span class="label label-default">{{account.num_transac_by_account}}</span>
                             <br>
@@ -69,6 +70,7 @@
         {% endfor %}
     {% endfor %}
   </div>
+</div> <!-- End of class="content"-->
 {% endblock content %}
 
 

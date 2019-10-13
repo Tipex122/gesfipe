@@ -144,7 +144,48 @@ def transactions_list(request):
         'banks_list': banks_list,
         # used for dispatching accounts by bank in sidebar
 
-        'transactions': transactions,
+        'transactions': transactions, # si on utilise paginator
+        # 'transactions': transaction_list, # si on n'utilise pas paginatore
+        # used to list transactions related to account(s) with num_of_lines_per_page
+
+        'account_total': account_total,
+        # sum of all transactions
+
+        'accounts_info': accounts_info2(request, 0),
+        # general information related to all accounts (due to "0")
+
+        'all_accounts': accounts_info2(request, 0),
+        # general information related
+        # to all accounts (due to "0") and used in sidebar
+
+        'num_visits': num_visits,
+        # to count the number of visit on the main page (transactions_list2.html only)
+        # just for test to use django.sessions middleware
+    }
+    return render(request, 'banksandaccounts/transactions_list.html', context)
+
+@login_required
+def transactions_list4(request):
+    # banks = Banks.objects.all()
+    banks_list = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+    # accounts_list = Accounts.objects.all().filter(owner_of_account=request.user)
+
+    # transaction_list = Transactions.objects.all()
+    transaction_list = Transactions.objects.filter(account__owner_of_account=request.user)
+
+    account_total = transaction_list.aggregate(Sum('amount_of_transaction'))
+
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
+    logger.warning('In transaction_list333333333: %s', transaction_list)
+
+    context = {
+        'banks_list': banks_list,
+        # used for dispatching accounts by bank in sidebar
+
+        # 'transactions': transactions, # si on utilise paginator
+        'transactions': transaction_list, # si on n'utilise pas paginatore
         # used to list transactions related to account(s) with num_of_lines_per_page
 
         'account_total': account_total,
@@ -168,15 +209,17 @@ def transactions_list(request):
 # class TransactionsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
 class TransactionsListView(LoginRequiredMixin, generic.ListView):
     model = Transactions
-    paginate_by = 25
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(TransactionsListView, self).get_context_data(**kwargs)
+        context['banks_list'] = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+        # context['transactions'] = Transactions.objects.filter(account__owner_of_account=self.request.user)
         # Get the blog from id and add it to the context
         context['account_total'] = Transactions.objects.aggregate(Sum('amount_of_transaction'))
         # context['banks'] = Banks.objects.all()
-        context['banks'] = Banks.objects.all().filter(accounts__owner_of_account=self.request.user)
+        # context['banks'] = Banks.objects.all().filter(accounts__owner_of_account=self.request.user)
         # context['accounts_info'] = accounts_info(0)
         context['accounts_info'] = accounts_info2(self.request, 0)
         # context['all_accounts'] = accounts_info(0)
@@ -187,9 +230,9 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Transactions.objects.filter(account__owner_of_account=self.request.user)
 
-    context_object_name = 'transactions_list'  # your own name for the list as a template variable
+    context_object_name = 'transactions'  # your own name for the list as a template variable
     queryset = Transactions.objects.all()  # [:55] Get 55 transactions
-    template_name = 'banksandaccounts/transactions_list3.html'  # Specify your own template name/location
+    template_name = 'banksandaccounts/transactions_list.html'  # Specify your own template name/location
 
 
 @login_required

@@ -20,6 +20,9 @@ Issues with the above approach:
 */
 $('.form-group').removeClass('row');
 
+$(document).ready(function() {
+  $('#dataTable').DataTable();
+});
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

@@ -8,81 +8,67 @@
 {% endblock %}
 
 
-{% block heading %}
-<!-- A améliorer car à chaque fois cela liste l'ensemble des comptes -->
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">
-            <h2 class="panel-title">
-                <a href="/">
-                    <strong>{% trans 'Transactions of account(s):' %}</strong>
-                </a>
-            </h2>
-        </div>
-        <table class="table table-hover table-bordered table-condensed">
-            <thead>
-                <tr>
-                    <th style="text-align: center"><strong>Account</strong></th>
-                    <th style="text-align: center"><strong>Ref.</strong></th>
-                    <th style="text-align: center"><strong>Total amount</strong></th>
-                    <!-- <th style="text-align: center"><b>Nmbr. of line(s)</b></th> -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for account in accounts_info %}
-                    <tr>
-                        <td><a href="/account/{{account.id}}/">{{account.name_of_account}}</a></td>
-                        <td>{{account.num_of_account}}</td>
-                        {% if account.total_amount_by_account >= 0 %}
-                            <td style="text-align: right">{{account.total_amount_by_account | rjust:"10" }}</td>
-                        {% else %}
-                            <td class="font-red" style="text-align: right">{{account.total_amount_by_account | rjust:"10" }}</td>
-                        {% endif %}
-                        <!-- <td  style="text-align: center">{{account.num_transac_by_account}}</td> -->
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-{% endblock heading %}
-
-
 {% block content %}
-    <!-- <div class="table-responsive"> -->
-    <table class="table table-hover table-responsive-sm table-bordered table-striped table-condensed">
-        <thead>
-            <tr>
-                <th><h4>Date</h4></th>
-                <!-- <th><h4>Type</h4></th> -->
-                <th><h4>Name</h4></th>
-                <!-- <th><h4>Category</h4></th> -->
-                <th><h4>Amount</h4></th>
-                <!-- <th>Currency</th>
-                <th>N° Account</th> -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-                <tr>
-                    <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
-                    <!-- <td>{{ transaction.type_of_transaction }}</td> -->
-                    <td><a href="{% url 'banksandaccounts:transaction_edit' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
-                    <!-- <td>{{transaction.category_of_transaction}}</td> -->
-                    {% if transaction.amount_of_transaction >= 0 %}
-                        <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
-                    {% else %}
-                        <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
-                    {% endif %}
-                    <!-- <td>{{ transaction.currency_of_transaction }}</td>
-                    <td>{{ transaction.account.num_of_account }}</td> -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- </div> -->
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Liste des transactions 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <!--
+            <table class="table table-hover table-responsive-sm table-bordered table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
+            -->    
+            <table class="table table-bordered table-hover table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <!-- <th><h4>Type</h4></th> -->
+                        <th>Name</th>
+                        <!-- <th><h4>Category</h4></th> -->
+                        <th>Amount</th>
+                        <!-- <th>Currency</th>
+                        <th>N° Account</th> -->
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Date</th>
+                        <!-- <th><h4>Type</h4></th> -->
+                        <th>Name</th>
+                        <!-- <th><h4>Category</h4></th> -->
+                        <th>Amount</th>
+                        <!-- <th>Currency</th>
+                        <th>N° Account</th> -->
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
+                            <!-- <td>{{ transaction.type_of_transaction }}</td> -->
+                            <td><a href="{% url 'banksandaccounts:transaction_edit' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
+                            <!-- <td>{{transaction.category_of_transaction}}</td> -->
+                            {% if transaction.amount_of_transaction >= 0 %}
+                                <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                            {% else %}
+                                <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                            {% endif %}
+                            <!-- <td>{{ transaction.currency_of_transaction }}</td>
+                            <td>{{ transaction.account.num_of_account }}</td> -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
     <!-- La pagination pourrait être mieux placée ... à creuser ultérieurement -->
     <!-- Voir aussi site https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html  pour tenir compte des ordres de tri -->
+    
+    <!--
     <nav class="pagination" aria-label="Page navigation">
         <span class="step-links">
             {% if transactions.has_previous %}
@@ -98,7 +84,7 @@
             {% endif %}
         </span>
     </nav>
-
+    -->
 
     <!--
     {% if transactions.has_other_pages %}
