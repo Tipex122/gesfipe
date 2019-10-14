@@ -29,7 +29,7 @@
     <!-- Bootswatch Yeti - Added by XLH -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="tv">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> 
-    <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet"> -->
     <!-- End Bootswatch Yeti - Added by XLH -->
 
     <!-- Custom fonts for this template-->
@@ -184,11 +184,15 @@
     <!-- Placed at the end of the document so the pages load faster -->
     {% block javascript %}
     
+    <!--
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     
     <!-- Core plugin JavaScript-->
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
@@ -196,16 +200,12 @@
     <!-- Page level plugin JavaScript-->
     <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
     <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
-
-      
-    <!--
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    -->
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>    
 
     <!--
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-    -->
-    <!--
+    
+    
     <script src="{% static 'js/bootstrap.min.js' %}"></script>  
     -->
 
