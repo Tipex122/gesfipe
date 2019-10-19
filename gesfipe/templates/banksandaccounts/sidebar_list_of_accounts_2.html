@@ -4,14 +4,16 @@
 {% load crispy_forms_tags %}
 
 <div class="accordion" id="accordionBanks">
+    <div class="card">
     {% for bank in banks_list %}
-        <div class="card-header card-title" id=bank{{bank.id}}>                
-            <button class="btn btn-link" type="button" data-toggle="collapse" data-target=#{{bank.id}} aria-expanded="true" aria-controls={{bank.id}}>
+        <div class="card-header card-title" id="bank{{bank.id}}">                
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{bank.id}}" aria-expanded="true" aria-controls="{{bank.id}}">
                 <i class="fas fa-university fa-1x"></i>
                     {{bank}}
             </button>            
         </div>
-        <div id={{bank.id}} class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#BankAccordion">
+        
+        <div id="collapse{{bank.id}}" class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#accordionBanks">
           {% for account in all_accounts %}
               {% if account.bank == bank %}
 
@@ -58,4 +60,5 @@
           {% endfor %}
         </div>
     {% endfor %}
+    </div>
 </div>
