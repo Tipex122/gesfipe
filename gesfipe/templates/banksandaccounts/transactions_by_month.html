@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+<!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+{% block title %}
+     - {% trans 'Transactions de:' %} {{account.bank.name_of_bank}} - {{account.name_of_account}}
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' previous_month.year previous_month.month  %}">
+                        <button type="button" class="btn btn-outline-secondary"> << </button>
+                    </a>
+                </div>
+                <div class="col-sm">
+                    <button type="button" class="btn btn-outline-secondary">
+                            {{ month|date:"F Y" }}
+                    </button>
+                </div>
+                <div class="col-sm">
+                    <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' next_month.year next_month.month  %}"> 
+                        <button type="button" class="btn btn-outline-secondary"> >>  </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-bordered table-hover table-responsive-sm table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <!-- <th><h4>Type</h4></th> -->
+                <th>Name</th>
+                <!-- <th><h4>Category</h4></th> -->
+                <th>Amount</th>
+                <!-- <th>Currency</th> -->
+                <th>N° Account</th> 
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Date</th>
+                <!-- <th><h4>Type</h4></th> -->
+                <th>Name</th>
+                <!-- <th><h4>Category</h4></th> -->
+                <th>Amount</th>
+                <!-- <th>Currency</th> -->
+                <th>N° Account</th> 
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for transaction in object_list %}
+                <tr>
+                    <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
+                    <!-- <td>{{ transaction.type_of_transaction }}</td> -->
+                    <td><a href="{% url 'banksandaccounts:transaction_edit' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
+                    <!-- <td>{{transaction.category_of_transaction}}</td> -->
+                    {% if transaction.amount_of_transaction >= 0 %}
+                        <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                    {% else %}
+                        <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                    {% endif %}
+                    <!-- <td>{{ transaction.currency_of_transaction }}</td> -->
+                    <td>{{ transaction.account.num_of_account }}</td> 
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+    <!--
+    <ul>
+        {% for article in object_list %}
+            <li>{{ article.real_date_of_transaction|date:"F j, Y" }}: {{ article.label_of_transaction }}</li>
+        {% endfor %}
+    </ul>
+    -->
+
+{% endblock %}
+
+
+
+{% block sidesearch %}
+
+  {% include 'banksandaccounts/sidebar_search.html' %}
+
+{% endblock sidesearch %}
+
+
+
+{% block sidebar %}
+
+  {% include 'banksandaccounts/sidebar_list_of_accounts_2.html' with all_accounts=all_accounts banks_list=banks_list  %}
+  {# {% include 'banksandaccounts/sidebar_list_of_accounts.html' with all_accounts=all_accounts banks_list=banks_list  %} #}
+
+{% endblock %}

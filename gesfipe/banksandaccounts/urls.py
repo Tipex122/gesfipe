@@ -22,6 +22,13 @@ urlpatterns = [
     url(r'^transactions_list/$', views.transactions_list, name='transactions_list'),
     url(r'^toto/$', views.TransactionsListView.as_view(), name='transactions_list3'),
     url(r'^tata/$', views.transactions_list4, name='transactions_list4'),
+    url(r'^transactions_by_month/$', views.TransactionsByMonthView.as_view(), name='transactions_by_month'),
+
+    # Example: /2012/08/
+    path('<int:year>/<int:month>/', views.TransactionsByMonthView.as_view(month_format='%m'), name="transactions_archive_month_numeric"),
+    # Example: /2012/aug/
+    path('<int:year>/<str:month>/', views.TransactionsByMonthView.as_view(), name="transactions_archive_month"),
+
 
     # url(r'^toto/$', views.transactions_list2, name='transactions_list2'),
     # url(r'^$', views.TransactionsListView.as_view(), name='transactions_list'),

@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from  django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.dates import ArchiveIndexView, MonthArchiveView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Avg, Sum, Min, Max, Count
 from django.contrib.auth.decorators import login_required
@@ -125,7 +126,7 @@ def transactions_list(request):
     request.session['num_visits'] = num_visits + 1
 
     # Page de 25 lignes
-    num_of_lines_per_page = 25
+    num_of_lines_per_page = 50
     paginator = Paginator(transaction_list, num_of_lines_per_page)
     page = request.GET.get('page')
 
@@ -203,6 +204,31 @@ def transactions_list4(request):
         # just for test to use django.sessions middleware
     }
     return render(request, 'banksandaccounts/transactions_list.html', context)
+
+class TransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
+    template_name="banksandaccounts/transactions_by_month.html"
+    model = Transactions
+    queryset = Transactions.objects.all()
+    date_field="real_date_of_transaction"
+    allow_future = True
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionsByMonthView,self).get_context_data(**kwargs)
+        context['banks_list'] = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+        # context['transactions'] = Transactions.objects.filter(account__owner_of_account=self.request.user)
+        # Get the blog from id and add it to the context
+        context['account_total'] = Transactions.objects.aggregate(Sum('amount_of_transaction'))
+        # context['banks'] = Banks.objects.all()
+        # context['banks'] = Banks.objects.all().filter(accounts__owner_of_account=self.request.user)
+        # context['accounts_info'] = accounts_info(0)
+        context['accounts_info'] = accounts_info2(self.request, 0)
+        # context['all_accounts'] = accounts_info(0)
+        context['all_accounts'] = accounts_info2(self.request, 0)
+
+        # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
+        # context['months'] = months
+
+        return context
 
 
 # TODO: Access management ==> to be improved with ListView

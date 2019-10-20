@@ -21,7 +21,15 @@ Issues with the above approach:
 $('.form-group').removeClass('row');
 
 $(document).ready(function() {
-  $('#dataTable').DataTable();
+  $('#dataTable').DataTable(
+    {
+      "pageLength": 1000,
+      "paging":  false,
+      /*
+      "scrollY": 400, 
+      */
+    }
+  );
 });
 
 $(function () {
