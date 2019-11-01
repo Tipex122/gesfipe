@@ -17,13 +17,17 @@
     <tr>
       <h3>New transactions loaded in database : </h3>
     </tr>
-    <table class="table table-striped table-responsive-sm table-bordered table-striped table-condensed">
+    {%regroup list_of_transactions by account as account_list %}
+    {%for account in account_list %}
+    <h3>{account.grouper}</h3>
+    {# <table class="table table-striped table-responsive-sm table-bordered table-striped table-condensed"> #}
+    <table class="table table-bordered table-hover table-responsive-sm table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
       <thead>
         <tr>
           <th>Debit Date</th>
           <th>Real Date</th>
           <th>Value Date</th>
-          <th>Account</th>
+          {# <th>Account</th> #}
           <th>Type</th>
           <th>Label</th>
           <th>Raw Label</th>
@@ -32,12 +36,13 @@
         </tr>
       </thead>
       <tbody>
-        {% for transaction in list_of_transactions %}
+        {# {% for transaction in list_of_transactions %} #}
+        {% for transaction in account.list %}
             <tr>
               <td> {{transaction.date|date:" Y/m/d"}} </td>
               <td> {{transaction.rdate|date:" Y/m/d"}} </td>
               <td> {{transaction.vdate|date:" Y/m/d"}} </td>
-              <td> {{transaction.account__name_of_account}} </td>
+              {# <td> {{transaction.account__name_of_account}} </td> #}
               <td> {{transaction.type}} </td>
               <td> {{transaction.label}} </td>
               <td> {{transaction.raw}} </td>
@@ -52,6 +57,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endfor %}
     {% else %}
         <tr>
           <h3>Database is up to date: there is no new transaction to load !</h3>

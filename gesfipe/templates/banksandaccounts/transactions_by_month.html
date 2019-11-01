@@ -14,9 +14,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' previous_month.year previous_month.month  %}">
-                        <button type="button" class="btn btn-outline-secondary"> << </button>
-                    </a>
+                    {% if previous_month.month %}
+                        <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' previous_month.year previous_month.month  %}">
+                            <button type="button" class="btn btn-outline-secondary"> << </button>
+                        </a>
+                    {% else %}
+                        <a href="#">
+                            <button type="button" class="btn btn-outline-light"> << </button>
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="col-sm">
                     <button type="button" class="btn btn-outline-secondary">
@@ -24,9 +30,15 @@
                     </button>
                 </div>
                 <div class="col-sm">
-                    <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' next_month.year next_month.month  %}"> 
-                        <button type="button" class="btn btn-outline-secondary"> >>  </button>
-                    </a>
+                    {% if next_month.month %}
+                        <a href="{% url 'banksandaccounts:transactions_archive_month_numeric' next_month.year next_month.month  %}"> 
+                            <button type="button" class="btn btn-outline-secondary"> >>  </button>
+                        </a>
+                    {% else %}
+                        <a href="#"> 
+                            <button type="button" class="btn btn-outline-secondary"> >>  </button>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

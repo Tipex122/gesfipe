@@ -139,6 +139,13 @@ class Accounts(models.Model):
         help_text='Enter number of account'
     )
 
+    iban_of_account = models.CharField(
+        'IBAN',
+        default='IBAN',
+        max_length=64,
+        help_text='Enter IBAN'
+    )
+
     type_int_of_account = models.IntegerField(
         'Type of account (int)',  # use TYPE_* constants
         default=TYPE_UNKNOWN,
@@ -164,6 +171,40 @@ class Accounts(models.Model):
         blank=True,
         null=True
     )
+
+    coming_of_account = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name='Sum of coming movements.',
+        blank=True,
+        null=True
+    )
+
+    # card attributes
+    pay_date = models.DateField(
+        'For credit cards. When next payment is due.',
+        default=datetime.datetime.now
+    )
+
+    pay_min = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name='For credit cards. Minimal payment due.',
+        blank=True,
+        null=True
+    )
+
+    card_limit = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name='For credit cards. Credit limit.',
+        blank=True,
+        null=True
+    )
+
 
     bank = models.ForeignKey(
         'Banks', 

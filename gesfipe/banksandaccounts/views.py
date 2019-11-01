@@ -467,20 +467,32 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
     for real_account in list_of_accounts:
         logger.warning('_______ real_account _______  : %s', real_account)
         if real_account.id not in db_accounts_list_id:
-            act = Accounts()
-            act.name_of_account = real_account.label
-            act.num_of_account = real_account.id
-            act.type_int_of_account = real_account.type
-            act.balance_of_account = real_account.balance            
-            act.bank = bank
-            # TODO: affecter un owner_of_account lorsqu'un account est créé
+            db_account = Accounts()
+            db_account.name_of_account = real_account.label
+            db_account.iban_of_account = real_account.iban
+            db_account.num_of_account = real_account.id
+            db_account.type_int_of_account = real_account.type
+            db_account.balance_of_account = real_account.balance     
+            db_account.coming_of_account = real_account.coming
+
             logger.warning(
                 'Ceating new account: ++++++> : %s --- Num : %s --- Type : %s', 
-                act.name_of_account, 
-                act.num_of_account, 
-                act.type_int_of_account
+                db_account.name_of_account, 
+                db_account.num_of_account, 
+                db_account.type_int_of_account
             )
-            act.save()
+            '''
+            print(db_account.type_int_of_account)
+            print(db_account.TYPE_CHECKING)
+            if db_account.type_int_of_account == db_account.TYPE_CHECKING:
+                db_account.pay_date = real_account.pay_date
+                db_account.pay_min = real_account.pay_min
+                db_account.card_limit = real_account.card_limit
+            '''
+            db_account.bank = bank
+            # TODO: affecter un owner_of_account lorsqu'un account est créé
+            
+            db_account.save()
             # TODO: how to set owner_of_account ?
             # act.owner_of_account = request.user
         else:
@@ -489,8 +501,25 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
             # Take profit of a transactions loading operation to update accounts data, mainly balance amount 
             db_account = Accounts.objects.get(num_of_account=real_account.id)
             db_account.name_of_account = real_account.label
+            db_account.iban_of_account = real_account.iban
             db_account.type_int_of_account = real_account.type
             db_account.balance_of_account = real_account.balance
+            db_account.coming_of_account = real_account.coming
+            
+            logger.warning(
+                'Updating account: ++++++> : %s --- Num : %s --- Type : %s', 
+                db_account.name_of_account, 
+                db_account.num_of_account, 
+                db_account.type_int_of_account
+            )
+            '''
+            print(db_account.type_int_of_account)
+            print(db_account.TYPE_CHECKING)
+            if db_account.type_int_of_account == db_account.TYPE_CHECKING:
+                db_account.pay_date = real_account.pay_date
+                db_account.pay_min = real_account.pay_min
+                db_account.card_limit = real_account.card_limit
+            '''
             db_account.save()
 
     # Updating list of accounts after potential creation of new ones
@@ -548,6 +577,7 @@ def load_transactions(request, w=Weboob(), bank=Banks(), list_of_accounts=[]):
 
                         Trans.account = db_account
                         # print(Trans.account)
+                        transac['account'] = db_account.name_of_account
 
                         # Debit date on the bank statement
                         transac['date'] = transaction.date  
