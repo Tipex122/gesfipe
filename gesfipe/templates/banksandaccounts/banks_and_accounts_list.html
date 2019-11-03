@@ -62,7 +62,10 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                      <a href="{% url 'banksandaccounts:account_list' account.id %}">Transactions</a>
+                        <!-- <a href="{% url 'banksandaccounts:account_list' account.id %}"> -->
+                        <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}">
+                            Transactions
+                        </a>
                       {# <a href="#" class="card-link">Another link</a> #}
                     </div>
                 </div>
