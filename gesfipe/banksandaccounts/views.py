@@ -93,7 +93,9 @@ def banks_and_accounts_list(request):
     account_total = \
         Transactions.objects.filter(account__owner_of_account=request.user).aggregate(
             total=Sum('amount_of_transaction'))
-
+    
+    # just to obtain the date of last transaction
+    last_transaction = Transactions.objects.latest('value_date_of_transaction')
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
 
@@ -102,6 +104,7 @@ def banks_and_accounts_list(request):
         'accounts_list': accounts_list,
         'account_total': account_total,
         'accounts_info': accounts_info2(request),
+        'date_last_transaction': last_transaction.value_date_of_transaction,
         'num_visits': num_visits,
     }
     return render(
@@ -205,7 +208,7 @@ def transactions_list4(request):
     }
     return render(request, 'banksandaccounts/transactions_list.html', context)
 
-class TransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
+class AllTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
     template_name="banksandaccounts/transactions_by_month.html"
     model = Transactions
     queryset = Transactions.objects.all()
@@ -213,7 +216,7 @@ class TransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
     allow_future = True
 
     def get_context_data(self, **kwargs):
-        context = super(TransactionsByMonthView,self).get_context_data(**kwargs)
+        context = super(AllTransactionsByMonthView,self).get_context_data(**kwargs)
         context['banks_list'] = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
         # context['transactions'] = Transactions.objects.filter(account__owner_of_account=self.request.user)
         # Get the blog from id and add it to the context
@@ -224,11 +227,49 @@ class TransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         context['accounts_info'] = accounts_info2(self.request, 0)
         # context['all_accounts'] = accounts_info(0)
         context['all_accounts'] = accounts_info2(self.request, 0)
+        
+        # To get date of last transaction to start the list of transaction of the last month
+        context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
+        # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
+        # context['months'] = months
+
+        return context
+
+
+class AccountTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
+    template_name="banksandaccounts/transactions_by_account_and_month.html"
+    model = Transactions
+    # queryset = Transactions.objects.all()
+    date_field="real_date_of_transaction"
+    allow_future = True
+
+    def get_queryset(self):
+        queryset = super(AccountTransactionsByMonthView, self).get_queryset()
+        account_id=self.kwargs['account_id']
+        return Transactions.objects.filter(account_id=account_id)
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountTransactionsByMonthView,self).get_context_data(**kwargs)
+        context['banks_list'] = Banks.objects.all()  # .filter(accounts__owner_of_account=request.user)
+        # context['transactions'] = Transactions.objects.filter(account__owner_of_account=self.request.user)
+        # Get the blog from id and add it to the context
+        context['account_total'] = Transactions.objects.aggregate(Sum('amount_of_transaction'))
+        # context['banks'] = Banks.objects.all()
+        # context['banks'] = Banks.objects.all().filter(accounts__owner_of_account=self.request.user)
+        # context['accounts_info'] = accounts_info(0)
+        context['accounts_info'] = accounts_info2(self.request, 0)
+        # context['all_accounts'] = accounts_info(0)
+        context['all_accounts'] = accounts_info2(self.request, 0)
+        context['account_id'] = self.kwargs['account_id']
+        
+        # To get date of last transaction to start the list of transaction of the last month
+        context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
 
         # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
         # context['months'] = months
 
         return context
+
 
 
 # TODO: Access management ==> to be improved with ListView
@@ -257,7 +298,7 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
         return Transactions.objects.filter(account__owner_of_account=self.request.user)
 
     context_object_name = 'transactions'  # your own name for the list as a template variable
-    queryset = Transactions.objects.all()  # [:55] Get 55 transactions
+    # queryset = Transactions.objects.all()  # [:55] Get 55 transactions
     template_name = 'banksandaccounts/transactions_list.html'  # Specify your own template name/location
 
 

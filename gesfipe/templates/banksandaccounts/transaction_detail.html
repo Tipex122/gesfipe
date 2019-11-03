@@ -26,18 +26,32 @@
     <thead>
     <tr>
         <th>Date</th>
+        <th>Real Date</th>
+        <th>Value Date</th>
         <th>Type</th>
+        <th>Type Int</th>
         <th>Name</th>
+        <th>Label</th>
+        <th>Card transaction</th>
+        <th>Commission</th>
         <th>Amount</th>
         <th>Currency</th>
+        <th>Category</th>
+        <th>Keywords</th>
         <th>N° Account</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>{{ transaction.date_of_transaction|date:" Y/m/d" }}</td>
+        <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
+        <td>{{ transaction.value_date_of_transaction|date:" Y/m/d" }}</td>
         <td>{{ transaction.type_of_transaction }}</td>
+        <td>{{ transaction.type_int_of_transaction }}</td>
         <td>{{ transaction.name_of_transaction }}</td>
+        <td>{{ transaction.label_of_transaction }}</td>
+        <td>{{ transaction.card_transaction }}</td>
+        <td>{{ transaction.commission_of_transaction }}</td>
             {% if transaction.amount_of_transaction >= 0 %}
                 <td class="font-blue"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
             {% endif %}
@@ -45,25 +59,13 @@
                 <td class="font-red"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
             {% endif %}
         <td>{{ transaction.currency_of_transaction }}</td>
+        <td>{{ transaction.category_of_transaction }}</td>
+        <td>{{ transaction.get_key_words }}</td>
         <td>{{ transaction.account.num_of_account }}</td>
     </tr>
     </tbody>
 </table>
 
 {% endblock content %}
-
-
-{% block sidesearch %}
-
-  {% include 'banksandaccounts/sidebar_search.html' %}
-
-{% endblock sidesearch %}
-
-
-{% block sidebar %}
-
-  {% include 'banksandaccounts/sidebar_list_of_accounts.html' with all_accounts=all_accounts banks_list=banks_list  %}
-
-{% endblock %}
 
 

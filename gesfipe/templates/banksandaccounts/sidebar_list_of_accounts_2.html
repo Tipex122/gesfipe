@@ -21,6 +21,7 @@
 
                     <div class="card">
                         <a href="{% url 'banksandaccounts:account_list' account.id %}">
+                        {# <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}"></a> #}
                         <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
                         <img class="card-img-top"
                             src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"

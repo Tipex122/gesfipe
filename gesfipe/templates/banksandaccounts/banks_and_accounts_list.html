@@ -19,11 +19,13 @@
                      data-toggle="tooltip"
                      data-placement="top"
                      title="Click to get list of transactions related to this account">
-                  <a href="{% url 'banksandaccounts:account_list' account.id %}">
+                {# <!-- <a href="{% url 'banksandaccounts:account_list' account.id %}"> --> #}
+                {# <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id 2019 09 %}"> #}
+                <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}">
                     <img class="card-img-top"
                          src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
                          alt="Card image cap">
-                  </a>
+                </a>
                     <div class="card-body">
                       <h4 class="card-title">Account name: <br><a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
                       <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>

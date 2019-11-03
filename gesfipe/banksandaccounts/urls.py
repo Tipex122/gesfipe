@@ -22,16 +22,20 @@ urlpatterns = [
     url(r'^transactions_list/$', views.transactions_list, name='transactions_list'),
     url(r'^toto/$', views.TransactionsListView.as_view(), name='transactions_list3'),
     url(r'^tata/$', views.transactions_list4, name='transactions_list4'),
-    url(r'^transactions_by_month/$', views.TransactionsByMonthView.as_view(), name='transactions_by_month'),
+    # url(r'^transactions_by_month/$', views.AllTransactionsByMonthView.as_view(), name='transactions_by_month'),
 
     # Example: /2012/08/
-    path('<int:year>/<int:month>/', views.TransactionsByMonthView.as_view(month_format='%m'), name="transactions_archive_month_numeric"),
+    path('all_transactions/<int:year>/<int:month>/', views.AllTransactionsByMonthView.as_view(month_format='%m'), name="transactions_archive_month_numeric"),
     # Example: /2012/aug/
-    path('<int:year>/<str:month>/', views.TransactionsByMonthView.as_view(), name="transactions_archive_month"),
+    path('all_transactions/<int:year>/<str:month>/', views.AllTransactionsByMonthView.as_view(), name="transactions_archive_month"),
+    # Example: 1234/2012/08/
+    path('account_transactions/<int:account_id>/<int:year>/<int:month>/', views.AccountTransactionsByMonthView.as_view(month_format='%m'), name="transactions_of_account_archive_month_numeric"),
+    # Example: 1234/2012/aug/
+    path('account_transactions/<int:account_id>/<int:year>/<str:month>/', views.AccountTransactionsByMonthView.as_view(month_format='%m'), name="transactions_of_account_archive_month"),
 
 
     # url(r'^toto/$', views.transactions_list2, name='transactions_list2'),
-    # url(r'^$', views.TransactionsListView.as_view(), name='transactions_list'),
+    # url(r'^list_transactions/(?P<pk>[0-9]+)/$', views.TransactionsListView.as_view(), name='transactions_list'),
 
     url(r'^bank_detail/(?P<bank_id>[0-9]+)/$', views.bank_detail, name='bank_detail'),
     url(r'^bank_edit/(?P<pk>[0-9]+)/$', views.bank_edit, name='bank_edit'),
