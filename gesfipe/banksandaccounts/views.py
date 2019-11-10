@@ -263,6 +263,10 @@ class AccountTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         context['account_id'] = self.kwargs['account_id']
         
         # To get date of last transaction to start the list of transaction of the last month
+        # TODO: Attention, cela prend la date de la dernière transaction de toutes les transactions, mais pas celle du compte concerné 
+        # TODO: (dont la dernière transaction peut dater du mois dernier, du coup )
+        # TODO: Il faut donc prendre la date de la dernière transaction du compte appelé sinon ça plante lorsqu'on clique sur le compte car  il n'y a pas de transaction
+        # TODO: De même: ça plante sans doute pour la même raison pour les prêts et autres compte particuliers
         context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
 
         # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]

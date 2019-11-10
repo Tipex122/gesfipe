@@ -5,61 +5,61 @@
 
 <div class="accordion" id="accordionBanks">
     <div class="card">
-    {% for bank in banks_list %}
-        <div class="card-header card-title" id="bank{{bank.id}}">                
-            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{bank.id}}" aria-expanded="true" aria-controls="{{bank.id}}">
-                <i class="fas fa-university fa-1x"></i>
-                    {{bank}}
-            </button>            
-        </div>
-        
-        <div id="collapse{{bank.id}}" class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#accordionBanks">
-          {% for account in all_accounts %}
-              {% if account.bank == bank %}
+        {% for bank in banks_list %}
+            <div class="card-header card-title" id="bank{{bank.id}}">                
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{bank.id}}" aria-expanded="true" aria-controls="{{bank.id}}">
+                    <i class="fas fa-university fa-1x"></i>
+                        {{bank}}
+                </button>            
+            </div>
+            
+            <div id="collapse{{bank.id}}" class="collapse" aria-labelledby="bank{{bank.id}}" data-parent="#accordionBanks">
+            {% for account in all_accounts %}
+                {% if account.bank == bank %}
 
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <div class="card">
-                        <a href="{% url 'banksandaccounts:account_list' account.id %}">
-                        {# <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}"></a> #}
-                        <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
-                        <img class="card-img-top"
-                            src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
-                            alt="Card image cap">
-                        </a>
-                        <div class="card-body">
-                            <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
-                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>
-                            <p class="card-text">
-                                <i>
-                                Total :
-                                {% comment  %}
-                                    {% if account.total_amount_by_account >= 0 %}
-                                        <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                        <div class="card">
+                            <a href="{% url 'banksandaccounts:account_list' account.id %}">
+                            {# <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}"></a> #}
+                            <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+                            <img class="card-img-top"
+                                src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
+                                alt="Card image cap">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
+                                <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>
+                                <p class="card-text">
+                                    <i>
+                                    Total :
+                                    {% comment  %}
+                                        {% if account.total_amount_by_account >= 0 %}
+                                            <span class="font-blue"><strong>{{account.total_amount_by_account}}</strong></span>
+                                        {% else %}
+                                            <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                        {% endif %}
+                                    {% endcomment %}
+                                    
+                                    {% if account.balance_of_account >= 0 %}
+                                        <span class="font-blue"><strong>{{account.balance_of_account}}</strong></span>
                                     {% else %}
-                                        <span class="font-red"><strong>{{account.total_amount_by_account}}</strong></span>
+                                        <span class="font-red"><strong>{{account.balance_of_account}}</strong></span>
                                     {% endif %}
-                                {% endcomment %}
-                                
-                                {% if account.balance_of_account >= 0 %}
-                                    <span class="font-blue"><strong>{{account.balance_of_account}}</strong></span>
-                                {% else %}
-                                    <span class="font-red"><strong>{{account.balance_of_account}}</strong></span>
-                                {% endif %}
 
-                                <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
-                                </i>
-                            </p>
+                                    <br>Number of transactions: <span class="label label-default"> {{account.num_transac_by_account}}</span>
+                                    </i>
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                            {# <a href="/transaction_create/">Create new transaction</a> #}
+                            <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                        {# <a href="/transaction_create/">Create new transaction</a> #}
-                        <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
-                        </div>
-                    </div>
-                </div> 
-              {% endif %}
-          {% endfor %}
-        </div>
-    {% endfor %}
+                    </div> 
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 </div>
