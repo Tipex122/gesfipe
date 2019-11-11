@@ -25,6 +25,7 @@ $(document).ready(function() {
     {
       "pageLength": 1000,
       "paging":  false,
+      "order": [[ 0, "desc" ]] /* Ne semble pas fonctionner (Numéro de colonne ?) */
       /*
       "scrollY": 400, 
       */

@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class="content">
-        <div class="container">
+        <div class="container">            
             <div class="row">
                 <div class="col-sm">
                     {% if previous_month.month %}
@@ -36,7 +36,7 @@
                         </a>
                     {% else %}
                         <a href="#"> 
-                            <button type="button" class="btn btn-outline-secondary"> >>  </button>
+                            <button type="button" class="btn btn-outline-light"> >>  </button>
                         </a>
                     {% endif %}
                 </div>
@@ -57,7 +57,7 @@
                     <!-- <th><h4>Category</h4></th> -->
                     <th>Amount</th>
                     <!-- <th>Currency</th> -->
-                    <th>N° Account</th> 
+                    <!-- <th>N° Account</th> -->
                 </tr>
             </thead>
             <tfoot>
@@ -68,7 +68,7 @@
                     <!-- <th><h4>Category</h4></th> -->
                     <th>Amount</th>
                     <!-- <th>Currency</th> -->
-                    <th>N° Account</th> 
+                    <!-- <th>N° Account</th> -->
                 </tr>
             </tfoot>
             <tbody>
@@ -84,7 +84,7 @@
                             <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
                         {% endif %}
                         <!-- <td>{{ transaction.currency_of_transaction }}</td> -->
-                        <td>{{ transaction.account.num_of_account }}</td> 
+                        <!-- <td>{{ transaction.account.num_of_account }}</td> -->
                     </tr>
                 {% endfor %}
             </tbody>

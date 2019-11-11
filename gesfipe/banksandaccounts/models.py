@@ -355,8 +355,8 @@ class Transactions(models.Model):
         Accounts,
         # null=True,
         # blank=True,
-        # related_name='transactions',
-        related_name='account',
+        related_name='transactions',
+        # related_name='account',
         on_delete=models.CASCADE
     )
 

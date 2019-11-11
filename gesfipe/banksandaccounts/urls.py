@@ -31,7 +31,7 @@ urlpatterns = [
     # Example: 1234/2012/08/
     path('account_transactions/<int:account_id>/<int:year>/<int:month>/', views.AccountTransactionsByMonthView.as_view(month_format='%m'), name="transactions_of_account_archive_month_numeric"),
     # Example: 1234/2012/aug/
-    path('account_transactions/<int:account_id>/<int:year>/<str:month>/', views.AccountTransactionsByMonthView.as_view(month_format='%m'), name="transactions_of_account_archive_month"),
+    path('account_transactions/<int:account_id>/<int:year>/<str:month>/', views.AccountTransactionsByMonthView.as_view(), name="transactions_of_account_archive_month"),
 
 
     # url(r'^toto/$', views.transactions_list2, name='transactions_list2'),

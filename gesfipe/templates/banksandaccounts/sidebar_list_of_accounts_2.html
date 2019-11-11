@@ -20,13 +20,15 @@
                     <div class="card-body">
 
                         <div class="card">
-                            <a href="{% url 'banksandaccounts:account_list' account.id %}">
-                            {# <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id date_last_transaction.year date_last_transaction.month %}"></a> #}
-                            <!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+                            {% if account.transactions.first.value_date_of_transaction %}
+                                <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id account.transactions.first.value_date_of_transaction.year account.transactions.first.value_date_of_transaction.month %}">
+                            {% else%}
+                                <a href="{% url 'banksandaccounts:account_detail' account.id %}"> 
+                            {% endif %}
                             <img class="card-img-top"
                                 src="{% static 'images/banksandaccounts/pexels-photo-196658.jpeg' %}"
                                 alt="Card image cap">
-                            </a>
+                                </a>
                             <div class="card-body">
                                 <h4 class="card-title">Account name: <a href="{% url 'banksandaccounts:account_detail' account.id %}"> {{account.name_of_account}}</a></h4>
                                 <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'banksandaccounts:bank_detail' bank.id %}">{{bank}}</a> - {{account.get_type_int_of_account_display}}</h6>
@@ -52,8 +54,15 @@
                                 </p>
                             </div>
                             <div class="card-footer">
-                            {# <a href="/transaction_create/">Create new transaction</a> #}
-                            <a href="{% url 'banksandaccounts:transaction_create' %}">Create new transaction</a>
+                                {% if account.transactions.first.value_date_of_transaction %}
+                                    <a href="{% url 'banksandaccounts:transactions_of_account_archive_month_numeric' account.id account.transactions.first.value_date_of_transaction.year account.transactions.first.value_date_of_transaction.month %}">
+                                        Transactions
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'banksandaccounts:account_detail' account.id %}"> 
+                                        Account details
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div> 

@@ -36,7 +36,7 @@
                         </a>
                     {% else %}
                         <a href="#"> 
-                            <button type="button" class="btn btn-outline-secondary"> >>  </button>
+                            <button type="button" class="btn btn-outline-light"> >>  </button>
                         </a>
                     {% endif %}
                 </div>
@@ -44,48 +44,53 @@
         </div>
     </div>
 
-
-    <table class="table table-bordered table-hover table-responsive-sm table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <!-- <th><h4>Type</h4></th> -->
-                <th>Name</th>
-                <!-- <th><h4>Category</h4></th> -->
-                <th>Amount</th>
-                <!-- <th>Currency</th> -->
-                <th>N° Account</th> 
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Date</th>
-                <!-- <th><h4>Type</h4></th> -->
-                <th>Name</th>
-                <!-- <th><h4>Category</h4></th> -->
-                <th>Amount</th>
-                <!-- <th>Currency</th> -->
-                <th>N° Account</th> 
-            </tr>
-        </tfoot>
-        <tbody>
-            {% for transaction in object_list %}
+    {% if object_list == None %}
+        <h3>There is no transaction this month for this account</h3>
+    {% else %}
+        <table class="table table-bordered table-hover table-responsive-sm table-striped table-condensed" id="dataTable" width="100%" cellspacing="0">
+            <thead>
                 <tr>
-                    <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
-                    <!-- <td>{{ transaction.type_of_transaction }}</td> -->
-                    <td><a href="{% url 'banksandaccounts:transaction_detail' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
-                    <!-- <td>{{transaction.category_of_transaction}}</td> -->
-                    {% if transaction.amount_of_transaction >= 0 %}
-                        <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
-                    {% else %}
-                        <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
-                    {% endif %}
-                    <!-- <td>{{ transaction.currency_of_transaction }}</td> -->
-                    <td>{{ transaction.account.num_of_account }}</td> 
+                    <th>Date</th>
+                    <!-- <th><h4>Type</h4></th> -->
+                    <th>Name</th>
+                    <!-- <th><h4>Category</h4></th> -->
+                    <th>Amount</th>
+                    <!-- <th>Currency</th> -->
+                    <!-- <th>N° Account</th> -->
+                    <th>Account name</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>    
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Date</th>
+                    <!-- <th><h4>Type</h4></th> -->
+                    <th>Name</th>
+                    <!-- <th><h4>Category</h4></th> -->
+                    <th>Amount</th>
+                    <!-- <th>Currency</th> -->
+                    <th>N° Account</th> 
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for transaction in object_list %}
+                    <tr>
+                        <td>{{ transaction.real_date_of_transaction|date:" Y/m/d" }}</td>
+                        <!-- <td>{{ transaction.type_of_transaction }}</td> -->
+                        <td><a href="{% url 'banksandaccounts:transaction_detail' transaction.id %}"> {{ transaction.label_of_transaction }} </a> </td>
+                        <!-- <td>{{transaction.category_of_transaction}}</td> -->
+                        {% if transaction.amount_of_transaction >= 0 %}
+                            <td class="font-blue" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                        {% else %}
+                            <td class="font-red" style="text-align: right"> {{ transaction.amount_of_transaction | rjust:"10" }} </td>
+                        {% endif %}
+                        <!-- <td>{{ transaction.currency_of_transaction }}</td> -->
+                        <!-- <td>{{ transaction.account.num_of_account }}</td> -->
+                        <td>{{ transaction.account.name_of_account }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
     <!--
     <ul>
         {% for article in object_list %}

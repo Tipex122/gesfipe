@@ -67,21 +67,23 @@ def accounts_info2(request, account_id=0):
 def accounts_info2(request, account_id=0):
     if account_id == 0:
         account_info = Accounts.objects.filter(owner_of_account=request.user).annotate(
-            total_amount_by_account=Sum('account__amount_of_transaction'), # related_name of foreignkey "account" in Trasactions
-            avg_amount_by_account=Avg('account__amount_of_transaction'),
-            min_amount_by_account=Min('account__amount_of_transaction'),
-            max_amount_by_account=Max('account__amount_of_transaction'),
+            total_amount_by_account=Sum('transactions__amount_of_transaction'), # related_name of foreignkey "account" in Trasactions
+            avg_amount_by_account=Avg('transactions__amount_of_transaction'),
+            min_amount_by_account=Min('transactions__amount_of_transaction'),
+            max_amount_by_account=Max('transactions__amount_of_transaction'),
+            # date_last_transaction = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction,
             # num_transac_by_account=Count('transactions'))
-            num_transac_by_account=Count('account'))
+            num_transac_by_account=Count('transactions'))
 
     elif account_id != 0:
         account_info = Accounts.objects.filter(owner_of_account=request.user).filter(id=account_id).annotate(
-            total_amount_by_account=Sum('account__amount_of_transaction'),
-            avg_amount_by_account=Avg('account__amount_of_transaction'),
-            min_amount_by_account=Min('account__amount_of_transaction'),
-            max_amount_by_account=Max('account__amount_of_transaction'),
+            total_amount_by_account=Sum('transactions__amount_of_transaction'),
+            avg_amount_by_account=Avg('transactions__amount_of_transaction'),
+            min_amount_by_account=Min('transactions__amount_of_transaction'),
+            max_amount_by_account=Max('transactions__amount_of_transaction'),
+            # date_last_transaction = Transactions.objects.filter(id=account_id).latest('value_date_of_transaction').value_date_of_transaction,
             # num_transac_by_account=Count('transactions'))
-            num_transac_by_account=Count('account'))
+            num_transac_by_account=Count('transactions'))
 
     return account_info
 
@@ -95,7 +97,7 @@ def banks_and_accounts_list(request):
             total=Sum('amount_of_transaction'))
     
     # just to obtain the date of last transaction
-    last_transaction = Transactions.objects.latest('value_date_of_transaction')
+    last_transaction = Transactions.objects.filter(account__owner_of_account=request.user).latest('value_date_of_transaction')
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
 
@@ -124,6 +126,9 @@ def transactions_list(request):
     transaction_list = Transactions.objects.filter(account__owner_of_account=request.user)
 
     account_total = transaction_list.aggregate(Sum('amount_of_transaction'))
+
+    # just to obtain the date of last transaction
+    last_transaction = Transactions.objects.filter(account__owner_of_account=request.user).latest('value_date_of_transaction')
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
@@ -162,6 +167,9 @@ def transactions_list(request):
         # general information related
         # to all accounts (due to "0") and used in sidebar
 
+        'date_last_transaction': last_transaction.value_date_of_transaction,
+        # just to obtain the date of last transaction
+
         'num_visits': num_visits,
         # to count the number of visit on the main page (transactions_list2.html only)
         # just for test to use django.sessions middleware
@@ -178,6 +186,9 @@ def transactions_list4(request):
     transaction_list = Transactions.objects.filter(account__owner_of_account=request.user)
 
     account_total = transaction_list.aggregate(Sum('amount_of_transaction'))
+    
+    # just to obtain the date of last transaction
+    last_transaction = Transactions.objects.filter(account__owner_of_account=request.user).latest('value_date_of_transaction')
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
@@ -201,6 +212,9 @@ def transactions_list4(request):
         'all_accounts': accounts_info2(request, 0),
         # general information related
         # to all accounts (due to "0") and used in sidebar
+
+        'date_last_transaction': last_transaction.value_date_of_transaction,
+        # just to obtain the date of last transaction
 
         'num_visits': num_visits,
         # to count the number of visit on the main page (transactions_list2.html only)
@@ -229,7 +243,7 @@ class AllTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         context['all_accounts'] = accounts_info2(self.request, 0)
         
         # To get date of last transaction to start the list of transaction of the last month
-        context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
+        context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction
         # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
         # context['months'] = months
 
@@ -261,13 +275,16 @@ class AccountTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         # context['all_accounts'] = accounts_info(0)
         context['all_accounts'] = accounts_info2(self.request, 0)
         context['account_id'] = self.kwargs['account_id']
+        context['account'] = Transactions.objects.filter(account_id=self.kwargs['account_id'])
         
         # To get date of last transaction to start the list of transaction of the last month
         # TODO: Attention, cela prend la date de la dernière transaction de toutes les transactions, mais pas celle du compte concerné 
         # TODO: (dont la dernière transaction peut dater du mois dernier, du coup )
         # TODO: Il faut donc prendre la date de la dernière transaction du compte appelé sinon ça plante lorsqu'on clique sur le compte car  il n'y a pas de transaction
         # TODO: De même: ça plante sans doute pour la même raison pour les prêts et autres compte particuliers
-        context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
+        # context['date_last_transaction'] = Transactions.objects.filter(account_id=self.kwargs['account_id']).latest('value_date_of_transaction').value_date_of_transaction
+        context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).filter(account_id=self.kwargs['account_id']).latest('value_date_of_transaction').value_date_of_transaction
+        # context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
 
         # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
         # context['months'] = months
@@ -295,6 +312,8 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
         context['accounts_info'] = accounts_info2(self.request, 0)
         # context['all_accounts'] = accounts_info(0)
         context['all_accounts'] = accounts_info2(self.request, 0)
+        # To get date of last transaction to start the list of transaction of the last month
+        context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction
 
         return context
 
@@ -316,7 +335,10 @@ def account_list(request, account_id):
     # transactions_list = Transactions.objects.get(id=account_id)
 
     account_total = Transactions.objects.filter(account_id=account_id).aggregate(Sum('amount_of_transaction'))
-
+    
+    # just to obtain the date of last transaction
+    last_transaction = Transactions.objects.filter(account__owner_of_account=request.user).latest('value_date_of_transaction')
+    
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
 
@@ -349,6 +371,9 @@ def account_list(request, account_id):
 
         'all_accounts': accounts_info2(request, 0),
         # general information related to all accounts (due to "0") and used in sidebar
+
+        'date_last_transaction': last_transaction.value_date_of_transaction,
+        # just to obtain the date of last transaction
 
         'num_visits': num_visits,
         # to count the number of visit on the main page (transactions_list2.html only)
