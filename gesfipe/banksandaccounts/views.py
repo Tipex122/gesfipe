@@ -16,6 +16,9 @@ from django.db.models import Avg, Sum, Min, Max, Count
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import Http404
+from django.utils.timezone import now
+from django.db.models.functions import ExtractYear, ExtractMonth
 
 # Weboob
 from weboob.core import Weboob
@@ -71,7 +74,6 @@ def accounts_info2(request, account_id=0):
             avg_amount_by_account=Avg('transactions__amount_of_transaction'),
             min_amount_by_account=Min('transactions__amount_of_transaction'),
             max_amount_by_account=Max('transactions__amount_of_transaction'),
-            # date_last_transaction = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction,
             # num_transac_by_account=Count('transactions'))
             num_transac_by_account=Count('transactions'))
 
@@ -81,7 +83,6 @@ def accounts_info2(request, account_id=0):
             avg_amount_by_account=Avg('transactions__amount_of_transaction'),
             min_amount_by_account=Min('transactions__amount_of_transaction'),
             max_amount_by_account=Max('transactions__amount_of_transaction'),
-            # date_last_transaction = Transactions.objects.filter(id=account_id).latest('value_date_of_transaction').value_date_of_transaction,
             # num_transac_by_account=Count('transactions'))
             num_transac_by_account=Count('transactions'))
 
@@ -106,6 +107,7 @@ def banks_and_accounts_list(request):
         'accounts_list': accounts_list,
         'account_total': account_total,
         'accounts_info': accounts_info2(request),
+        # TODO: date_last_transaction n'est a priori jamais utilisé quelque soit l'objet ou la fonction: à supprimer partout (on rentre le mois et l'année directement via l'url)
         'date_last_transaction': last_transaction.value_date_of_transaction,
         'num_visits': num_visits,
     }
@@ -225,9 +227,38 @@ def transactions_list4(request):
 class AllTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
     template_name="banksandaccounts/transactions_by_month.html"
     model = Transactions
-    queryset = Transactions.objects.all()
+    # queryset = Transactions.objects.all()
+    # date = queryset.latest('value_date_of_transaction').value_date_of_transaction
+    # year = queryset.latest('value_date_of_transaction').value_date_of_transaction.year
+    # month = queryset.latest('value_date_of_transaction').value_date_of_transaction.month
     date_field="real_date_of_transaction"
     allow_future = True
+
+    def get_queryset(self):
+        queryset = super(AllTransactionsByMonthView, self).get_queryset()
+        return Transactions.objects.filter(account__owner_of_account=self.request.user)
+
+    def get_month(self):
+        try:
+            month = super(AllTransactionsByMonthView, self).get_month()
+        except Http404:
+            # TODO: Il faudrait mieux prendre l'année et le mois de la dernière transaction en base de donnée
+            month = now().strftime(self.get_month_format())
+            # month = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction.get_month()
+            # month = Transactions.objects.annotate(month = ExtractMonth('value_date_of_transaction')).filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction')
+
+        return month
+
+    def get_year(self):
+        try:
+            year = super(AllTransactionsByMonthView, self).get_year()
+        except Http404:
+            year = now().strftime(self.get_year_format())
+            # year = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction.year
+            # year = Transactions.objects.annotate(year = ExtractYear('value_date_of_transaction')).filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction')
+
+        return year
+
 
     def get_context_data(self, **kwargs):
         context = super(AllTransactionsByMonthView,self).get_context_data(**kwargs)
@@ -243,7 +274,7 @@ class AllTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         context['all_accounts'] = accounts_info2(self.request, 0)
         
         # To get date of last transaction to start the list of transaction of the last month
-        context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction
+        # context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).latest('value_date_of_transaction').value_date_of_transaction
         # months = Transactions.objects.dates('real_date_of_transaction','month')[::-1]
         # context['months'] = months
 
@@ -278,10 +309,6 @@ class AccountTransactionsByMonthView(LoginRequiredMixin, MonthArchiveView):
         context['account'] = Transactions.objects.filter(account_id=self.kwargs['account_id'])
         
         # To get date of last transaction to start the list of transaction of the last month
-        # TODO: Attention, cela prend la date de la dernière transaction de toutes les transactions, mais pas celle du compte concerné 
-        # TODO: (dont la dernière transaction peut dater du mois dernier, du coup )
-        # TODO: Il faut donc prendre la date de la dernière transaction du compte appelé sinon ça plante lorsqu'on clique sur le compte car  il n'y a pas de transaction
-        # TODO: De même: ça plante sans doute pour la même raison pour les prêts et autres compte particuliers
         # context['date_last_transaction'] = Transactions.objects.filter(account_id=self.kwargs['account_id']).latest('value_date_of_transaction').value_date_of_transaction
         context['date_last_transaction'] = Transactions.objects.filter(account__owner_of_account=self.request.user).filter(account_id=self.kwargs['account_id']).latest('value_date_of_transaction').value_date_of_transaction
         # context['date_last_transaction'] = Transactions.objects.latest('value_date_of_transaction').value_date_of_transaction
@@ -318,6 +345,7 @@ class TransactionsListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
+        queryset = super(TransactionsListView, self).get_queryset()
         return Transactions.objects.filter(account__owner_of_account=self.request.user)
 
     context_object_name = 'transactions'  # your own name for the list as a template variable

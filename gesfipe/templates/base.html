@@ -76,11 +76,7 @@
               <a class="nav-link" href="{% url 'banksandaccounts:transactions_list' %}">Transactions <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              
-              <a class="nav-link" href="{% url 'banksandaccounts:transactions_archive_month_numeric' 2019 9 %}">All transactions by month <span class="sr-only">(current)</span></a>
-              <!-- TODO: pour le menu principal il faut charger à chaque fois l'année et le mois de la dernière transaction pour que "All transactions by month" fonctionne -->
-              {# <a class="nav-link" href="{% url 'banksandaccounts:transactions_archive_month_numeric' date_last_transaction.year date_last_transaction.month %}">All transactions by month <span class="sr-only">(current)</span></a> #}
-              
+              <a class="nav-link" href="{% url 'banksandaccounts:transactions_archive_month_all' %}">All transactions by month <span class="sr-only">(current)</span></a>              
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'categories:show_category' node=None %}">Budget <span class="sr-only">(current)</span></a>

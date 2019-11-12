@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^tata/$', views.transactions_list4, name='transactions_list4'),
     # url(r'^transactions_by_month/$', views.AllTransactionsByMonthView.as_view(), name='transactions_by_month'),
 
+    path('all_transactions/', views.AllTransactionsByMonthView.as_view(), name="transactions_archive_month_all"),
     # Example: /2012/08/
     path('all_transactions/<int:year>/<int:month>/', views.AllTransactionsByMonthView.as_view(month_format='%m'), name="transactions_archive_month_numeric"),
     # Example: /2012/aug/
