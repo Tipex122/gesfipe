@@ -17,10 +17,9 @@
       <tr>
         <h3>New transactions loaded in database : </h3>
       </tr>
-      {%regroup list_of_transactions by account as account_list %}
-
-      <div class="accordion" id="accordionAccounts">
+      <div class="accordion" id="accordionAccounts"></div>     
         <div class="card">
+          {%regroup list_of_transactions by account as account_list %}
           {%for account in account_list %}
             
             <div class="card-header card-title" id="account{{account.id}}">                
@@ -29,12 +28,6 @@
                     {{account.grouper}}
                 </button>            
             </div>
-
-            {% comment %}
-            <div class="alert alert-dark" role="alert">
-                {{account.grouper}}
-            </div>
-            {% endcomment %}
             
             <div id="collapse{{account.id}}" class="collapse" aria-labelledby="account{{account.id}}" data-parent="#accordionAccounts">
               {% if list_of_transactions == None %}
