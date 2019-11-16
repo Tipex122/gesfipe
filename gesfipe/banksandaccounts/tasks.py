@@ -5,5 +5,5 @@ def adding_task(x, y):
     return x + y
 
 @shared_task
-def debug_task(message="Je suis le meilleur !"):
+def message_task(message="Je suis le meilleur !"):
     print('Request: {0}'.format(message))
