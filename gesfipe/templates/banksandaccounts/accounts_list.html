@@ -21,6 +21,7 @@
                     <th>Num. </th>
                     <th>Total amount</th>
                     <th>Type</th>
+                    <th>IBAN</th>
                     <th>Bank</th>
                     <th>Owner(s)</th>
                 </tr>
@@ -32,6 +33,7 @@
                         <td><a href="{% url 'banksandaccounts:account_list' account.id %}">{{ account.num_of_account }}</a></td>
                         <td style="text-align: center">{{ account.total_amount_by_account}}</td>
                         <td>{{ account.get_type_int_of_account_display }}</td>
+                        <td>{{ account.iban_of_account}}</td>
                         <td>{{ account.bank.name_of_bank }}</td>
                         <td>
                             {% for u in account.owner_of_account.all %}
@@ -47,9 +49,11 @@
                     <td><b>Total : </b></td>
                     <td style="text-align: center">
                         <b>
+                            <!-- TODO: To replace with sum of "account.balance" -->
                             {{ account_total.amount_of_transaction__sum }}
                         </b>
                     </td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

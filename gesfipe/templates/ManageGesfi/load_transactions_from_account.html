@@ -13,6 +13,18 @@
 {% endblock heading %}
 
 {% block content %}
+<!-- Celery - Redis -->
+<div class='progress-wrapper'>
+  <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+</div>
+<div id="progress-bar-message">Waiting for progress to start...</div>
+
+<div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+<div id="celery-result"></div>
+
     {% if list_of_transactions %}
       <tr>
         <h3>New transactions loaded in database : </h3>

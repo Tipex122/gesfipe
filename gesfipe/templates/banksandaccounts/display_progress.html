@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+<!-- TODO: How to send "name of bank" and "name of account" with link of sidebar_list -->
+{% block title %}
+     - {% trans 'Progress bar' %}
+{% endblock %}
+
+
+{% block heading %}
+
+{% endblock heading %}
+
+
+{% block content %}
+<div class="alert alert-dark" role="alert">
+    <div class='progress-wrapper'>
+        <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+    </div>
+
+    <div id="celery-result"></div>
+    <div id="progress-bar-message">Waiting for progress to start...</div>
+</div>
+
+<div class="alert alert-light" role="alert">    
+    <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <div class='progress-wrapper'>
+        <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+    </div>
+    <div id="progress-bar-message">Waiting for progress to start...</div>
+</div>
+
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+<script>
+    $(function () {
+        var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+        CeleryProgressBar.initProgressBar(progressUrl)
+    });
+</script>
+
+{% endblock %}
+
+
+{% block sidesearch %}
+
+{% endblock sidesearch %}
+
+
+{% block sidebar %}
+
+{% endblock %}
+

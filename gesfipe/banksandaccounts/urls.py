@@ -62,5 +62,7 @@ urlpatterns = [
     # url(r'^banks/(?P<pk>[0-9]+)/delete/$', views.BankDelete.as_view(), name='bank_delete'),
     path('banks/connection_and_loading/<int:pk>/',views.bank_connection_and_load_transactions, name='bank_connection_and_load_transactions'),
     path('banks/create_with_weboob_module/<int:pk>', views.bank_create_with_weboob_module, name='bank_create_with_weboob_module'),
+
+    path('progress_bar/', views.progress_view, name='progress_view_celery')
 ]
 

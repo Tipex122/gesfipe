@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls import include, url
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
@@ -13,6 +13,8 @@ from gesfipe.manageweboob.models import WeboobModules
 from gesfipe.banksandaccounts.views import banks_and_accounts_list
 
 urlpatterns = [
+    re_path(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
+    
     # url(r'^$', TemplateView.as_view(template_name='banksandaccounts/banks_and_accounts_list.html'), name='home'),
     # url(r'^$', TemplateView.as_view(template_name='banksandaccounts/banks_and_accounts_list.html'), name='index'),
     url(r'^$', banks_and_accounts_list),

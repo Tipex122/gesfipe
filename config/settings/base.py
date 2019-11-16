@@ -85,6 +85,7 @@ THIRD_PARTY_APPS = [
     'import_export',
     'mptt',
     'django_mptt_admin',
+    'celery_progress',
     # 'manageweboob',
 ]
 

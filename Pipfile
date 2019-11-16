@@ -38,6 +38,7 @@ weboob = "*"
 psycopg2-binary = "*"
 sentry-sdk = "*"
 gunicorn = "*"
+celery-progress = "*"
 
 [dev-packages]
 pylint = "*"
