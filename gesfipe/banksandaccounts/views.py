@@ -29,7 +29,7 @@ from .forms import *
 from gesfipe.categories.models import Tag
 from gesfipe.managegesfi.views import list_unique_of_numbers
 from gesfipe.banksandaccounts.models import Accounts
-from gesfipe.banksandaccounts.tasks import *
+# from gesfipe.banksandaccounts.tasks import *
 
 
 logger = logging.getLogger(__name__)
@@ -1001,9 +1001,3 @@ def transactions_with_tag(request, tag_name):
         'banksandaccounts/transactions_with_tag.html',
         context
     )
-#####################  Celery - Redis ##################################
-
-def progress_view(request):
-    result = my_task.delay(10)
-    return render(request, 'banksandaccounts/display_progress.html', context={'task_id': result.task_id})
-    

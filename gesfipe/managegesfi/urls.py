@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'load_transactions/$', load_transactions, name='load_transactions'),
     url(r'list_unique_numbers/$', list_unique_numbers, name='list_unique_numbers'),
 
+    # url(r'progress_bar/(?P<task_id>[\w-]+)/$', progress_view, name='progress_view_status')
+    url(r'progress_bar/$', progress_view, name='progress_view_status')
 ]
 

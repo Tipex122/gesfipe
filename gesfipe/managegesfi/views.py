@@ -15,6 +15,7 @@ from gesfipe.banksandaccounts.models import *
 from gesfipe.banksandaccounts.models import Accounts as db_Accounts
 from gesfipe.categories.models import *
 from gesfipe.users.models import User
+from gesfipe.managegesfi.tasks import *
 
 # from categories.forms import TagForm
 
@@ -494,3 +495,10 @@ def connect_bank(request, pk):
         context = {'data_to_print': "No bank  found in database with module named {}".format(module.name_of_module)}
 
     return render(request, 'info_to_print.html', context)
+
+#####################  Celery - Redis ##################################
+
+def progress_view(request):
+    result = my_task.delay(10)
+    print('Task_Id: {}'.format(result.task_id))
+    return render(request, 'ManageGesfi/display_progress.html', context={'task_id': result.task_id})

@@ -94,7 +94,7 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {# <a class="dropdown-item" href="#">Action</a> #}
                 {# <a class="dropdown-item" href="#">Another action</a> #}
-                <a class="dropdown-item" href="{% url 'banksandaccounts:progress_view_celery' %}">Progress Bar</a>
+                <a class="dropdown-item" href="{% url 'managegesfi:progress_view_status' %}">Progress Bar</a>
 
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'categories:tag_edit' pk=Null %}">Edit Tags</a>
@@ -198,6 +198,8 @@
  <!--
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     -->
+
+    <script src="{% static 'celery_progress/celery_progress.js' %}"></script> <!-- For progress bar through celery and redis-->
     
     <script src="{% static 'js/bootstrap.min.js' %}"></script>  
 
@@ -219,10 +221,11 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
+    
 
     <script src="{% static 'js/project.js' %}"></script>
     <!-- <script src="{% static 'js/celery_progress.js' %}"></script> -->
-    <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+    
 
     {% endblock javascript %}
 

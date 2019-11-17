@@ -78,6 +78,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'celery_progress',
     'crispy_forms',
     'allauth',
     'allauth.account',
@@ -85,7 +86,6 @@ THIRD_PARTY_APPS = [
     'import_export',
     'mptt',
     'django_mptt_admin',
-    'celery_progress',
     # 'manageweboob',
 ]
 

@@ -15,8 +15,6 @@ from gesfipe.banksandaccounts.views import banks_and_accounts_list
 urlpatterns = [
     re_path(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
     
-    # url(r'^$', TemplateView.as_view(template_name='banksandaccounts/banks_and_accounts_list.html'), name='home'),
-    # url(r'^$', TemplateView.as_view(template_name='banksandaccounts/banks_and_accounts_list.html'), name='index'),
     url(r'^$', banks_and_accounts_list),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
 
@@ -27,19 +25,11 @@ urlpatterns = [
     url(r'^users/', include('gesfipe.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
 
-
     # Your stuff: custom urls includes go here
-    # url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
-    # url(r'^categories/', include('gesfipe.categories.urls')),
-    # url(r'^', include('gesfipe.manageweboob.urls')),
     url(r'^manageweboob/', include('gesfipe.manageweboob.urls')),
     url(r'^managegesfi/', include('gesfipe.managegesfi.urls')),
     url(r'^categories/', include('gesfipe.categories.urls')),
     url(r'^banksandaccounts/', include('gesfipe.banksandaccounts.urls', namespace='banksandaccounts')),
-
-
-    # path('', include(('gesfipe.banksandaccounts.urls', 'banksandaccounts'), namespace='banksandaccounts')),
-    # path('', include('gesfipe.banksandaccounts.urls', namespace='banksandaccounts')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
